@@ -1,0 +1,9 @@
+ports:
+  - port: 8080
+
+image:
+  file: .gitpod.Dockerfile
+
+vscode:
+  extensions:
+    - Pivotal.vscode-spring-boot@1.21.0:VrPD7WUvW3BLuex1cvs7Sg==
