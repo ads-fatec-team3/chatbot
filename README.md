@@ -55,14 +55,14 @@ Pode acessar aqui: https://xd.adobe.com/view/503a484d-6928-4e69-a0ec-ae30c1574dc
 
 ## Integrantes
 
-| Nome                           | Github                                | LinkedIn                                                    |
-|--------------------------------|---------------------------------------|-------------------------------------------------------------|
-| Leandro Lopes (Scrum Master)   | [acessar](https://github.com/LLBueno) | [acessar](https://www.linkedin.com/in/leandro-lopes-bueno/) |
-| Marcio Ordonez (Product Owner) | [acessar]()                           | [acessar]()                                                 |
-| Bruna Totti                    | [acessar]()                           | [acessar]()                                                 |
-| Eduardo Nunes                  | [acessar]()                           | [acessar]()                                                 |
-| Greice Castilho                | [acessar]()                           | [acessar]()                                                 |
-| João Uchoas                    | [acessar]()                           | [acessar]()                                                 |
-| Letícia Barreto                | [acessar]()                           | [acessar]()                                                 |
-| Rafael Ribeira                 | [acessar]()                           | [acessar]()                                                 |
-| Robson Martins                 | [acessar]()                           | [acessar]()                                                 |
+| Nome                           | Github                                  | LinkedIn                                                    |
+|--------------------------------|-----------------------------------------|-------------------------------------------------------------|
+| Leandro Lopes (Scrum Master)   | [acessar](https://github.com/LLBueno)   | [acessar](https://www.linkedin.com/in/leandro-lopes-bueno/) |
+| Marcio Ordonez (Product Owner) | [acessar]()                             | [acessar]()                                                 |
+| Bruna Totti                    | [acessar]()                             | [acessar]()                                                 |
+| Eduardo Nunes                  | [acessar]()                             | [acessar]()                                                 |
+| Greice Castilho                | [acessar]()                             | [acessar]()                                                 |
+| João Uchoas                    | [acessar]()                             | [acessar]()                                                 |
+| Letícia Barreto                | [acessar](https://github.com/lebarreto) | [acessar](https://www.linkedin.com/in/leticiambarreto/)     |
+| Rafael Ribeira                 | [acessar]()                             | [acessar]()                                                 |
+| Robson Martins                 | [acessar]()                             | [acessar]()                                                 |
