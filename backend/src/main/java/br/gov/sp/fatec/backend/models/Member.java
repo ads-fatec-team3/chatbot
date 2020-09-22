@@ -7,8 +7,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
 
 @Entity
 @Table(name = "member")
@@ -18,9 +19,12 @@ public class Member {
     @Column(name = "idMember")
     private long idMember;
     
-    @OneToOne(fetch = FetchType.EAGER)
-    @Column(name = "idConversation")
-    private Conversation idConversation;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinTable(name="member_conversation", 
+        joinColumns={@JoinColumn(name="idMember")},
+        inverseJoinColumns={@JoinColumn(name="idConversation")}
+    )
+    private Conversation conversation;
     
     @Column(name = "idUser")
     private long idUser;
@@ -30,16 +34,12 @@ public class Member {
         return idMember;
     }
 
-    public void setIdMember(long idMember) {
-        this.idMember = idMember;
-    }
-
-	public Conversation getIdConversation() {
-		return idConversation;
+	public Conversation getConversation() {
+		return conversation;
 	}
 
-	public void setIdConversation(Conversation idConversation) {
-		this.idConversation = idConversation;
+	public void setConversation(Conversation conversation) {
+		this.conversation = conversation;
 	}
 
 	public long getIdUser() {

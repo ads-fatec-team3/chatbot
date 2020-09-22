@@ -2,13 +2,19 @@ package br.gov.sp.fatec.backend.models;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 
 
@@ -23,18 +29,22 @@ public class Conversation {
     @Column(name = "title")
     private String title;
     
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany
+    @JoinTable(name = "member_conversation",
+            joinColumns = {@JoinColumn(name = "idConversation")},
+            inverseJoinColumns = {@JoinColumn(name = "idMember")}
+    )   
     private List<Member> members;
     
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany
+    @JoinTable (name = "message_conversation",
+        joinColumns = { @JoinColumn (name = "idConversation")},
+        inverseJoinColumns = { @JoinColumn (name = "idMessage")}
+    )
     private List<Message> messages;
 
     public long getIdConversation() {
         return idConversation;
-    }
-
-    public void setIdConversation(long idConversation) {
-        this.idConversation = idConversation;
     }
 
     public String getTitle() {

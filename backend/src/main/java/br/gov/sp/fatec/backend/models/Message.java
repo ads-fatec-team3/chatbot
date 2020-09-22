@@ -1,6 +1,6 @@
 package br.gov.sp.fatec.backend.models;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -9,8 +9,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 
 @Entity
 @Table(name = "message")
@@ -20,9 +21,12 @@ public class Message {
     @Column(name = "idMessage")
     private long idMessage;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @Column(name = "idConversation")
-    private Conversa idConversation;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinTable(name="message_conversation", 
+        joinColumns={@JoinColumn(name="idMessage")},
+        inverseJoinColumns={@JoinColumn(name="idConversation")}
+    )
+    private Conversation idConversation;
     
     @Column(name = "idUser")
     private long idUser;
@@ -34,15 +38,11 @@ public class Message {
 		return idMessage;
 	}
 
-	public void setIdMessage(long idMessage) {
-		this.idMessage = idMessage;
-	}
-
-	public Conversa getIdConversation() {
+	public Conversation getIdConversation() {
 		return idConversation;
 	}
 
-	public void setIdConversation(Conversa idConversation) {
+	public void setIdConversation(Conversation idConversation) {
 		this.idConversation = idConversation;
 	}
 
@@ -61,8 +61,4 @@ public class Message {
 	public void setDateHour(Date dateHour) {
 		this.dateHour = dateHour;
 	}
-    
-    
-    
-
 }
