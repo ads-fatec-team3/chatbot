@@ -6,7 +6,10 @@ import javax.transaction.Transactional;
 
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -21,10 +24,12 @@ import br.gov.sp.fatec.backend.repositories.ConversationRepository;
 import br.gov.sp.fatec.backend.repositories.MemberRepository;
 import br.gov.sp.fatec.backend.repositories.MessageRepository;
 import br.gov.sp.fatec.backend.repositories.UserRepository;
+import br.gov.sp.fatec.backend.services.SecurityService;
 
 @SpringBootTest
-// @Transactional
-// @Rollback
+@Transactional
+@Rollback
+@TestMethodOrder(OrderAnnotation.class)
 class BackendApplicationTests {
 
     @Autowired
@@ -39,10 +44,14 @@ class BackendApplicationTests {
     @Autowired
     private MemberRepository memberRepo;
 
+    @Autowired
+    private SecurityService securityService;
+
 	@Test
 	void contextLoads() {
     }
     
+    @Order(1)
     @Test
     void insertUser() {
         User user = new User();
@@ -52,6 +61,7 @@ class BackendApplicationTests {
         userRepo.save(user);
     }
 
+    @Order(2)
     @Test
     void insertConversation() {
         User user = new User();
@@ -84,27 +94,40 @@ class BackendApplicationTests {
         assertNotNull(conversation.getMembers().iterator().next().getIdMember());
     }
 
+    @Order(3)
     @Test
     void testMember() {
-        Member member = memberRepo.findById(2L).get();
+        Member member = memberRepo.findById(1L).get();
         assertEquals("Conversation 1", member.getConversation().getTitle());
     }
 
+    @Order(4)
     @Test
     void searchUserByName() {
         User user = userRepo.findByName("User 1");
         assertNotNull(user);
     }
 
+    @Order(5)
     @Test
     void searchMessageByConversation() {
        Message messages = messageRepo.findByConversation("Conversation 1");
         assertNotNull(messages);
     }
 
+    @Order(6)
     @Test
     void searchByDateAndUser() {
-        Message messages = messageRepo.findByDateAndUser(new Date(2020, 9, 22), 1);
+        Date date = new Date(2020, 9, 22);
+
+        Message messages = messageRepo.findByDateAndUser(date, 2);
         assertNotNull(messages);
+    }
+
+    @Order(7)
+    @Test
+    void serviceInsertConversation() {
+        Conversation conversation = securityService.insertConversation("Conversation XPTO", 1, 14L);
+        assertNotNull(conversation);
     }
 }

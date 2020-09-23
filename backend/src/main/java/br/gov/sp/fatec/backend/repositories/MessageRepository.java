@@ -16,5 +16,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Query("select m from Message m where m.dateHour = ?1 and m.idUser = ?2")
     public Message findByDateAndUser(Date dateHour, long idUser);
-    
+
+    @Query("select m from Message m where m.idMessage = ?1")
+    public Message findByIdMessage(long idMessage);
 }
