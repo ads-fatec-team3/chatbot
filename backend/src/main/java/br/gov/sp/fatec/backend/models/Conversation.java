@@ -33,11 +33,11 @@ public class Conversation {
 
     @ManyToMany(mappedBy = "conversations")
     private List<Member> members;
-
+    
     public long getId() {
         return id;
     }
-
+    
     public String getTitle() {
         return title;
     }
@@ -77,4 +77,5 @@ public class Conversation {
         members.remove(member);
         member.getConversations().remove(this);
     }
+
 }
