@@ -89,3 +89,4 @@ public class Member {
         conversations.remove(conversation);
         conversation.getMembers().remove(this);
     }
+}
