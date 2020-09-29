@@ -1,68 +1,82 @@
 package br.gov.sp.fatec.backend.models;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "message")
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "idMessage")
-    private long idMessage;
+    @Column(name = "message_id")
+    private long id;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @Column(name = "idConversation")
-    private Conversa idConversation;
+    @Column(name = "message_text", nullable = false)
+    private String text;
+
+    @Column(name = "timestamp", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timestamp;
+
+    @ManyToOne
+    @JoinColumn(name = "conversation_id")
+    private Conversation conversation;
+
+    @ManyToOne
+    @JoinColumn(name = "sender_id")
+    private Member sender;
+
+    public Message() {
+        this.timestamp = new Date(System.currentTimeMillis());
+    }
     
-    @Column(name = "idUser")
-    private long idUser;
+    public long getId() {
+        return id;
+    }
     
-    @Column(name = "dateHour")
-    private Date dateHour;
-
-	public long getIdMessage() {
-		return idMessage;
-	}
-
-	public void setIdMessage(long idMessage) {
-		this.idMessage = idMessage;
-	}
-
-	public Conversa getIdConversation() {
-		return idConversation;
-	}
-
-	public void setIdConversation(Conversa idConversation) {
-		this.idConversation = idConversation;
-	}
-
-	public long getIdUser() {
-		return idUser;
-	}
-
-	public void setIdUser(long idUser) {
-		this.idUser = idUser;
-	}
-
-	public Date getDateHour() {
-		return dateHour;
-	}
-
-	public void setDateHour(Date dateHour) {
-		this.dateHour = dateHour;
-	}
+    public String getText() {
+        return text;
+    }
     
-    
-    
+    public Date getTimestamp() {
+        return timestamp;
+    }
 
+    public Conversation getConversation() {
+        return conversation;
+    }
+    
+    public Member getSender() {
+        return sender;
+    }
+    
+    public void setId(long id) {
+        this.id = id;
+    }
+    
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setConversation(Conversation conversation) {
+        this.conversation = conversation;
+    }
+
+    public void setSender(Member sender) {
+        this.sender = sender;
+    }
 }
