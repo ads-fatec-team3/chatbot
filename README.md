@@ -1,4 +1,5 @@
 # ChatBot para help desk de 1º nível
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/ads-fatec-team3/chatbot)
 
 <img src="./frontend/src/assets/logo.png" width="100" title="Logo">
 
@@ -58,7 +59,7 @@ Pode acessar aqui: https://xd.adobe.com/view/503a484d-6928-4e69-a0ec-ae30c1574dc
 | Nome                           | Github                                  | LinkedIn                                                    |
 |--------------------------------|-----------------------------------------|-------------------------------------------------------------|
 | Leandro Lopes (Scrum Master)   | [acessar](https://github.com/LLBueno)   | [acessar](https://www.linkedin.com/in/leandro-lopes-bueno/) |
-| Marcio Ordonez (Product Owner) | [acessar]()                             | [acessar]()                                                 |
+| Marcio Ordonez (Product Owner) | [acessar](https://github.com/MarcioOrdonez)      | [acessar](https://www.linkedin.com/in/marcio-ordonez/)                               |
 | Bruna Totti                    | [acessar]()                             | [acessar]()                                                 |
 | Eduardo Nunes                  | [acessar]()                             | [acessar]()                                                 |
 | Greice Castilho                | [acessar]()                             | [acessar]()                                                 |
