@@ -35,12 +35,40 @@ atendente ou instrutor.
 
 [Kanban do Github](https://github.com/ads-fatec-team3/chatbot/projects/1)
 
+## Entregáveis Sprints
+
+### Sprint 1
+- Prototipação
+- Mapeamento do Banco de Dados
+
+### Sprint 2
+- Backend com consultas
+- MVP Frontend (Criação do componente de Chat)
+- Mockup API cliente
+- Refatoração Protótipo por permissões
+
+### Sprint 3
+- Integração Backend e Frontend (consumir das rotas)
+- MVP Chatbot (Linguagem natural)
+
+### Sprint 4
+- Autenticação
+- Melhoria na estilização do frontend
+- Melhoria chatbot
+
+### Sprint 5
+- Conclusão chatbot
+
+### Sprint 6
+- Melhorias
+- Entrega produto final
+
 ## Etapas do Projeto (Sprints)
 
 | Nº Sprint | Data Inicio | Data Final | Documento de entrega                                                                      |
 |-----------|-------------|------------|-------------------------------------------------------------------------------------------|
 | 1         | 07/09/2020  | 20/09/2020 | [acessar](https://github.com/ads-fatec-team3/chatbot/blob/master/docs/entregas/sprint1.md)|
-| 2         | 21/09/2020  | 04/10/2020 | ---                                                                                       |
+| 2         | 21/09/2020  | 04/10/2020 | [acessar](https://github.com/ads-fatec-team3/chatbot/blob/master/docs/entregas/sprint2.md)|
 | 3         | 05/10/2020  | 18/10/2020 | ---                                                                                       |
 | 4         | 19/10/2020  | 01/11/2020 | ---                                                                                       |
 | 5         | 02/11/2020  | 15/11/2020 | ---                                                                                       |
@@ -50,20 +78,20 @@ atendente ou instrutor.
 
 Print screen da prototipação feita no Adobe XD.
 
-<img src="./docs/entregas/exemplo_tela.png" width="350" title="Logo">
+<img src="./docs/entregas/exemplo_tela2.png" width="350" title="Logo">
 
-Pode acessar aqui: https://xd.adobe.com/view/503a484d-6928-4e69-a0ec-ae30c1574dcb-0569/?fullscreen
+Pode acessar aqui: https://xd.adobe.com/view/76ccd03a-4998-4da1-9f5c-ca6f4ecf4023-239f/?fullscreen
 
 ## Integrantes
 
-| Nome                           | Github                                  | LinkedIn                                                    |
-|--------------------------------|-----------------------------------------|-------------------------------------------------------------|
-| Leandro Lopes (Scrum Master)   | [acessar](https://github.com/LLBueno)   | [acessar](https://www.linkedin.com/in/leandro-lopes-bueno/) |
-| Marcio Ordonez (Product Owner) | [acessar](https://github.com/MarcioOrdonez)      | [acessar](https://www.linkedin.com/in/marcio-ordonez/)                               |
-| Bruna Totti                    | [acessar]()                             | [acessar]()                                                 |
-| Eduardo Nunes                  | [acessar]()                             | [acessar]()                                                 |
-| Greice Castilho                | [acessar]()                             | [acessar]()                                                 |
-| João Uchoas                    | [acessar]()                             | [acessar]()                                                 |
-| Letícia Barreto                | [acessar](https://github.com/lebarreto) | [acessar](https://www.linkedin.com/in/leticiambarreto/)     |
-| Rafael Ribeira                 | [acessar]()                             | [acessar]()                                                 |
-| Robson Martins                 | [acessar]()                             | [acessar]()                                                 |
+| Nome                           | Github                                           | LinkedIn                                                    |
+|--------------------------------|--------------------------------------------------|-------------------------------------------------------------|
+| Leandro Lopes (Scrum Master)   | [acessar](https://github.com/LLBueno)            | [acessar](https://www.linkedin.com/in/leandro-lopes-bueno/) |
+| Marcio Ordonez (Product Owner) | [acessar](https://github.com/MarcioOrdonez)      | [acessar](https://www.linkedin.com/in/marcio-ordonez/)      |
+| Bruna Totti                    | [acessar]()                                      | [acessar]()                                                 |
+| Eduardo Nunes                  | [acessar]()                                      | [acessar]()                                                 |
+| Greice Castilho                | [acessar]()                                      | [acessar]()                                                 |
+| João Uchoas                    | [acessar]()                                      | [acessar]()                                                 |
+| Letícia Barreto                | [acessar](https://github.com/lebarreto)          | [acessar](https://www.linkedin.com/in/leticiambarreto/)     |
+| Rafael Ribeira                 | [acessar]()                                      | [acessar]()                                                 |
+| Robson Martins                 | [acessar]()                                      | [acessar]()                                                 |
