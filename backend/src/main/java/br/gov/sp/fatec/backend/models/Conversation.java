@@ -1,6 +1,8 @@
 package br.gov.sp.fatec.backend.models;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -32,7 +34,7 @@ public class Conversation {
     private List<Message> messages;
 
     @ManyToMany(mappedBy = "conversations")
-    private List<Member> members;
+    private Set<Member> members = new HashSet<Member>();
 
     public long getId() {
         return id;
@@ -46,7 +48,7 @@ public class Conversation {
         return messages;
     }
 
-    public List<Member> getMembers() {
+    public Set<Member> getMembers() {
         return members;
     }
 

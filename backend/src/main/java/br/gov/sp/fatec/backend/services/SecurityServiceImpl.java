@@ -18,69 +18,69 @@ import br.gov.sp.fatec.backend.repositories.MessageRepository;
 public class SecurityServiceImpl implements SecurityService {
 
     @Autowired
-    private ConversationRepository conversationRepo;
+    private ConversationRepository conversationRepository;
 
     @Autowired
-    private MessageRepository messageRepo;
+    private MessageRepository messageRepository;
 
     @Autowired
-    private MemberRepository memberRepo;
+    private MemberRepository memberRepository;
 
     @Transactional
-    public Message insertMessage(String text, Date timestamp, long conversation, long sender) {
-        Conversation conv = conversationRepo.findConversationById(conversation);
+    public Message insertMessage(String text, Date timestamp, long conversationId, long senderId) {
+        Conversation conversation = conversationRepository.findConversationById(conversationId);
 
-        if (conv == null) {
-            conv = new Conversation();
+        if (conversation == null) {
+            conversation = new Conversation();
+            conversation.setTitle("Conversation Test");
 
-            conv.setTitle("Conversation Test");
-            conversationRepo.save(conv);
+            conversationRepository.save(conversation);
         }
 
-        Member member = memberRepo.findMemberById(sender);
+        Member sender = memberRepository.findMemberById(senderId);
 
-        if (member == null) {
-            member = new Member();
-
-            member.setName("Member Test");
-            member.setUserId(2);
-            memberRepo.save(member);
+        if (sender == null) {
+            sender = new Member();
+            sender.setName("Member Test");
+            sender.setUserId(2);
+    
+            memberRepository.save(sender);
         }
 
         Message message = new Message();
 
-        message.setConversation(conv);
-        message.setSender(member);
+        message.setConversation(conversation);
+        message.setSender(sender);
         message.setText(text);
         message.setTimestamp(timestamp);
 
-        messageRepo.save(message);
+        messageRepository.save(message);
 
         return message;
     }
     
     @Transactional
-    public Member addToConversation(long id, long conversation) {
-        Conversation conv = conversationRepo.findConversationById(conversation);
+    public Member addToConversation(long memberId, long conversationId) {
+        Conversation conversation = conversationRepository.findConversationById(conversationId);
 
-        if (conv == null) {
-            conv = new Conversation();
+        if (conversation == null) {
+            conversation = new Conversation();
+            conversation.setTitle("Conversation Test");
 
-            conv.setTitle("Conversation Test");
-            conversationRepo.save(conv);
+            conversationRepository.save(conversation);
         }        
 
-        Member member = memberRepo.findMemberById(id);
+        Member member = memberRepository.findMemberById(memberId);
 
         if (member == null) {
             member = new Member();
-
-            member.setName("Member Test");
             member.setUserId(2);
-            memberRepo.save(member);
+            member.setName("Member Test");
+            
+            memberRepository.save(member);
         }
 
-        member.addConversation(conv);
+        conversation.addMember(member);
 
         return member;
     }

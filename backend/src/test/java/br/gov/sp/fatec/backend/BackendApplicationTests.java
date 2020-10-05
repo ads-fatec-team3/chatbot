@@ -1,5 +1,6 @@
 package br.gov.sp.fatec.backend;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.transaction.Transactional;
@@ -29,28 +30,27 @@ import br.gov.sp.fatec.backend.services.SecurityService;
 class BackendApplicationTests {
 
     @Autowired
-    private ConversationRepository conversationRepo;
+    private ConversationRepository conversationRepository;
 
     @Autowired
-    private MessageRepository messageRepo;
+    private MessageRepository messageRepository;
 
     @Autowired
-    private MemberRepository memberRepo;
+    private MemberRepository memberRepository;
 
     @Autowired
     private SecurityService securityService;
 
 	@Test
-	void contextLoads() {
-    }
+	void contextLoads() {}
 
     @Order(1)
     @Test
     void insertConversation() {
         Conversation conversation = new Conversation();
-
         conversation.setTitle("Conversation 2");
-        conversationRepo.save(conversation);
+
+        conversationRepository.save(conversation);
 
         assertNotNull(conversation);
     }
@@ -60,10 +60,10 @@ class BackendApplicationTests {
     void insertMember() {
         Member member = new Member();
 
-        member.setName("Member 1");
         member.setUserId(1);
+        member.setName("Member 1");
 
-        memberRepo.save(member);
+        memberRepository.save(member);
 
         assertNotNull(member);
     }
@@ -71,9 +71,13 @@ class BackendApplicationTests {
     @Order(3)
     @Test
     void insertMessage() {
-        Date date = new Date(2020, 9, 22);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2020, 9, 22);
+
+        Date date = calendar.getTime();
 
         Message message = securityService.insertMessage("Test", date, 1, 2);
+
         assertNotNull(message);
     }
 
@@ -88,7 +92,19 @@ class BackendApplicationTests {
     @Order(5)
     @Test
     void searchMessageByTextAndSender() {
-        Message messages = messageRepo.findByTextAndSender("Test", 2L);
-        assertNotNull(messages);
+        Member member = new Member();
+        member.setName("Eduardo");
+
+        memberRepository.save(member);
+
+        Message message = new Message();
+        message.setText("Test");
+        message.setSender(member);
+
+        messageRepository.save(message);
+
+        Message fetchedMessage = messageRepository.findByTextAndSender("Test", member.getId());
+
+        assertNotNull(fetchedMessage);
     }
 }
