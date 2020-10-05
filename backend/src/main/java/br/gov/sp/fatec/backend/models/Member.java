@@ -1,6 +1,8 @@
 package br.gov.sp.fatec.backend.models;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -30,14 +32,14 @@ public class Member {
     @Column(name = "member_name", nullable = false)
     private String name;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id", nullable = true)
     private Integer userId;
 
     @ManyToMany
     @JoinTable(name = "member_conversation",
                joinColumns = @JoinColumn(name = "conversation_id"),
                inverseJoinColumns = @JoinColumn(name = "member_id"))
-    private List<Conversation> conversations;
+    private Set<Conversation> conversations = new HashSet<Conversation>();
 
     @OneToMany(mappedBy = "sender")
     private List<Message> messages;
@@ -54,7 +56,7 @@ public class Member {
         return userId;
     }
 
-    public List<Conversation> getConversations() {
+    public Set<Conversation> getConversations() {
         return conversations;
     }
 
