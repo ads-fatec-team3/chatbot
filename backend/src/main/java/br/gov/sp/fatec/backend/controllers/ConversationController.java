@@ -86,7 +86,7 @@ public class ConversationController {
         );
     }
 
-    @DeleteMapping("/{id}/members/add/{memberId}")
+    @DeleteMapping("/{id}/members/delete/{memberId}")
     @ApiOperation(value = "Deleta um membro de uma conversa")
     public void deleteConversationMember(@PathVariable("id") long id,
                                          @PathVariable("memberId") long memberId) {
