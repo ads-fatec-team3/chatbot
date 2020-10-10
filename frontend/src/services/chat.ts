@@ -1,7 +1,11 @@
 import axios from "axios"
 import { IChat } from "../@types/chat";
 
+<<<<<<< HEAD
 const SERVER_URL = "http://localhost:8080"
+=======
+const SERVER_URL = "https://8080-adaec710-37f0-408a-9f51-5f0c7d7a1403.ws-us02.gitpod.io/"
+>>>>>>> c3213e6d51702b1944dff63359a7979c0767981b
 
 const ChatService = {
     async createChat(chat: IChat): Promise<IChat>{
@@ -23,6 +27,7 @@ const ChatService = {
             })
         });
         return chatRoom;
+<<<<<<< HEAD
     },
 
     async getAllChats():Promise<IChat[]>{
@@ -35,3 +40,7 @@ const ChatService = {
 }
 
 export default ChatService;
+=======
+    }
+}
+>>>>>>> c3213e6d51702b1944dff63359a7979c0767981b
