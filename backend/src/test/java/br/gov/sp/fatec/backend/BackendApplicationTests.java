@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.transaction.Transactional;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -27,6 +28,7 @@ import br.gov.sp.fatec.backend.services.SecurityService;
 @Transactional
 @Rollback
 @TestMethodOrder(OrderAnnotation.class)
+@Disabled("Desabilitada até os todos os testes dos controllers ficarem prontos")
 class BackendApplicationTests {
 
     @Autowired
