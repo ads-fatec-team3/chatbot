@@ -24,48 +24,65 @@ import org.springframework.web.bind.annotation.RestController;
 @Api("API REST Gruly Member")
 @CrossOrigin(origins = "*")
 public class MemberController {
-    @Autowired
-    private MemberRepository memberRepository;
+  @Autowired
+  private MemberRepository memberRepository;
 
-    @GetMapping
-    @ApiOperation(value = "Retorna uma lista com os dados de todos os membros")
-    public List<Member> getAllMembers() {
-        return memberRepository.findAll();
-    }
+  @GetMapping
+  @ApiOperation(value = "Retorna uma lista com os dados de todos os membros")
+  public List<Member> getAllMembers() {
+    return memberRepository.findAll();
+  }
+
+  @GetMapping("/{memberId}")
+  @ApiOperation(value = "Retorna os dados de um membro")
+  public ResponseEntity<Member> getMemberById(@PathVariable("memberId") long memberId) {
+    Member fetchedMember = memberRepository.findMemberById(memberId);
+
+    if(fetchedMember == null)
+      return ResponseEntity.notFound().build();
+
+    return ResponseEntity.ok(fetchedMember);
+  }
+
+  @PostMapping
+  @ApiOperation(value = "Insere os dados de um membro")
+  public ResponseEntity<Member> insert(@RequestBody Member member) {
+    Member newMember = memberRepository.save(member);
+
+    if(newMember == null)
+      return ResponseEntity.badRequest().build();
     
-    @GetMapping("/{id}")
-    @ApiOperation(value = "Retorna os dados de um membro com um id específico")
-    public ResponseEntity<Member> getMemberById(@PathVariable("id") long id) {
-        return ResponseEntity.ok(
-            memberRepository.findMemberById(id)
-        );
-    }
+    return ResponseEntity.ok(newMember);
+  }
 
-    @PostMapping
-    @ApiOperation(value = "Insere os dados de um membro")
-    public ResponseEntity<Member> insert(@RequestBody Member member) {
-        return ResponseEntity.ok(
-            memberRepository.save(member)
-        );
-    }
+  @PutMapping("/{memberId}")
+  @ApiOperation(value = "Atualiza os dados de um membro")
+  public ResponseEntity<Member> update(@PathVariable("memberId") long memberId,
+                                       @RequestBody Member memberDataToUpdate) {
+    Member member = memberRepository.findMemberById(memberId);
     
-    @PutMapping("/{id}")
-    @ApiOperation(value = "Atualiza os dados de um membro")
-    public ResponseEntity<Member> update(@PathVariable("id") long id,
-                                         @RequestBody Member newMember) {
-        Member member = memberRepository.findMemberById(id);
+    if(memberDataToUpdate.getName() != null) member.setName(memberDataToUpdate.getName());
+    if(memberDataToUpdate.getUserId() != null) member.setUserId(memberDataToUpdate.getUserId());
+    if(memberDataToUpdate.getConversations() != null) member.setConversations(memberDataToUpdate.getConversations());
 
-        if(newMember.getName() != null) member.setName(newMember.getName());
-        if(newMember.getUserId() != null) member.setUserId(newMember.getUserId());
+    Member updatedMember = memberRepository.save(member);
 
-        return ResponseEntity.ok(
-            memberRepository.save(member)
-        );
-    }
+    if(updatedMember == null)
+      return ResponseEntity.badRequest().build();
+    
+    return ResponseEntity.ok(updatedMember);
+  }
 
-    @DeleteMapping("/{id}")
-    @ApiOperation(value = "Deleta os dados de um membro")
-    public void delete(@PathVariable("id") long id) {
-        memberRepository.deleteById(id);
-    }
+  @DeleteMapping("/{memberId}")
+  @ApiOperation(value = "Deleta os dados de um membro")
+  public ResponseEntity<Member> delete(@PathVariable("memberId") long memberId) {
+    Member memberToDelete = memberRepository.findMemberById(memberId);
+    
+    if(memberToDelete == null)
+      return ResponseEntity.notFound().build();
+    else
+      memberRepository.deleteById(memberId);
+
+    return ResponseEntity.ok().build();
+  }
 }

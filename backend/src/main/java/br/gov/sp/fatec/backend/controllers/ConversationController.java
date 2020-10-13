@@ -28,93 +28,80 @@ import org.springframework.web.bind.annotation.RestController;
 @Api("API REST Gruly Conversation")
 @CrossOrigin(origins = "*")
 public class ConversationController {
-    @Autowired
-    private ConversationRepository conversationRepository;
+  @Autowired
+  private ConversationRepository conversationRepository;
 
-    @Autowired
-    private MemberRepository memberRepository;
+  @Autowired
+  private MemberRepository memberRepository;
 
-    @Autowired
-    private MessageRepository messageRepository;
+  @Autowired
+  private MessageRepository messageRepository;
 
-    @GetMapping
-    @ApiOperation(value = "Retorna uma lista com os dados de todas as conversas")
-    public List<Conversation> getAllConversations() {
-        return conversationRepository.findAll();
-    }
+  @GetMapping
+  @ApiOperation(value = "Retorna uma lista com os dados de todas as conversas")
+  public List<Conversation> getAllConversations() {
+    return conversationRepository.findAll();
+  }
 
-    @GetMapping("/{id}")
-    @ApiOperation(value = "Retorna os dados de uma conversa com um id específico")
-    public ResponseEntity<Conversation> getConversationById(@PathVariable("id") long id) {
-        return ResponseEntity.ok(
-            conversationRepository.findConversationById(id)
-        );
-    }
+  @GetMapping("/{conversationId}")
+  @ApiOperation(value = "Retorna os dados de uma conversa")
+  public ResponseEntity<Conversation> getConversationById(@PathVariable("conversationId") long conversationId) {
+    return ResponseEntity.ok(conversationRepository.findConversationById(conversationId));
+  }
 
-    @PostMapping
-    @ApiOperation(value = "Insere os dados de uma conversa")
-    public ResponseEntity<Conversation> insert(@RequestBody Conversation conversation) {
-        return ResponseEntity.ok(
-            conversationRepository.save(conversation)
-        );
-    }
+  @PostMapping
+  @ApiOperation(value = "Insere os dados de uma conversa")
+  public ResponseEntity<Conversation> insert(@RequestBody Conversation conversation) {
+    return ResponseEntity.ok(conversationRepository.save(conversation));
+  }
 
-    @PutMapping("/{id}")
-    @ApiOperation(value = "Atualiza os dados de uma conversa")
-    public ResponseEntity<Conversation> update(@PathVariable("id") long id,
-                                               @RequestBody Conversation newConversation) {
-        Conversation conversation = conversationRepository.findConversationById(id);
+  @PutMapping("/{conversationId}")
+  @ApiOperation(value = "Atualiza os dados de uma conversa")
+  public ResponseEntity<Conversation> update(@PathVariable("conversationId") long conversationId, @RequestBody Conversation updatedConversation) {
+    Conversation conversation = conversationRepository.findConversationById(conversationId);
+    if(updatedConversation.getTitle() != null) conversation.setTitle(updatedConversation.getTitle());
+    if(updatedConversation.getMembers() != null) conversation.setMembers(updatedConversation.getMembers());
+    if(updatedConversation.getMessages() != null) conversation.setMessages(updatedConversation.getMessages());
 
-        if(newConversation.getTitle() != null) conversation.setTitle(newConversation.getTitle());
+    return ResponseEntity.ok(conversationRepository.save(conversation));
+  }
+
+  @PostMapping("/{conversationId}/members/{memberId}")
+  @ApiOperation(value = "Adiciona um membro a uma conversa")
+  public ResponseEntity<Conversation> insertConversationMember(@PathVariable("conversationId") long conversationId, @PathVariable("memberId") long memberId) {
+    Conversation conversation = conversationRepository.findConversationById(conversationId);
+    Member member = memberRepository.findMemberById(memberId);
+
+    conversation.addMember(member);
     
-        return ResponseEntity.ok(
-            conversationRepository.save(conversation)
-        );
-    }
+    return ResponseEntity.ok(conversationRepository.save(conversation));
+  }
 
-    @PostMapping("/{id}/members/add/{memberId}")
-    @ApiOperation(value = "Adiciona um membro a uma conversa")
-    public ResponseEntity<Conversation> insertConversationMember(@PathVariable("id") long id,
-                                        @PathVariable("memberId") long memberId) {
-        Conversation conversation = conversationRepository.findConversationById(id);
-        Member member = memberRepository.findMemberById(memberId);
+  @DeleteMapping("/{conversationId}/members/delete/{memberId}")
+  @ApiOperation(value = "Deleta um membro de uma conversa")
+  public void deleteConversationMember(@PathVariable("id") long conversationId, @PathVariable("memberId") long memberId) {
+    Conversation conversation = conversationRepository.findConversationById(conversationId);
+    Member member = memberRepository.findMemberById(memberId);
 
-        conversation.addMember(member);
+    conversation.removeMember(member);
 
-        return ResponseEntity.ok(
-            conversationRepository.save(conversation)
-        );
-    }
+    conversationRepository.save(conversation);
+  }
 
-    @DeleteMapping("/{id}/members/delete/{memberId}")
-    @ApiOperation(value = "Deleta um membro de uma conversa")
-    public void deleteConversationMember(@PathVariable("id") long id,
-                                         @PathVariable("memberId") long memberId) {
-        Conversation conversation = conversationRepository.findConversationById(id);
-        Member member = memberRepository.findMemberById(memberId);
+  @PostMapping("/{conversationId}/messages/add/{messageId}")
+  @ApiOperation(value = "Adiciona uma mensagem a uma conversa")
+  public ResponseEntity<Conversation> insertConversationMessage(@PathVariable("conversationId") long conversationId, @RequestBody long messageId) {
+    Conversation conversation = conversationRepository.findConversationById(conversationId);
+    Message message = messageRepository.findMessageById(messageId);
 
-        conversation.removeMember(member);
+    conversation.addMessage(message);
 
-        conversationRepository.save(conversation);
-    }
+    return ResponseEntity.ok(conversationRepository.save(conversation));
+  }
 
-    @PostMapping("/{id}/messages/add/{messageId}")
-    @ApiOperation(value = "Adiciona uma mensagem a uma conversa")
-    public ResponseEntity<Conversation> insertConversationMessage(@PathVariable("id") long id,
-                                        @PathVariable("messageId") long messageId) {
-        Conversation conversation = conversationRepository.findConversationById(id);
-        Message message = messageRepository.findMessageById(messageId);
-
-        conversation.addMessage(message);
-
-        return ResponseEntity.ok(
-            conversationRepository.save(conversation)
-        );
-    }
-
-    @DeleteMapping("/{id}")
-    @ApiOperation(value = "Deleta os dados de uma conversa")
-    public void delete(@PathVariable("id") long id) {
-        conversationRepository.deleteById(id);
-    }
+  @DeleteMapping("/{conversationId}")
+  @ApiOperation(value = "Deleta os dados de uma conversa")
+  public void delete(@PathVariable("conversationId") long conversationId) {
+    conversationRepository.deleteById(conversationId);
+  }
 }
