@@ -6,12 +6,14 @@ import br.gov.sp.fatec.backend.models.Message;
 import br.gov.sp.fatec.backend.repositories.ConversationRepository;
 import br.gov.sp.fatec.backend.repositories.MemberRepository;
 import br.gov.sp.fatec.backend.repositories.MessageRepository;
+import br.gov.sp.fatec.backend.utils.GrulyApiExceptionResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,50 +47,137 @@ public class ConversationController {
 
   @GetMapping("/{conversationId}")
   @ApiOperation(value = "Retorna os dados de uma conversa")
-  public ResponseEntity<Conversation> getConversationById(@PathVariable("conversationId") long conversationId) {
-    return ResponseEntity.ok(conversationRepository.findConversationById(conversationId));
+  public ResponseEntity<GrulyApiExceptionResponse<Conversation>> getConversationById(@PathVariable("conversationId") long conversationId) {
+    GrulyApiExceptionResponse<Conversation> response = new GrulyApiExceptionResponse<Conversation>();
+
+    Conversation fetchedChat = conversationRepository.findConversationById(conversationId);
+    
+    if(fetchedChat == null) {
+      response.addErrorMessage("conversa não encontrada");
+
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+    
+    response.setData(fetchedChat);
+
+    return ResponseEntity.ok(response);
   }
 
   @PostMapping
   @ApiOperation(value = "Insere os dados de uma conversa")
-  public ResponseEntity<Conversation> insert(@RequestBody Conversation conversation) {
-    return ResponseEntity.ok(conversationRepository.save(conversation));
+  public ResponseEntity<GrulyApiExceptionResponse<Conversation>> insert(@RequestBody Conversation conversation) {
+    GrulyApiExceptionResponse<Conversation> response = new GrulyApiExceptionResponse<Conversation>();
+
+    Conversation newChat = conversationRepository.save(conversation);
+    
+    if(newChat == null) {
+      response.addErrorMessage("erro ao criar uma conversa");
+
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
+    response.setData(newChat);
+
+    return ResponseEntity.ok(response);
   }
 
   @PutMapping("/{conversationId}")
   @ApiOperation(value = "Atualiza os dados de uma conversa")
-  public ResponseEntity<Conversation> update(@PathVariable("conversationId") long conversationId, @RequestBody Conversation updatedConversation) {
-    Conversation conversation = conversationRepository.findConversationById(conversationId);
-    if(updatedConversation.getTitle() != null) conversation.setTitle(updatedConversation.getTitle());
-    if(updatedConversation.getMembers() != null) conversation.setMembers(updatedConversation.getMembers());
-    if(updatedConversation.getMessages() != null) conversation.setMessages(updatedConversation.getMessages());
+  public ResponseEntity<GrulyApiExceptionResponse<Conversation>> update(@PathVariable("conversationId") long conversationId,
+                                             @RequestBody Conversation chatDataToUpdate) {
+    GrulyApiExceptionResponse<Conversation> response = new GrulyApiExceptionResponse<Conversation>();
 
-    return ResponseEntity.ok(conversationRepository.save(conversation));
+    Conversation chat = conversationRepository.findConversationById(conversationId);
+    if(chat == null) {
+      response.addErrorMessage("conversa não encontrada");
+      
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    if(chatDataToUpdate.getTitle() != null) chat.setTitle(chatDataToUpdate.getTitle());
+    if(chatDataToUpdate.getMembers() != null) chat.setMembers(chatDataToUpdate.getMembers());
+    if(chatDataToUpdate.getMessages() != null) chat.setMessages(chatDataToUpdate.getMessages());
+
+    Conversation updatedChat = conversationRepository.save(chat);
+
+    if(updatedChat == null) {
+      response.addErrorMessage("erro ao atualizar os dados da conversa");
+
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
+    response.setData(updatedChat);
+
+    return ResponseEntity.ok(response);
   }
 
-  @PostMapping("/{conversationId}/members/{memberId}")
+  @DeleteMapping("/{conversationId}")
+  @ApiOperation(value = "Deleta os dados de uma conversa")
+  public ResponseEntity<GrulyApiExceptionResponse<Conversation>> delete(@PathVariable("conversationId") long conversationId) {
+    GrulyApiExceptionResponse<Conversation> response = new GrulyApiExceptionResponse<Conversation>();
+
+    Conversation chatToDelete = conversationRepository.findConversationById(conversationId);
+
+    if(chatToDelete == null) {
+      response.addErrorMessage("conversa não encontrada");
+
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    conversationRepository.deleteById(conversationId);
+
+    return ResponseEntity.ok().build();
+  }
+
+  @PutMapping("/{conversationId}/members/{memberId}/add")
   @ApiOperation(value = "Adiciona um membro a uma conversa")
-  public ResponseEntity<Conversation> insertConversationMember(@PathVariable("conversationId") long conversationId, @PathVariable("memberId") long memberId) {
-    Conversation conversation = conversationRepository.findConversationById(conversationId);
-    Member member = memberRepository.findMemberById(memberId);
+  public ResponseEntity<GrulyApiExceptionResponse<Conversation>> insertConversationMember(@PathVariable("conversationId") long conversationId,
+                                                               @PathVariable("memberId") long memberId) {
+    GrulyApiExceptionResponse<Conversation> response = new GrulyApiExceptionResponse<Conversation>();
 
-    conversation.addMember(member);
-    
-    return ResponseEntity.ok(conversationRepository.save(conversation));
+    Conversation chat = conversationRepository.findConversationById(conversationId);
+    Member memberToAdd = memberRepository.findMemberById(memberId);
+
+    if(chat == null || memberToAdd == null) {
+      if(chat == null) response.addErrorMessage("conversa não encontrada");
+      if(memberToAdd == null) response.addErrorMessage("membro não encontrado");
+      
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    chat.addMember(memberToAdd);
+    conversationRepository.save(chat);
+
+    response.setData(chat);
+
+    return ResponseEntity.ok(response);
   }
 
-  @DeleteMapping("/{conversationId}/members/delete/{memberId}")
+  @DeleteMapping("/{conversationId}/members/{memberId}/delete")
   @ApiOperation(value = "Deleta um membro de uma conversa")
-  public void deleteConversationMember(@PathVariable("id") long conversationId, @PathVariable("memberId") long memberId) {
-    Conversation conversation = conversationRepository.findConversationById(conversationId);
-    Member member = memberRepository.findMemberById(memberId);
+  public ResponseEntity<GrulyApiExceptionResponse<Conversation>> deleteConversationMember(@PathVariable("conversationId") long conversationId,
+                                                                                          @PathVariable("memberId") long memberId) {
+    GrulyApiExceptionResponse<Conversation> response = new GrulyApiExceptionResponse<Conversation>();
 
-    conversation.removeMember(member);
+    Conversation chat = conversationRepository.findConversationById(conversationId);
+    Member memberToDelete = memberRepository.findMemberById(memberId);
 
-    conversationRepository.save(conversation);
+    if(chat == null || memberToDelete == null) {
+      if(chat == null) response.addErrorMessage("conversa não encontrada");
+      if(memberToDelete == null) response.addErrorMessage("membro não encontrado");
+
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    chat.removeMember(memberToDelete);
+    conversationRepository.save(chat);
+
+    response.setData(chat);
+
+    return ResponseEntity.ok(response);
   }
 
-  @PostMapping("/{conversationId}/messages/add/{messageId}")
+  @PutMapping("/{conversationId}/messages/{messageId}/add")
   @ApiOperation(value = "Adiciona uma mensagem a uma conversa")
   public ResponseEntity<Conversation> insertConversationMessage(@PathVariable("conversationId") long conversationId, @RequestBody long messageId) {
     Conversation conversation = conversationRepository.findConversationById(conversationId);
@@ -97,11 +186,5 @@ public class ConversationController {
     conversation.addMessage(message);
 
     return ResponseEntity.ok(conversationRepository.save(conversation));
-  }
-
-  @DeleteMapping("/{conversationId}")
-  @ApiOperation(value = "Deleta os dados de uma conversa")
-  public void delete(@PathVariable("conversationId") long conversationId) {
-    conversationRepository.deleteById(conversationId);
   }
 }
