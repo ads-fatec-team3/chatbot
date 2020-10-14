@@ -39,6 +39,12 @@ public class Conversation {
   @JsonIdentityReference(alwaysAsId = true)
   private Set<Member> members = new HashSet<Member>();
 
+  public Conversation() {}
+
+  public Conversation(String title) {
+    this.title = title;
+  }
+
   public long getId() {
     return id;
   }
