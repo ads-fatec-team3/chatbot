@@ -70,17 +70,17 @@ public class MemberControllerTests {
       .andExpect(jsonPath("$.userId", is(10)));
     }
     
-    @Test
-    public void updateMember() throws Exception {
-      Member memberToUpdate = memberRepository.save(new Member("new member", 10));
-      memberToUpdate.setName("new member updated");
+  @Test
+  public void updateMember() throws Exception {
+    Member memberToUpdate = memberRepository.save(new Member("new member", 10));
+    memberToUpdate.setName("new member updated");
 
-      mockMvc.perform(
-        put("/{API_URL}/{memberId}", BASE_API_MEMBERS_URL, memberToUpdate.getId())
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(memberToUpdate)))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.name", is("new member updated")));
+    mockMvc.perform(
+      put("/{API_URL}/{memberId}", BASE_API_MEMBERS_URL, memberToUpdate.getId())
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(objectMapper.writeValueAsString(memberToUpdate)))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.name", is("new member updated")));
   }
 
   @Test
