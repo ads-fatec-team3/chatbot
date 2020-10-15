@@ -6,11 +6,15 @@ Antes de tudo, você deve ter o maven instalado e configurado na sua máquina, c
 Entre no diretório *__backend__* e digite no terminal:
 > __mvn spring-boot:run__
 
-Isto irá subir servidor e criará as tabelas do banco de dados automaticamente.
+Isto irá subir o servidor e criará as tabelas do banco de dados automaticamente.
 
 ### Debug da aplicação
-Pra executar a aplicação em modo _debug_, digite o seguinte no terminal:
+Pra executar a aplicação em modo _debug_, execute o seguinte comando no terminal:
 >__mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"__
+
+### Testes
+Para executar os testes da aplicação em modo _debug_, execute esse comando:
+>__mvn -Dmaven.surefire.debug="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005" test__
 
 Isso fará com que a aplicação seja iniciada em modo _debug_ remoto e irá escutar por um debugger na porta **5005**.
 Em seguida, na aba de Debug no VSCode, execute a task **Debug (Attach)**.

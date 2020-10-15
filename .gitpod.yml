@@ -4,6 +4,9 @@ ports:
 image:
   file: .gitpod.Dockerfile
 
+tasks:
+  - command: psql -f backend/database/db.sql
+
 vscode:
   extensions:
     - Pivotal.vscode-spring-boot@1.21.0:VrPD7WUvW3BLuex1cvs7Sg==
