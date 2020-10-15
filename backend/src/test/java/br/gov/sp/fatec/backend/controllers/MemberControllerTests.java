@@ -1,5 +1,10 @@
 package br.gov.sp.fatec.backend.controllers;
 
+import br.gov.sp.fatec.backend.models.Member;
+import br.gov.sp.fatec.backend.repositories.MemberRepository;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -8,12 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-
-import br.gov.sp.fatec.backend.models.Member;
-import br.gov.sp.fatec.backend.repositories.MemberRepository;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -22,8 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -46,41 +45,41 @@ public class MemberControllerTests {
 
   @Test
   public void insertMember() throws Exception {
-    Member newMember = new Member("new user", 10);
+    Member newMember = new Member("new member", 10);
 
     mockMvc.perform(
       post("/{API_URL}", BASE_API_MEMBERS_URL)
       .contentType(MediaType.APPLICATION_JSON)
-      .content(objectMapper.writeValueAsString(newMember))
-      .accept(MediaType.APPLICATION_JSON))
-      .andExpect(status().isOk());
+      .content(objectMapper.writeValueAsString(newMember)))
+      .andExpect(status().isCreated());
   }
 
   @Test
   public void getMember() throws Exception {
-    Member savedMember = memberRepository.save(new Member("new member", 10));
+    Member member = memberRepository.save(new Member("member", 10));
     
     mockMvc.perform(
-      get("/{API_URL}/{memberId}", BASE_API_MEMBERS_URL, savedMember.getId())
+      get("/{API_URL}/{memberId}", BASE_API_MEMBERS_URL, member.getId())
       .accept(MediaType.APPLICATION_JSON))
       .andDo(print())
       .andExpect(status().isOk())
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.name", is("new member")))
-      .andExpect(jsonPath("$.userId", is(10)));
+      .andExpect(jsonPath("$.data.name", is("member")))
+      .andExpect(jsonPath("$.data.userId", is(10)));
     }
     
   @Test
   public void updateMember() throws Exception {
-    Member memberToUpdate = memberRepository.save(new Member("new member", 10));
-    memberToUpdate.setName("new member updated");
+    Member updatedMember = memberRepository.save(new Member("member", 10));
+    updatedMember.setName("member updated");
 
     mockMvc.perform(
-      put("/{API_URL}/{memberId}", BASE_API_MEMBERS_URL, memberToUpdate.getId())
+      put("/{API_URL}/{memberId}", BASE_API_MEMBERS_URL, updatedMember.getId())
       .contentType(MediaType.APPLICATION_JSON)
-      .content(objectMapper.writeValueAsString(memberToUpdate)))
-      .andExpect(status().isOk())
-      .andExpect(jsonPath("$.name", is("new member updated")));
+      .content(objectMapper.writeValueAsString(updatedMember)))
+      .andExpect(status().isOk());
+    
+    assertThat(updatedMember.getName()).isEqualTo("member updated");
   }
 
   @Test

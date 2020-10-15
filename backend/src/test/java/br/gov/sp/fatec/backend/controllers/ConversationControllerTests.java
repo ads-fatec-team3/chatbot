@@ -1,5 +1,14 @@
 package br.gov.sp.fatec.backend.controllers;
 
+import br.gov.sp.fatec.backend.models.Member;
+import br.gov.sp.fatec.backend.models.Message;
+import br.gov.sp.fatec.backend.models.Conversation;
+import br.gov.sp.fatec.backend.repositories.MemberRepository;
+import br.gov.sp.fatec.backend.repositories.MessageRepository;
+import br.gov.sp.fatec.backend.repositories.ConversationRepository;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -8,27 +17,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-
-import br.gov.sp.fatec.backend.models.Member;
-import br.gov.sp.fatec.backend.models.Conversation;
-import br.gov.sp.fatec.backend.repositories.MemberRepository;
-import br.gov.sp.fatec.backend.repositories.ConversationRepository;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.hasSize;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -49,6 +48,9 @@ public class ConversationControllerTests {
   @Autowired
   ConversationRepository conversationRepository;
 
+  @Autowired
+  MessageRepository messageRepository;
+
   @Test
   public void contextLoads() {}
 
@@ -59,17 +61,16 @@ public class ConversationControllerTests {
     mockMvc.perform(
       post("/{API_URL}", BASE_API_CONVERSATIONS_URL)
       .contentType(MediaType.APPLICATION_JSON)
-      .content(objectMapper.writeValueAsString(chat))
-      .accept(MediaType.APPLICATION_JSON))
-      .andExpect(status().isOk());
+      .content(objectMapper.writeValueAsString(chat)))
+      .andExpect(status().isCreated());
   }
 
   @Test
   public void getConversation() throws Exception {
-    Conversation savedChat = conversationRepository.save(new Conversation("chat"));
+    Conversation chat = conversationRepository.save(new Conversation("chat"));
     
     mockMvc.perform(
-      get("/{API_URL}/{conversationId}", BASE_API_CONVERSATIONS_URL, savedChat.getId())
+      get("/{API_URL}/{conversationId}", BASE_API_CONVERSATIONS_URL, chat.getId())
       .accept(MediaType.APPLICATION_JSON))
       .andDo(print())
       .andExpect(status().isOk())
@@ -77,19 +78,22 @@ public class ConversationControllerTests {
       .andExpect(jsonPath("$.data.title", is("chat")))
       .andExpect(jsonPath("$.data.messages", empty()))
       .andExpect(jsonPath("$.data.members", empty()));
-    }
+  }
     
-    @Test
-    public void updateConversation() throws Exception {
-      Conversation chatToUpdate = conversationRepository.save(new Conversation("chat"));
-      chatToUpdate.setTitle("chat updated");
+  @Test
+  public void updateConversation() throws Exception {
+    Conversation updatedChat = conversationRepository.save(new Conversation("chat"));
+    updatedChat.setTitle("chat updated");
 
-      mockMvc.perform(
-        put("/{API_URL}/{conversationId}", BASE_API_CONVERSATIONS_URL, chatToUpdate.getId())
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(chatToUpdate)))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.data.title", is("chat updated")));
+    mockMvc.perform(
+      put("/{API_URL}/{conversationId}", BASE_API_CONVERSATIONS_URL, updatedChat.getId())
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(objectMapper.writeValueAsString(updatedChat)))
+      .andExpect(status().isOk());
+    
+    assertThat(updatedChat.getTitle()).isEqualTo("chat updated");
+    assertThat(updatedChat.getMembers()).asList().isEmpty();
+    assertThat(updatedChat.getMessages()).asList().isEmpty();
   }
 
   @Test
@@ -103,32 +107,54 @@ public class ConversationControllerTests {
 
   @Test
   public void insertConversationMember() throws Exception {
-    long memberId = memberRepository.save(new Member("new member", 10)).getId();
-    long chatId = conversationRepository.save(new Conversation("chat")).getId();
+    Member member = memberRepository.save(new Member("member", 10));
+    Conversation chat = conversationRepository.save(new Conversation("chat"));
 
     mockMvc.perform(
       put("/{API_URL}/{conversationId}/members/{memberId}/add",
-          BASE_API_CONVERSATIONS_URL, chatId, memberId))
-      .andDo(print())
-      .andExpect(status().isOk())
-      .andExpect(jsonPath("$.data.members", hasSize(1)));
+          BASE_API_CONVERSATIONS_URL, chat.getId(), member.getId()))
+      .andExpect(status().isOk());
+
+    assertThat(chat.getMembers()).asList().isNotEmpty();
   }
   
   @Test
   public void deleteConversationMember() throws Exception {
-    Member member = memberRepository.save(new Member("new member", 10));
+    Member member = memberRepository.save(new Member("member", 10));
     Conversation chat = conversationRepository.save(new Conversation("chat"));
-
+    
     memberRepository.save(member);
-
+    
     chat.addMember(member);
     conversationRepository.save(chat);
 
     mockMvc.perform(
-      delete("/{API_URL}/{conversationId}/members/{memberId}/delete",
-             BASE_API_CONVERSATIONS_URL, chat.getId(), member.getId()))
-      .andDo(print())
-      .andExpect(status().isOk())
-      .andExpect(jsonPath("$.data.members", empty()));
+      delete("/{API_URL}/{conversationId}/members/{memberId}/remove",
+      BASE_API_CONVERSATIONS_URL, chat.getId(), member.getId()))
+      .andExpect(status().isOk());
+
+    assertThat(chat.getMembers()).asList().isEmpty();
+  }
+
+  @Test
+  public void insertConversationMessage() throws Exception {
+    Member sender = new Member("member", 10);
+    Conversation chat = new Conversation("chat");
+
+    conversationRepository.save(chat);
+    memberRepository.save(sender);
+
+    Message newMessage = new Message();
+    newMessage.setText("test");
+    newMessage.setSender(sender);
+
+    messageRepository.save(newMessage);
+
+    mockMvc.perform(
+      put("/{API_URL}/{conversationId}/messages/{messageId}/add",
+          BASE_API_CONVERSATIONS_URL, chat.getId(), newMessage.getId()))
+      .andExpect(status().isOk());
+    
+    assertThat(chat.getMessages()).asList().isNotEmpty();
   }
 }
