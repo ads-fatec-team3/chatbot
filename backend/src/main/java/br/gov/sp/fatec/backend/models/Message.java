@@ -46,6 +46,11 @@ public class Message {
   public Message() {
     this.timestamp = new Date(System.currentTimeMillis());
   }
+  
+  public Message(String text) {
+    this.text = text;
+    this.timestamp = new Date(System.currentTimeMillis());
+  }
 
   public long getId() {
     return id;
