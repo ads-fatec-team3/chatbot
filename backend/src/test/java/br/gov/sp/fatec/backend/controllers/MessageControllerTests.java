@@ -28,7 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-test.properties")
@@ -89,12 +88,11 @@ public class MessageControllerTests {
   @Test
   public void updateMessage() throws Exception {
     Message updatedMessage = messageRepository.save(new Message("test"));
-    updatedMessage.setText("test updated");
 
     mockMvc.perform(
       put("/{API_URL}/{messageId}", BASE_API_MESSAGES_URL, updatedMessage.getId())
       .contentType(MediaType.APPLICATION_JSON)
-      .content(objectMapper.writeValueAsString(updatedMessage)))
+      .content(objectMapper.writeValueAsString(new Message("test updated"))))
       .andExpect(status().isOk());
 
     assertThat(updatedMessage.getText()).isEqualTo("test updated");

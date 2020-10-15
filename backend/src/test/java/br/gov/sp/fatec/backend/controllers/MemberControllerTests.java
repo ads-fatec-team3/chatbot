@@ -5,6 +5,7 @@ import br.gov.sp.fatec.backend.repositories.MemberRepository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -71,20 +72,20 @@ public class MemberControllerTests {
   @Test
   public void updateMember() throws Exception {
     Member updatedMember = memberRepository.save(new Member("member", 10));
-    updatedMember.setName("member updated");
 
     mockMvc.perform(
       put("/{API_URL}/{memberId}", BASE_API_MEMBERS_URL, updatedMember.getId())
       .contentType(MediaType.APPLICATION_JSON)
-      .content(objectMapper.writeValueAsString(updatedMember)))
+      .content(objectMapper.writeValueAsString(new Member("member updated", 20))))
       .andExpect(status().isOk());
     
     assertThat(updatedMember.getName()).isEqualTo("member updated");
+    assertThat(updatedMember.getUserId()).isEqualTo(20);
   }
 
   @Test
   public void deleteMember() throws Exception {
-    Member memberToDelete = memberRepository.save(new Member("new member", 10));
+    Member memberToDelete = memberRepository.save(new Member("member", 10));
 
     mockMvc.perform(
       delete("/{API_URL}/{memberId}", BASE_API_MEMBERS_URL, memberToDelete.getId()))

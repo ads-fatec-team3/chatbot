@@ -83,12 +83,11 @@ public class ConversationControllerTests {
   @Test
   public void updateConversation() throws Exception {
     Conversation updatedChat = conversationRepository.save(new Conversation("chat"));
-    updatedChat.setTitle("chat updated");
 
     mockMvc.perform(
       put("/{API_URL}/{conversationId}", BASE_API_CONVERSATIONS_URL, updatedChat.getId())
       .contentType(MediaType.APPLICATION_JSON)
-      .content(objectMapper.writeValueAsString(updatedChat)))
+      .content(objectMapper.writeValueAsString(new Conversation("chat updated"))))
       .andExpect(status().isOk());
     
     assertThat(updatedChat.getTitle()).isEqualTo("chat updated");
@@ -138,15 +137,11 @@ public class ConversationControllerTests {
 
   @Test
   public void insertConversationMessage() throws Exception {
-    Member sender = new Member("member", 10);
     Conversation chat = new Conversation("chat");
 
     conversationRepository.save(chat);
-    memberRepository.save(sender);
 
-    Message newMessage = new Message();
-    newMessage.setText("test");
-    newMessage.setSender(sender);
+    Message newMessage = new Message("test");
 
     messageRepository.save(newMessage);
 
