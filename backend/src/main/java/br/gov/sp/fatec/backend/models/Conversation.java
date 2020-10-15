@@ -1,17 +1,14 @@
 package br.gov.sp.fatec.backend.models;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Table;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,7 +34,7 @@ public class Conversation {
 
   @ManyToMany(mappedBy = "conversations")
   @JsonIdentityReference(alwaysAsId = true)
-  private Set<Member> members = new HashSet<Member>();
+  private List<Member> members = new ArrayList<Member>();
 
   public Conversation() {}
 
@@ -57,7 +54,7 @@ public class Conversation {
     return messages;
   }
 
-  public Set<Member> getMembers() {
+  public List<Member> getMembers() {
     return members;
   }
 
@@ -69,7 +66,7 @@ public class Conversation {
     this.title = title;
   }
 
-  public void setMembers(Set<Member> members) {
+  public void setMembers(List<Member> members) {
     this.members = members;
   }
 
