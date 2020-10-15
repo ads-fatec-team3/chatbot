@@ -14,7 +14,7 @@ Pra executar a aplicação em modo _debug_, execute o seguinte comando no termin
 
 ### Testes
 Para executar os testes da aplicação em modo _debug_, execute esse comando:
->__mvn test -Dtest.debug="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"__
+>__mvn -Dmaven.surefire.debug="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005" test__
 
 Isso fará com que a aplicação seja iniciada em modo _debug_ remoto e irá escutar por um debugger na porta **5005**.
 Em seguida, na aba de Debug no VSCode, execute a task **Debug (Attach)**.
