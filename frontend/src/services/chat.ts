@@ -1,7 +1,7 @@
 import axios from "axios"
 import { IChat } from "../@types/chat";
 
-const SERVER_URL = "http://localhost:8080"
+const SERVER_URL = `${process.env.VUE_APP_SERVER_URL}`
 
 const ChatService = {
     async createChat(chat: IChat): Promise<IChat>{
