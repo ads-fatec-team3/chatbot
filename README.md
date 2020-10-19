@@ -69,7 +69,7 @@ atendente ou instrutor.
 |-----------|-------------|------------|-------------------------------------------------------------------------------------------|
 | 1         | 07/09/2020  | 20/09/2020 | [acessar](https://github.com/ads-fatec-team3/chatbot/blob/master/docs/entregas/sprint1.md)|
 | 2         | 21/09/2020  | 04/10/2020 | [acessar](https://github.com/ads-fatec-team3/chatbot/blob/master/docs/entregas/sprint2.md)|
-| 3         | 05/10/2020  | 18/10/2020 | ---                                                                                       |
+| 3         | 05/10/2020  | 18/10/2020 | [acessar](https://github.com/ads-fatec-team3/chatbot/blob/master/docs/entregas/sprint3.md)|
 | 4         | 19/10/2020  | 01/11/2020 | ---                                                                                       |
 | 5         | 02/11/2020  | 15/11/2020 | ---                                                                                       |
 | 6         | 16/11/2020  | 29/11/2020 | ---                                                                                       |
