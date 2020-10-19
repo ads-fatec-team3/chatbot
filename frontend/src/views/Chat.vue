@@ -7,6 +7,11 @@
         centered
         icons-and-text
       >
+        <v-tab href="#tab-gruly">
+          Gruly
+          <v-icon>mdi-robot</v-icon>
+        </v-tab>
+
         <v-tab href="#tab-chat">
           Chat
           <v-icon>mdi-chat</v-icon>
@@ -24,6 +29,53 @@
       </v-tabs>
 
       <v-tabs-items v-model="tab">
+        <v-tab-item value="tab-gruly">
+          <div>
+            <v-virtual-scroll
+              id="messages"
+              :items="messagesGruly"
+              class="scroll-box"
+              item-height="110"
+            >
+              <template v-slot="{ item, index }">
+
+                <v-list-item
+                  v-if="item.owner == user"
+                  :key="index"
+                  class="d-flex flex-row justify-end"
+                >
+                  <strong class="message my-message">{{ item.content }}</strong>
+                </v-list-item>
+
+                <v-list-item
+                  v-else
+                  :key="index"
+                  class="d-flex flex-row justify-start">
+                  <strong class="message your-message">{{ item.content }}</strong>
+                </v-list-item>
+
+              </template>
+            </v-virtual-scroll>
+            <div class="d-flex flex-row message-input">
+              <v-textarea
+                v-model="messageGruly"
+                outlined
+                rows="2"
+                no-resize
+                class="ml-2"
+              ></v-textarea>
+              <v-btn
+                fab
+                color="primary"
+                class="ma-2"
+                @click="sendMessageGruly"
+              >
+                <v-icon>mdi-send</v-icon>
+              </v-btn>
+            </div>
+          </div>
+        </v-tab-item>
+
         <v-tab-item value="tab-chat">
           <div>
             <v-virtual-scroll
@@ -163,14 +215,15 @@ export default {
   data () {
     return {
       tab: null,
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       message: null,
+      messageGruly: null,
       searchMember: null,
       user: 1,
       otherUser: 2,
       messages: [
         { content: 'olá', dateTime: '2020-10-04 12:00:00', owner: 2 }
       ],
+      messagesGruly: [],
       conversas: [
         { id: 1, members: ['João', 'Maria'], lastMessage: { content: 'olá', dateTime: '2020-10-04 12:00:00', owner: 2 } },
         { id: 2, members: ['José', 'Pedro'], lastMessage: { content: 'olá', dateTime: '2020-10-04 12:00:00', owner: 2 } },
@@ -196,6 +249,24 @@ export default {
         this.scrollToEnd()
       }
     },
+    sendMessageGruly: function () {
+      if (this.messageGruly) {
+        this.messagesGruly.push({
+          content: this.messageGruly,
+          owner: this.user
+        })
+
+        axios.post('http://127.0.0.1:5000/send-message', {
+          message: this.messageGruly
+        }).then(response => {
+          this.messagesGruly.push({
+            content: response.data.result, dateTime: '2020-10-04 12:00:00', owner: 'Gruly'
+          })
+        })
+
+        this.messageGruly = null
+      }
+    },
     scrollToEnd: function () {
       var scrollArea = this.$el.querySelector('#messages')
       scrollArea.scrollTop = scrollArea.scrollHeight
@@ -210,11 +281,19 @@ export default {
       }).catch(response => {
         console.log('Deu ruim')
       })
+    },
+    loadGruly: function () {
+      axios.get('http://127.0.0.1:5000').then(response => {
+        this.messagesGruly.push({
+          content: response.data.result, dateTime: '2020-10-04 12:00:00', owner: 'Gruly'
+        })
+      })
     }
   },
 
   mounted () {
     this.loadAgenda()
+    this.loadGruly()
   },
 
   filters: {
