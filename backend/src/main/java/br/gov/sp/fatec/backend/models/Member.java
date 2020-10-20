@@ -6,9 +6,9 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonView;
+
+import br.gov.sp.fatec.backend.views.Views;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,24 +20,25 @@ import javax.persistence.ManyToMany;
 
 @Entity
 @Table(name = "member")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Member {
+  @JsonView({Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "member_id")
   private long id;
 
+  @JsonView({Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
   @Column(name = "member_name", nullable = false)
   private String name;
 
   @Column(name = "user_id", nullable = true)
   private Integer userId;
 
+  @JsonView(Views.DetailMemberView.class)
   @ManyToMany
   @JoinTable(name = "member_conversation",
              joinColumns = @JoinColumn(name = "conversation_id"),
              inverseJoinColumns = @JoinColumn(name = "member_id"))
-  @JsonIdentityReference(alwaysAsId = true)
   private Set<Conversation> conversations = new HashSet<Conversation>();
 
   public Member() {}
