@@ -64,8 +64,7 @@ public class MemberControllerTests {
       .andDo(print())
       .andExpect(status().isOk())
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.data.name", is("member")))
-      .andExpect(jsonPath("$.data.userId", is(10)));
+      .andExpect(jsonPath("$.name", is("member")));
     }
     
   @Test
