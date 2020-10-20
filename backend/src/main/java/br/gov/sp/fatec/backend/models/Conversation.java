@@ -1,8 +1,8 @@
 package br.gov.sp.fatec.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonView;
+
+import br.gov.sp.fatec.backend.views.Views;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,22 +18,23 @@ import javax.persistence.OneToMany;
 
 @Entity
 @Table(name = "conversation")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Conversation {
+  @JsonView({Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "conversation_id")
   private long id;
 
+  @JsonView({Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
   @Column(name = "conversation_title")
   private String title;
 
+  @JsonView(Views.SummaryConversationView.class)
   @OneToMany(mappedBy = "conversation")
-  @JsonIdentityReference(alwaysAsId = true)
   private List<Message> messages = new ArrayList<Message>();
 
+  @JsonView(Views.DetailConversationView.class)
   @ManyToMany(mappedBy = "conversations")
-  @JsonIdentityReference(alwaysAsId = true)
   private List<Member> members = new ArrayList<Member>();
 
   public Conversation() {}

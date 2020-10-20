@@ -82,7 +82,7 @@ public class MessageControllerTests {
       .andDo(print())
       .andExpect(status().isOk())
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.data.text", is("test")));
+      .andExpect(jsonPath("$.text", is("test")));
     }
     
   @Test

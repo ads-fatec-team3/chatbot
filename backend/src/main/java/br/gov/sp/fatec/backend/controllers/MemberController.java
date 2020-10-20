@@ -1,12 +1,16 @@
 package br.gov.sp.fatec.backend.controllers;
 
+import br.gov.sp.fatec.backend.exceptions.MemberException.MemberCrudException;
+import br.gov.sp.fatec.backend.exceptions.MemberException.MemberNotFoundException;
 import br.gov.sp.fatec.backend.models.Member;
 import br.gov.sp.fatec.backend.repositories.MemberRepository;
-import br.gov.sp.fatec.backend.utils.GrulyApiExceptionResponse;
+import br.gov.sp.fatec.backend.views.Views;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,41 +33,35 @@ public class MemberController {
   @Autowired
   private MemberRepository memberRepository;
 
+  @JsonView(Views.DetailMemberView.class)
   @GetMapping
   @ApiOperation(value = "Retorna uma lista com os dados de todos os membros")
-  public List<Member> getAllMembers() {
-    return memberRepository.findAll();
+  public ResponseEntity<List<Member>> getAllMembers() {
+    List<Member> members = memberRepository.findAll();
+
+    return ResponseEntity.ok(members);
   }
 
+  @JsonView(Views.DetailMemberView.class)
   @GetMapping("/{memberId}")
   @ApiOperation(value = "Retorna os dados de um membro")
-  public ResponseEntity<GrulyApiExceptionResponse<Member>> getMemberById(@PathVariable("memberId") long memberId) {
-    GrulyApiExceptionResponse<Member> response = new GrulyApiExceptionResponse<Member>();
-    
+  public ResponseEntity<Member> getMemberById(@PathVariable("memberId") long memberId) throws MemberNotFoundException {    
     Member fetchedMember = memberRepository.findMemberById(memberId);
 
     if(fetchedMember == null) {
-      response.addErrorMessage("membro não encontrado");
-
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+      throw new MemberNotFoundException(memberId);
     }
 
-    response.setData(fetchedMember);
-
-    return ResponseEntity.ok(response);
+    return ResponseEntity.ok(fetchedMember);
   }
 
   @PostMapping
   @ApiOperation(value = "Insere os dados de um membro")
-  public ResponseEntity<GrulyApiExceptionResponse<Member>> insert(@RequestBody Member member) {
-    GrulyApiExceptionResponse<Member> response = new GrulyApiExceptionResponse<Member>();
-
+  public ResponseEntity<Member> insert(@RequestBody Member member) throws MemberCrudException {
     Member newMember = memberRepository.save(member);
 
     if(newMember == null) {
-      response.addErrorMessage("erro ao criar o membro");
-
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+      throw new MemberCrudException("erro ao criar um membro");
     }
 
     return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -71,16 +69,12 @@ public class MemberController {
 
   @PutMapping("/{memberId}")
   @ApiOperation(value = "Atualiza os dados de um membro")
-  public ResponseEntity<GrulyApiExceptionResponse<Member>> update(@PathVariable("memberId") long memberId,
-                                                                  @RequestBody Member memberDataToUpdate) {
-    GrulyApiExceptionResponse<Member> response = new GrulyApiExceptionResponse<Member>();
-
+  public ResponseEntity<Member> update(@PathVariable("memberId") long memberId,
+                                       @RequestBody Member memberDataToUpdate) throws MemberCrudException {
     Member member = memberRepository.findMemberById(memberId);
 
     if(member == null) {
-      response.addErrorMessage("membro não encontrado");
-
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+      throw new MemberNotFoundException(memberId);
     }
     
     if(memberDataToUpdate.getName() != null) member.setName(memberDataToUpdate.getName());
@@ -90,9 +84,7 @@ public class MemberController {
     Member updatedMember = memberRepository.save(member);
 
     if(updatedMember == null) {
-      response.addErrorMessage("erro ao atualizar os dados do membro");
-
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+      throw new MemberCrudException(String.format("erro ao atualizar os dados do membro de id = %d", memberId));
     }
 
     return ResponseEntity.ok().build();
@@ -100,15 +92,11 @@ public class MemberController {
 
   @DeleteMapping("/{memberId}")
   @ApiOperation(value = "Deleta os dados de um membro")
-  public ResponseEntity<GrulyApiExceptionResponse<Member>> delete(@PathVariable("memberId") long memberId) {
-    GrulyApiExceptionResponse<Member> response = new GrulyApiExceptionResponse<Member>();
-
+  public ResponseEntity<Member> delete(@PathVariable("memberId") long memberId) throws MemberCrudException {
     Member memberToDelete = memberRepository.findMemberById(memberId);
     
     if(memberToDelete == null) {
-      response.addErrorMessage("membro não encontrado");
-      
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+      throw new MemberCrudException(String.format("erro ao deletar o membro de id = %d", memberId));
     }
     
     memberRepository.deleteById(memberId);

@@ -75,9 +75,9 @@ public class ConversationControllerTests {
       .andDo(print())
       .andExpect(status().isOk())
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.data.title", is("chat")))
-      .andExpect(jsonPath("$.data.messages", empty()))
-      .andExpect(jsonPath("$.data.members", empty()));
+      .andExpect(jsonPath("$.title", is("chat")))
+      .andExpect(jsonPath("$.messages", empty()))
+      .andExpect(jsonPath("$.members", empty()));
   }
     
   @Test

@@ -2,9 +2,9 @@ package br.gov.sp.fatec.backend.models;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonView;
+
+import br.gov.sp.fatec.backend.views.Views;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -18,29 +18,31 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Table(name = "message")
 public class Message {
+  @JsonView({Views.SummaryMessageView.class, Views.SummaryConversationView.class})
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "message_id")
   private long id;
-
+  
+  @JsonView(Views.DetailMessageView.class)
   @Column(name = "message_text", nullable = false)
   private String text;
-
+  
+  @JsonView(Views.DetailMessageView.class)
   @Column(name = "timestamp", nullable = false)
   @Temporal(TemporalType.TIMESTAMP)
   private Date timestamp;
 
+  @JsonView(Views.DetailMessageView.class)
   @ManyToOne
   @JoinColumn(name = "conversation_id")
-  @JsonIdentityReference(alwaysAsId = true)
   private Conversation conversation;
 
+  @JsonView({Views.DetailMessageView.class, Views.DetailConversationView.class})
   @ManyToOne
   @JoinColumn(name = "sender_id")
-  @JsonIdentityReference(alwaysAsId = true)
   private Member sender;
 
   public Message() {
