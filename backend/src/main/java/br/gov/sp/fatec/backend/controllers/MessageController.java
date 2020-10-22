@@ -1,16 +1,11 @@
 package br.gov.sp.fatec.backend.controllers;
 
-import br.gov.sp.fatec.backend.exceptions.ConversationException.ConversationNotFoundException;
-import br.gov.sp.fatec.backend.exceptions.MemberException.MemberNotFoundException;
 import br.gov.sp.fatec.backend.exceptions.MessageException.MessageCrudException;
 import br.gov.sp.fatec.backend.exceptions.MessageException.MessageNotFoundException;
 
-import br.gov.sp.fatec.backend.models.Conversation;
-import br.gov.sp.fatec.backend.models.Member;
 import br.gov.sp.fatec.backend.models.Message;
-import br.gov.sp.fatec.backend.repositories.ConversationRepository;
-import br.gov.sp.fatec.backend.repositories.MemberRepository;
 import br.gov.sp.fatec.backend.repositories.MessageRepository;
+import br.gov.sp.fatec.backend.services.MessageService;
 import br.gov.sp.fatec.backend.views.Views;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,12 +35,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class MessageController {
   @Autowired
   private MessageRepository messageRepository;
-
+  
   @Autowired
-  private ConversationRepository conversationRepository;
-
-  @Autowired
-  private MemberRepository memberRepository;
+  private MessageService messageService;
 
   @JsonView(Views.DetailMessageView.class)
   @GetMapping
@@ -73,29 +65,8 @@ public class MessageController {
   @ApiOperation(value = "Insere os dados de uma mensagem")
   public ResponseEntity<Message> insert(@RequestBody Message message,
                                         @RequestParam("senderId") long senderId,
-                                        @RequestParam("conversationId") long conversationId) throws MemberNotFoundException,
-                                                                                                    ConversationNotFoundException,
-                                                                                                    MessageCrudException {
-    Member sender = memberRepository.findMemberById(senderId);
-    Conversation chat = conversationRepository.findConversationById(conversationId);
-
-    if(chat == null) {
-      throw new ConversationNotFoundException(conversationId);
-    }
-
-    if(sender == null) {
-      throw new MemberNotFoundException(senderId);
-    }
-    
-    message.setSender(sender);
-    message.setConversation(chat);
-
-    Message newMessage = messageRepository.save(message);
-
-    if(newMessage == null) {
-      throw new MessageCrudException("erro ao criar uma mensagem");
-    }
-
+                                        @RequestParam("conversationId") long conversationId) {
+    messageService.createMessage(message, senderId, conversationId);
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
