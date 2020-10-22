@@ -158,7 +158,14 @@
 import axios from 'axios'
 import moment from 'moment'
 
-export default {
+import Vue from 'vue'
+import { mapGetters } from 'vuex'
+export default Vue.extend({
+  computed: {
+    ...mapGetters({
+      chatList: 'chat/chatList'
+    })
+  },
   name: 'Chat',
   data () {
     return {
@@ -195,6 +202,7 @@ export default {
         this.message = null
         this.scrollToEnd()
       }
+      console.log(this.chatList())
     },
     scrollToEnd: function () {
       var scrollArea = this.$el.querySelector('#messages')
@@ -229,7 +237,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style>
