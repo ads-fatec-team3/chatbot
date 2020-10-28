@@ -61,7 +61,7 @@ public class MessageController {
   @PutMapping("/{messageId}")
   @ApiOperation(value = "Atualiza os dados de uma mensagem")
   public ResponseEntity<Message> updateMessageById(@PathVariable("messageId") long messageId,
-                                               @RequestBody Message messageDataToUpdate) {
+                                                   @RequestBody Message messageDataToUpdate) {
     messageService.updateMessageById(messageId, messageDataToUpdate);
 
     return ResponseEntity.ok().build();

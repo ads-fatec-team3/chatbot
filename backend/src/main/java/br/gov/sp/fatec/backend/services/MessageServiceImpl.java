@@ -3,7 +3,6 @@ package br.gov.sp.fatec.backend.services;
 import br.gov.sp.fatec.backend.exceptions.ConversationException.ConversationNotFoundException;
 import br.gov.sp.fatec.backend.exceptions.MemberException.MemberNotFoundException;
 import br.gov.sp.fatec.backend.exceptions.MessageException.MessageCrudException;
-//import br.gov.sp.fatec.backend.exceptions.MessageException.MessageNotFoundException;
 import br.gov.sp.fatec.backend.exceptions.MessageException.MessageNotFoundException;
 
 import java.util.List;
