@@ -48,16 +48,17 @@ atendente ou instrutor.
 - Refatoração Protótipo por permissões
 
 ### Sprint 3
-- Integração Backend e Frontend (consumir das rotas)
 - MVP Chatbot (Linguagem natural)
 
 ### Sprint 4
+- Integração Backend e Frontend (consumir das rotas)
 - Autenticação
-- Melhoria na estilização do frontend
 - Melhoria chatbot
 
 ### Sprint 5
-- Conclusão chatbot
+- Controle de permissões
+- Melhoria na estilização do frontend
+- Conclusão chatbot para validação
 
 ### Sprint 6
 - Melhorias
