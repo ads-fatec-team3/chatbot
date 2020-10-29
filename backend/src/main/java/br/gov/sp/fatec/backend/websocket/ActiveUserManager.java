@@ -24,8 +24,8 @@ public class ActiveUserManager {
     notifyPool = new ThreadPoolExecutor(1, 5, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(100));
   }
 
-  public void addUser(String username, String remoteAddress) {
-    users.put(username, remoteAddress);
+  public void addUser(String username, String sessionId) {
+    users.put(username, sessionId);
     notifyListeners();
   }
 
@@ -39,20 +39,12 @@ public class ActiveUserManager {
   }
 
   /**
-   * Get all active user
-   * @return - a Set of active users
-   */
-  public Set<String> getAllUsers() {
-    return users.keySet();
-  }
-
-  /**
    * Get a set of all active user except username that passed in the parameter
    * @param username - current username
    * @return - a Set of users except passed username
    */
   public Set<String> getActiveUsers() {
-    Set<String> activeUsers = new HashSet<>(this.getAllUsers());
+    Set<String> activeUsers = new HashSet<>(this.users.keySet());
     return activeUsers;
   }
 

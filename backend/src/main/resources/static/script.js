@@ -10,6 +10,7 @@
 
 var stompClient = null;
 var selectedUser = null;
+var users = null;
 var username = $("#from").val();
 
 function setConnected(connected) {
@@ -23,6 +24,7 @@ function setConnected(connected) {
   } else {
     $("#users").hide();
     $("#sendmessage").hide();
+    users = [];
   }
 }
 
@@ -34,67 +36,35 @@ function connect() {
     return;
   }
 
-  $.post('/rest/user-connect', { username: username },
+  var socket = new SockJS('/chat');
 
-    function(remoteAddr, status, xhr) {
-      var socket = new SockJS('/chat');
+  stompClient = Stomp.over(socket);
+  stompClient.connect({ username: username },
+  function(response) {
+    stompClient.subscribe('/topic/broadcast', function(response) {
+      showMessage(createTextNode(JSON.parse(response.body)));
+    });
 
-      stompClient = Stomp.over(socket);
-      stompClient.connect({
-        username: username
-      }, function() {
-        stompClient.subscribe('/topic/broadcast', function(output) {
-          showMessage(createTextNode(JSON.parse(output.body)));
-        });
+    stompClient.subscribe('/topic/active', function(response) {
+      updateActiveUsers(JSON.parse(response.body));
+    });
 
-        stompClient.subscribe('/topic/active', function() {
-          updateUsers(username);
-        });
+    stompClient.subscribe('/user/queue/messages', function(response) {
+      showMessage(createTextNode(JSON.parse(response.body)));
+    });
 
-        stompClient.subscribe('/queue/messages', function(output) {
-          showMessage(createTextNode(JSON.parse(output.body)));
-        });
-
-        sendConnection('connected to server');
-        setConnected(true);
-
-      }, function(err) {
-        alert(err);
-      });
-    }).done(function() {}).fail(function(jqxhr, settings, ex) {
-      console.log('failed [ ' + ex + ' ]');
-    }
-  );
+    setConnected(true);
+  })
 }
 
 function disconnect() {
   if (stompClient != null) {
-    $.post('/rest/user-disconnect', { username: username },
-
-      function() {
-        sendConnection(' disconnected from server');
-
-        stompClient.disconnect(function() {
-          console.log('disconnected...');
-          setConnected(false);
-        });
-      }).done(function(param) {
-        console.log('param done [ ' + param + ' ]');
-      }).fail(function(jqxhr, settings, ex) {
-        console.log('failed [ ' + ex + ' ]');
-      }
-    );
+    stompClient.disconnect(function() {
+      console.log('disconnected...');
+      setConnected(false);
+      updateSelectedUser()
+    });
   }
-}
-
-function sendConnection(message) {
-  sendBroadcast({
-    'sender': 'server',
-    'type': 'CHAT',
-    'text': username + message
-  });
-
-  updateUsers(username);
 }
 
 function sendBroadcast(message) {
@@ -154,14 +124,43 @@ function clearMessages() {
   $("#clear").hide();
 }
 
-function setSelectedUser(username) {
-  $("#selectedUser").html(username);
+function updateSelectedUser() {
+  if(users.filter(user => user === selectedUser).length == 0) {
+    $("#selectedUser").html('')
+    selectedUser = null
+  }
+}
+
+function setSelectedUser(user) {
+  selectedUser = user;
+  $("#selectedUser").html(selectedUser);
 
   if ($("#selectedUser").html() == "") {
     $("#divSelectedUser").hide();
   } else {
     $("#divSelectedUser").show();
   }
+}
+
+function updateActiveUsers(activeUsers) {
+  var activeUserSpan = $("#active-users-span");
+  var activeUserUL = $("#active-users");
+  
+  activeUserUL.html('');
+
+  users = activeUsers.filter(user => user != username)
+
+  if (users.length == 0) {
+    activeUserSpan.html('<p><i>No active users found</i></p>');
+  } else {
+    activeUserSpan.html('<p class="text-muted">click on user to begin chat</p>');
+  }
+
+  users.forEach(function(user) {
+    activeUserUL.html(activeUserUL.html() + createUserNode(user));
+  })
+
+  updateSelectedUser()
 }
 
 function updateUsers(username) {          
@@ -175,16 +174,19 @@ function updateUsers(username) {
     url: '/rest/active-users',
     dataType: 'json',
     success: function(userList) {
+      userList = userList.filter(user => user != username)
+
       if (userList.length == 0) {
         activeUserSpan.html('<p><i>No active users found.</i></p>');
+      } else  {
+        activeUserSpan.html('<p class="text-muted">click on user to begin chat</p>');
       }
 
-      activeUserSpan.html('<p class="text-muted">click on user to begin chat</p>');
-
       userList.forEach(function(user) {
-        if(user != username)
-          activeUserUL.html(activeUserUL.html() + createUserNode(user));
+        activeUserUL.html(activeUserUL.html() + createUserNode(user));
       })
+
+      updateSelectedUser()
     },
     error: function(XMLHttpRequest, textStatus, errorThrown) {
       alert("error occurred", errorThrown);
