@@ -91,8 +91,8 @@ Pode acessar aqui: https://xd.adobe.com/view/76ccd03a-4998-4da1-9f5c-ca6f4ecf402
 | Marcio Ordonez (Product Owner) | [acessar](https://github.com/MarcioOrdonez)      | [acessar](https://www.linkedin.com/in/marcio-ordonez/)      |
 | Bruna Totti                    | [acessar]()                                      | [acessar]()                                                 |
 | Eduardo Nunes                  | [acessar]()                                      | [acessar]()                                                 |
-| Greice Castilho                | [acessar]()                                      | [acessar]()                                                 |
+| Greice Castilho                | [acessar](https://github.com/GreiceCastilho)     | [acessar]()                                                 |
 | João Uchoas                    | [acessar]()                                      | [acessar]()                                                 |
 | Letícia Barreto                | [acessar](https://github.com/lebarreto)          | [acessar](https://www.linkedin.com/in/leticiambarreto/)     |
 | Rafael Ribeira                 | [acessar]()                                      | [acessar]()                                                 |
-| Robson Martins                 | [acessar](https://github.com/rmsilva007)                                      | [acessar]()                                                 |
+| Robson Martins                 | [acessar](https://github.com/rmsilva007)         | [acessar](https://www.linkedin.com/in/robsonmartinssilva/)                                                 |
