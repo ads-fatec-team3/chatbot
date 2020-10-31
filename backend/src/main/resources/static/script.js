@@ -39,17 +39,20 @@ function connect() {
   var socket = new SockJS('/chat');
 
   stompClient = Stomp.over(socket);
-  stompClient.connect({ username: username },
+  stompClient.connect({ username },
   function(response) {
+    /*
     stompClient.subscribe('/topic/broadcast', function(response) {
       showMessage(createTextNode(JSON.parse(response.body)));
     });
-
+    
+    */
+   
     stompClient.subscribe('/topic/active', function(response) {
       updateActiveUsers(JSON.parse(response.body));
     });
-
-    stompClient.subscribe('/user/queue/messages', function(response) {
+    
+    stompClient.subscribe('/topic/chat.messages', function(response) {
       showMessage(createTextNode(JSON.parse(response.body)));
     });
 
@@ -67,10 +70,6 @@ function disconnect() {
   }
 }
 
-function sendBroadcast(message) {
-  stompClient.send("/app/broadcast", {}, JSON.stringify(message));
-}
-
 function send() {
   var text = $("#message").val();
 
@@ -86,7 +85,7 @@ function send() {
     'recipient': selectedUser
   }
 
-  stompClient.send("/app/chat", { 'sender' : username }, JSON.stringify(message));
+  stompClient.send("/app/chat.messages", { 'sender' : username }, JSON.stringify(message));
 
   $("#message").val("");
 }
@@ -161,37 +160,6 @@ function updateActiveUsers(activeUsers) {
   })
 
   updateSelectedUser()
-}
-
-function updateUsers(username) {          
-  var activeUserSpan = $("#active-users-span");
-  var activeUserUL = $("#active-users");
-
-  activeUserUL.html('');
-
-  $.ajax({
-    type: 'GET',
-    url: '/rest/active-users',
-    dataType: 'json',
-    success: function(userList) {
-      userList = userList.filter(user => user != username)
-
-      if (userList.length == 0) {
-        activeUserSpan.html('<p><i>No active users found.</i></p>');
-      } else  {
-        activeUserSpan.html('<p class="text-muted">click on user to begin chat</p>');
-      }
-
-      userList.forEach(function(user) {
-        activeUserUL.html(activeUserUL.html() + createUserNode(user));
-      })
-
-      updateSelectedUser()
-    },
-    error: function(XMLHttpRequest, textStatus, errorThrown) {
-      alert("error occurred", errorThrown);
-    }
-  });
 }
   
 function createUserNode(username) {
