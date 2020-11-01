@@ -2,7 +2,7 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
     <Hello msg="Melhor Chatbot da FATEC"/>
-    <iframe class="chat" width="450" height="550" v-bind:src="serverUrl + '/chat'" scrolling="no"></iframe>
+    <iframe class="chat" width="450" height="550" src="/chat" scrolling="no"></iframe>
   </div>
 </template>
 
@@ -14,11 +14,6 @@ export default {
   name: 'Home',
   components: {
     Hello
-  },
-  data () {
-    return {
-      serverUrl: process.env.VUE_APP_SERVER_URL
-    }
   }
 }
 </script>
