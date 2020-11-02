@@ -35,6 +35,8 @@ atendente ou instrutor.
 
 [Kanban do Github](https://github.com/ads-fatec-team3/chatbot/projects/1)
 
+[Planejado vs Realizado (Tempo e Custo)](https://github.com/ads-fatec-team3/chatbot/blob/master/docs/Sprint%201/custos.md)
+
 ## Entregáveis Sprints
 
 ### Sprint 1
@@ -53,7 +55,6 @@ atendente ou instrutor.
 ### Sprint 4
 - Criação dos serviços para integração do front com o back (utilizando a api do back-end)
 - Conexão de chat em tempo real (webSocket)
-- Melhoria front chatbot
 
 ### Sprint 5
 - Sistema de autenticação (utilização de jwt)
@@ -73,7 +74,7 @@ atendente ou instrutor.
 | 1         | 07/09/2020  | 20/09/2020 | [acessar](https://github.com/ads-fatec-team3/chatbot/blob/master/docs/entregas/sprint1.md)|
 | 2         | 21/09/2020  | 04/10/2020 | [acessar](https://github.com/ads-fatec-team3/chatbot/blob/master/docs/entregas/sprint2.md)|
 | 3         | 05/10/2020  | 18/10/2020 | [acessar](https://github.com/ads-fatec-team3/chatbot/blob/master/docs/entregas/sprint3.md)|
-| 4         | 19/10/2020  | 01/11/2020 | ---                                                                                       |
+| 4         | 19/10/2020  | 01/11/2020 | [acessar](https://github.com/ads-fatec-team3/chatbot/blob/master/docs/entregas/sprint4.md)|
 | 5         | 02/11/2020  | 15/11/2020 | ---                                                                                       |
 | 6         | 16/11/2020  | 29/11/2020 | ---                                                                                       |
 
@@ -97,4 +98,4 @@ Pode acessar aqui: https://xd.adobe.com/view/76ccd03a-4998-4da1-9f5c-ca6f4ecf402
 | João Uchoas                    | [acessar]()                                      | [acessar]()                                                 |
 | Letícia Barreto                | [acessar](https://github.com/lebarreto)          | [acessar](https://www.linkedin.com/in/leticiambarreto/)     |
 | Rafael Ribeira                 | [acessar]()                                      | [acessar]()                                                 |
-| Robson Martins                 | [acessar](https://github.com/rmsilva007)         | [acessar](https://www.linkedin.com/in/robsonmartinssilva/)                                                 |
+| Robson Martins                 | [acessar](https://github.com/rmsilva007)         | [acessar](https://www.linkedin.com/in/robsonmartinssilva/)  |
