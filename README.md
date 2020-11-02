@@ -65,7 +65,7 @@ atendente ou instrutor.
 ### Sprint 6
 - Melhorias
 - Entrega produto final
-- Videdo de apresentação
+- Video de apresentação
 
 ## Etapas do Projeto (Sprints)
 
