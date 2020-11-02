@@ -51,18 +51,20 @@ atendente ou instrutor.
 - MVP Chatbot (Linguagem natural)
 
 ### Sprint 4
-- Integração Backend e Frontend (consumir das rotas)
-- Autenticação
-- Melhoria chatbot
+- Criação dos serviços para integração do front com o back (utilizando a api do back-end)
+- Conexão de chat em tempo real (webSocket)
+- Melhoria front chatbot
 
 ### Sprint 5
+- Sistema de autenticação (utilização de jwt)
+- Criação de atividades na agenda
 - Controle de permissões
 - Melhoria na estilização do frontend
-- Conclusão chatbot para validação
 
 ### Sprint 6
 - Melhorias
 - Entrega produto final
+- Videdo de apresentação
 
 ## Etapas do Projeto (Sprints)
 
