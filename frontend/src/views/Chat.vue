@@ -77,132 +77,48 @@
         </v-tab-item>
 
         <v-tab-item value="tab-chat">
-          <div>
-            <v-virtual-scroll
-              id="messages"
-              :items="messages"
-              class="scroll-box"
-              item-height="64"
-            >
-              <template v-slot="{ item, index }">
-
-                <v-list-item
-                  v-if="item.owner == user"
-                  :key="index"
-                  class="d-flex flex-row justify-end"
-                >
-                  <strong class="message my-message">{{ item.content }}</strong>
-                </v-list-item>
-
-                <v-list-item
-                  v-else
-                  :key="index"
-                  class="d-flex flex-row justify-start">
-                  <strong class="message your-message">{{ item.content }}</strong>
-                </v-list-item>
-
-              </template>
-            </v-virtual-scroll>
-            <div class="d-flex flex-row message-input">
-              <v-textarea
-                v-model="message"
-                outlined
-                rows="2"
-                no-resize
-                class="ml-2"
-              ></v-textarea>
-              <v-btn
-                fab
-                color="primary"
-                class="ma-2"
-                @click="sendMessage"
-              >
-                <v-icon>mdi-send</v-icon>
-              </v-btn>
-            </div>
+          <ChatTab v-if="otherUser" :messages="messages" :user="user" :otherUser="otherUser" @send="send"/>
+          <div v-else>
+            <div class="text-h4 mt-4">Selecione uma conversa!</div>
           </div>
         </v-tab-item>
 
         <v-tab-item value="tab-conversas">
-          <div>
-            <div class="d-flex flex-row ma-2">
-              <v-textarea
-                v-model="searchMember"
-                outlined
-                rows="1"
-                no-resize
-                class="ml-2"
-                placeholder="Quem você está procurando?"
-              ></v-textarea>
-              <v-btn
-                fab
-                color="primary"
-                class="ml-2"
-              >
-                <v-icon>mdi-magnify</v-icon>
-              </v-btn>
-            </div>
-            <v-virtual-scroll
-              :items="conversas"
-              item-height="64"
-              class="scroll-box"
-            >
-              <template v-slot="{ item, index }">
-
-                <v-list-item :key="index" @click="tab = 'tab-message'">
-                  <v-list-item-action>
-                    <v-btn
-                      fab
-                      small
-                      depressed
-                      color="blue darken-4"
-                    >
-                      <strong class="white--text">{{ item.id }}</strong>
-                    </v-btn>
-                  </v-list-item-action>
-
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      <strong>{{ arrayToString(item.members) }}</strong>
-                    </v-list-item-title>
-                  </v-list-item-content>
-
-                </v-list-item>
-                <v-divider></v-divider>
-
-              </template>
-            </v-virtual-scroll>
-          </div>
+          <ConversasTab :conversas="conversas" @handleChangeTab="goToChat" />
         </v-tab-item>
 
         <v-tab-item value="tab-agenda">
-          <div>
-            <v-virtual-scroll
-              :items="agenda"
-              item-height="60"
-              class="scroll-box"
-            >
-              <template v-slot="{ item, index }">
-
-                <v-list-item :key="index">
-
-                  <v-list-item-content>
-                    <v-list-item-title class="d-flex flex-column">
-                      <strong class="mb-1">{{ item.title|upperCase }}</strong>
-                      <strong>{{ item.begins_at|formatDate }}</strong>
-                    </v-list-item-title>
-                  </v-list-item-content>
-
-                </v-list-item>
-                <v-divider></v-divider>
-
-              </template>
-            </v-virtual-scroll>
-          </div>
+          <AgendaTab :agenda="agenda" />
         </v-tab-item>
 
       </v-tabs-items>
     </div>
+    <v-row justify="center">
+      <v-dialog
+        v-model="dialog"
+        persistent
+        max-width="290"
+      >
+        <v-card>
+          <v-card-title class="headline">
+            Informe seu nome
+          </v-card-title>
+          <v-card-text>
+            <v-text-field v-model="inputUser" outlined />
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="green darken-1"
+              text
+              @click="selectUser"
+            >
+              OK
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </v-app>
 </template>
 
@@ -210,52 +126,86 @@
 import axios from 'axios'
 import moment from 'moment'
 
-import Vue from 'vue'
-import { mapGetters } from 'vuex'
-export default Vue.extend({
-  computed: {
-    ...mapGetters({
-      chatList: 'chat/chatList'
-    })
-  },
+import SockJS from 'sockjs-client'
+import Stomp from 'webstomp-client'
+
+import ChatTab from '@/components/ChatTab.vue'
+import ConversasTab from '@/components/ConversasTab.vue'
+import AgendaTab from '@/components/AgendaTab.vue'
+
+export default {
   name: 'Chat',
+  components: {
+    ChatTab,
+    ConversasTab,
+    AgendaTab
+  },
   data () {
     return {
-      tab: null,
+      tab: 'tab-conversas',
       message: null,
       messageGruly: null,
-      searchMember: null,
-      user: 1,
-      otherUser: 2,
-      messages: [
-        { content: 'olá', dateTime: '2020-10-04 12:00:00', owner: 2 }
-      ],
+      user: null,
+      otherUser: null,
+      inputUser: null,
+      messages: [],
       messagesGruly: [],
-      conversas: [
-        { id: 1, members: ['João', 'Maria'], lastMessage: { content: 'olá', dateTime: '2020-10-04 12:00:00', owner: 2 } },
-        { id: 2, members: ['José', 'Pedro'], lastMessage: { content: 'olá', dateTime: '2020-10-04 12:00:00', owner: 2 } },
-        { id: 3, members: ['Carlos'], lastMessage: { content: 'olá', dateTime: '2020-10-04 12:00:00', owner: 2 } }
-      ],
-      agenda: []
+      conversas: [],
+      agenda: [],
+      connected: false,
+      dialog: true
     }
   },
   methods: {
-    sendMessage: function () {
-      if (this.message) {
-        this.messages.push({
-          content: this.message,
-          owner: this.user
-        })
-
-        this.messages.push({
-          content: this.message,
-          owner: this.otherUser
-        })
-
-        this.message = null
-        this.scrollToEnd()
+    connect: function () {
+      this.socket = new SockJS('http://localhost:8080/chat')
+      this.stompClient = Stomp.over(this.socket)
+      this.stompClient.connect(
+        { username: this.user },
+        frame => {
+          this.connected = true
+          this.stompClient.subscribe('/topic/active', response => {
+            this.conversas = this.arrayStringToArrayObj(JSON.parse(response.body))
+          })
+          this.stompClient.subscribe('/topic/chat.messages', response => {
+            const message = JSON.parse(response.body)
+            this.messages.push({
+              content: message.text,
+              owner: message.sender
+            })
+          })
+        },
+        error => {
+          this.connected = false
+          console.log(error)
+        }
+      )
+    },
+    send: function (content) {
+      const message = {
+        sender: this.user,
+        text: content,
+        type: 'CHAT',
+        recipient: this.otherUser
       }
-      console.log(this.chatList())
+      this.stompClient.send('/app/chat.messages', JSON.stringify(message), { sender: this.user })
+    },
+    selectUser: function () {
+      if (this.inputUser) {
+        this.user = this.inputUser
+        this.dialog = false
+        this.connect()
+      }
+    },
+    arrayStringToArrayObj: function (array) {
+      const arrayObj = []
+      var self = this
+      array.forEach((element, index, originalArray) => {
+        if (element !== self.user) {
+          arrayObj.push({ name: element })
+        }
+      })
+      return arrayObj
     },
     sendMessageGruly: function () {
       if (this.messageGruly) {
@@ -279,13 +229,9 @@ export default Vue.extend({
       var scrollArea = this.$el.querySelector('#messages')
       scrollArea.scrollTop = scrollArea.scrollHeight
     },
-    arrayToString: function (array) {
-      return array.join(', ')
-    },
     loadAgenda: function () {
       axios.get('https://ads-fatec-team3.free.beeceptor.com/schedule').then(response => {
         this.agenda = response.data.schedule
-        console.log(this.agenda)
       }).catch(response => {
         console.log('Deu ruim')
       })
@@ -296,12 +242,17 @@ export default Vue.extend({
           content: response.data.result, dateTime: '2020-10-04 12:00:00', owner: 'Gruly'
         })
       })
+    },
+    goToChat: function (user) {
+      this.tab = 'tab-chat'
+      this.otherUser = user
     }
   },
 
   mounted () {
+    this.selectUser()
     this.loadAgenda()
-    this.loadGruly()
+    // this.loadGruly()
   },
 
   filters: {
@@ -316,7 +267,7 @@ export default Vue.extend({
       }
     }
   }
-})
+}
 </script>
 
 <style>
