@@ -55,7 +55,7 @@ public class MessageControllerTests {
 
   @Test
   public void insertMessage() throws Exception {
-    Member sender = new Member("sender", 10);
+    Member sender = new Member("sender");
     Conversation chat = new Conversation("chat");
 
     memberRepository.save(sender);
