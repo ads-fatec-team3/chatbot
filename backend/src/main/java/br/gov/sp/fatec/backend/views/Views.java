@@ -9,4 +9,10 @@ public class Views {
 
   public interface SummaryMessageView {}
   public interface DetailMessageView extends SummaryMessageView {}
+
+  public interface SummaryMemberRoleView {}
+  public interface DetailMemberRoleView extends SummaryMemberRoleView {}
+
+  public interface SummaryRolePrivilegeView {}
+  public interface DetailRolePrivilegeView extends SummaryRolePrivilegeView {}
 }

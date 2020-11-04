@@ -14,4 +14,6 @@ public interface MemberService {
   public Member updateMemberById(long memberId, Member memberDataToUpdate);
 
   public void deleteMemberById(long memberId);
+
+  public void updateMemberRole(long memberId, long memberRoleId);
 }

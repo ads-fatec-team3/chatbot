@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -57,8 +58,17 @@ public class MemberController {
   @PutMapping("/{memberId}")
   @ApiOperation(value = "Atualiza os dados de um membro")
   public ResponseEntity<Member> updateMemberById(@PathVariable("memberId") long memberId,
-                                                 @RequestBody Member memberDataToUpdate){
+                                                 @RequestBody Member memberDataToUpdate) {
     memberService.updateMemberById(memberId, memberDataToUpdate);
+
+    return ResponseEntity.ok().build();
+  }
+
+  @PutMapping("/{memberId}/role")
+  @ApiOperation(value = "Atualiza a permissão de um membro")
+  public ResponseEntity<Member> updateMemberRole(@PathVariable("memberId") long memberId,
+                                                 @RequestParam("roleId") long memberRoleId) {
+    memberService.updateMemberRole(memberId, memberRoleId);
 
     return ResponseEntity.ok().build();
   }
