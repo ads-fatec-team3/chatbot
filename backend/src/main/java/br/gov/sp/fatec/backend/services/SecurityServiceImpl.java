@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +29,7 @@ public class SecurityServiceImpl implements SecurityService {
     @Autowired
     private MemberRepository memberRepository;
 
-    @Autowired 
+    @Autowired
     private PasswordEncoder passEncoder;
 
     @Transactional
@@ -47,7 +49,7 @@ public class SecurityServiceImpl implements SecurityService {
             sender = new Member();
             sender.setName("Member Test");
             sender.setUserId(2);
-    
+
             memberRepository.save(sender);
         }
 
@@ -62,7 +64,7 @@ public class SecurityServiceImpl implements SecurityService {
 
         return message;
     }
-    
+
     @Transactional
     public Member addToConversation(long memberId, long conversationId) {
         Conversation conversation = conversationRepository.findConversationById(conversationId);
@@ -72,7 +74,7 @@ public class SecurityServiceImpl implements SecurityService {
             conversation.setTitle("Conversation Test");
 
             conversationRepository.save(conversation);
-        }        
+        }
 
         Member member = memberRepository.findMemberById(memberId);
 
@@ -80,12 +82,18 @@ public class SecurityServiceImpl implements SecurityService {
             member = new Member();
             member.setUserId(2);
             member.setName("Member Test");
-            
+
             memberRepository.save(member);
         }
 
         conversation.addMember(member);
 
         return member;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
