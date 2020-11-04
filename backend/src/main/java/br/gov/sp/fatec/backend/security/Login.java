@@ -3,7 +3,9 @@ package br.gov.sp.fatec.backend.security;
 public class Login {
 	
 	private String username;
-	private String password;
+    private String password;
+    private String token;
+    private String[] authorizations;
 	
 	public Login() {
 	}
@@ -22,5 +24,21 @@ public class Login {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String[] getAuthorization() {
+        return authorizations;
+    }
+
+    public void setAuthorization(String[] authorizations) {
+        this.authorizations = authorizations;
+    }
 
 }
