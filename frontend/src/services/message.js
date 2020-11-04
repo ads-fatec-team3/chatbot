@@ -4,6 +4,13 @@ const api = axios.create({
   baseURL: 'localhost:8080/api'
 })
 module.exports = {
+  setToken: (token) => {
+    if (token) {
+      api.defaults.headers.common.Authorization = 'Bearer ' + token
+      return true
+    }
+    return false
+  },
   getAllMessages: async () => {
     try {
       const resp = await api.get('/messages')
