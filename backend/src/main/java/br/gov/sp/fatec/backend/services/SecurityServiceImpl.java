@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.gov.sp.fatec.backend.models.Conversation;
@@ -25,6 +26,9 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired 
+    private PasswordEncoder passEncoder;
 
     @Transactional
     public Message insertMessage(String text, Date timestamp, long conversationId, long senderId) {

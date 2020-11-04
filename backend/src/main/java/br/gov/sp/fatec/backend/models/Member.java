@@ -34,6 +34,10 @@ public class Member {
   @Column(name = "user_id", nullable = true)
   private Integer userId;
 
+  @Column(name = "user_password", nullable = true)
+  private String password;
+
+
   @JsonView(Views.DetailMemberView.class)
   @ManyToMany
   @JoinTable(name = "member_conversation",
@@ -43,9 +47,10 @@ public class Member {
 
   public Member() {}
 
-  public Member(String name, Integer userId) {
+  public Member(String name, Integer userId, String password) {
     this.name = name;
     this.userId = userId;
+    this.password = password;
   }
 
   public long getId() {
@@ -59,6 +64,11 @@ public class Member {
   public Integer getUserId() {
     return userId;
   }
+
+   public String getPassword() {
+    return password;
+  }
+
 
   public Set<Conversation> getConversations() {
     return conversations;
@@ -74,6 +84,10 @@ public class Member {
 
   public void setUserId(Integer id) {
     this.userId = id;
+  }
+
+  public void setPassword(long id) {
+    this.password = password;
   }
 
   public void setConversations(Set<Conversation> conversations) {

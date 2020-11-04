@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean //Disponibiliza para autowired
-    public PasswordEncoder passWordEncoderBean(){ //metodo p/ codificar a senha do user
+    public PasswordEncoder passWordEncoderBean(){ //metodo padrão do spring p/ codificar a senha do user
         return new BCryptPasswordEncoder();
     }
 
