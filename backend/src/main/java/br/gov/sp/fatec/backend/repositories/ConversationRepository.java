@@ -8,8 +8,8 @@ import br.gov.sp.fatec.backend.models.Conversation;
 
 @Repository
 public interface ConversationRepository extends JpaRepository<Conversation, Long> {
-    Conversation findConversationById(long id);
+  Conversation findConversationById(long id);
 
-    @Query("select c from Conversation c where c.title = ?1")
-    public Conversation findByTitle(String title);
+  @Query("select c from Conversation c where c.title = ?1")
+  public Conversation findByTitle(String title);
 }

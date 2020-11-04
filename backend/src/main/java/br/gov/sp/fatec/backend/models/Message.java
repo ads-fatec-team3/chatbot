@@ -1,10 +1,10 @@
 package br.gov.sp.fatec.backend.models;
 
-import java.util.Date;
+import br.gov.sp.fatec.backend.views.Views;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import br.gov.sp.fatec.backend.views.Views;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
