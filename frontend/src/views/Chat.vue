@@ -210,7 +210,14 @@
 import axios from 'axios'
 import moment from 'moment'
 
-export default {
+import Vue from 'vue'
+import { mapGetters } from 'vuex'
+export default Vue.extend({
+  computed: {
+    ...mapGetters({
+      chatList: 'chat/chatList'
+    })
+  },
   name: 'Chat',
   data () {
     return {
@@ -248,6 +255,7 @@ export default {
         this.message = null
         this.scrollToEnd()
       }
+      console.log(this.chatList())
     },
     sendMessageGruly: function () {
       if (this.messageGruly) {
@@ -308,7 +316,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style>
