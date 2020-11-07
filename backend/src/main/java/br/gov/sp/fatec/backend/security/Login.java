@@ -5,15 +5,15 @@ public class Login {
 	private String username;
     private String password;
     private String token;
-    private String[] authorizations;
+    private String authorization;
 	
 	public Login() {
 	}
 	
-	public String getUsername() {
+	public String getUserName() {
 		return username;
 	}
-	public void setUsername(String username) {
+	public void setUserName(String username) {
 		this.username = username;
 	}
 
@@ -33,12 +33,12 @@ public class Login {
         this.token = token;
     }
 
-    public String[] getAuthorization() {
-        return authorizations;
+    public String getAuthorization() {
+        return authorization;
     }
 
-    public void setAuthorization(String[] authorizations) {
-        this.authorizations = authorizations;
+    public void setAuthorization(String authorization) {
+        this.authorization = authorization;
     }
 
 }

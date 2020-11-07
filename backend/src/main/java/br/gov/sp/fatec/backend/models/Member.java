@@ -86,7 +86,7 @@ public class Member {
     this.userId = id;
   }
 
-  public void setPassword(long id) {
+  public void setPassword(String password) {
     this.password = password;
   }
 
