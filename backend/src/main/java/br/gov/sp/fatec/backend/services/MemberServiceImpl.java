@@ -70,7 +70,7 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
-  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public void deleteMemberById(long memberId) throws MemberCrudException {
     Member memberToDelete = memberRepository.findMemberById(memberId);
     
