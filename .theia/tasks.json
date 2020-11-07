@@ -1,0 +1,20 @@
+{
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "serve",
+      "path": "frontend/",
+      "problemMatcher": []
+    },
+    {
+      "label": "backend debug",
+      "type": "shell",
+      "command": "mvn org.springframework.boot:spring-boot-maven-plugin:run -Dspring-boot.run.jvmArguments=\"-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005\"",
+      "group": "build",
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
