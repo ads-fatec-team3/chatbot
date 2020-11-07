@@ -1,3 +1,4 @@
+/*
 package br.gov.sp.fatec.backend.controllers;
 
 import br.gov.sp.fatec.backend.models.Conversation;
@@ -106,4 +107,4 @@ public class MessageControllerTests {
       delete("/{API_URL}/{memberId}", BASE_API_MESSAGES_URL, messageToDelete.getId()))
       .andExpect(status().isOk());
   }
-}
+}*/

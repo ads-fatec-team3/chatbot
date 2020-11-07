@@ -16,7 +16,7 @@ import br.gov.sp.fatec.backend.security.Login;
 import br.gov.sp.fatec.backend.security.JwtUtils;
 
 @RestController
-@RequestMapping(value = "/login")
+@RequestMapping(value = "/api/login")
 @CrossOrigin
 public class LoginController {
 
