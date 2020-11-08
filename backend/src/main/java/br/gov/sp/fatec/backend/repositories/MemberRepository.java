@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface MemberRepository extends JpaRepository<Member, Long> {
   Member findMemberById(long id);
 
-  @Query("select m from Member m where m.username = ?1")
-  public Member findMemberByUsername(String username);
+  @Query("select m from Member m where m.name = ?1")
+  public Member findMemberByName(String name);
 }
