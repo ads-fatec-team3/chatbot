@@ -5,7 +5,7 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - command: psql -f backend/database/db.sql
+  - command: psql -f backend/src/main/resources/database/db.sql
 
 vscode:
   extensions:
