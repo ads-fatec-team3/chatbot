@@ -7,6 +7,7 @@ import br.gov.sp.fatec.backend.exceptions.MemberException.MemberCrudException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,7 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public Member getMemberById(long memberId) throws MemberNotFoundException {
     Member fetchedMember = memberRepository.findMemberById(memberId);
 
@@ -52,6 +54,7 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public Member updateMemberById(long memberId, Member memberDataToUpdate) throws MemberNotFoundException, MemberCrudException  {
     Member member = memberRepository.findMemberById(memberId);
 
@@ -72,6 +75,7 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public void deleteMemberById(long memberId) throws MemberCrudException {
     Member memberToDelete = memberRepository.findMemberById(memberId);
     

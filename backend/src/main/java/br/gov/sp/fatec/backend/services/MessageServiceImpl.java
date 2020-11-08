@@ -8,6 +8,7 @@ import br.gov.sp.fatec.backend.exceptions.MessageException.MessageNotFoundExcept
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +37,7 @@ public class MessageServiceImpl implements MessageService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public Message getMessageById(long messageId) throws MessageNotFoundException {
     Message fetchedMessage = messageRepository.findMessageById(messageId);
 
@@ -74,6 +76,7 @@ public class MessageServiceImpl implements MessageService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public Message updateMessageById(long messageId, Message messageDataToUpdate) throws MessageNotFoundException, MessageCrudException {
     Message message = messageRepository.findMessageById(messageId);
 
@@ -93,6 +96,7 @@ public class MessageServiceImpl implements MessageService {
   }
 
   @Override
+  @PreAuthorize("hasRole('ADMIN')")
   public void deleteMessageById(long messageId) {
     Message messageToDelete = messageRepository.findMessageById(messageId);
 
