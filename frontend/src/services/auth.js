@@ -1,18 +1,41 @@
 const axios = require('axios')
 
-const api = axios.create({
-  baseURL: 'localhost:8080/api'
+const axiosInstance = axios.create({
+  baseURL: 'http://localhost:8080/api'
 })
 
 module.exports = {
-  getAccessToken: async (userId) => {
-    try {
-      const resp = await api.post('/auth', {
-        params: { userId }
-      })
-      return resp
-    } catch (err) {
-      console.log(err)
+  api: (data) => {
+    const body = data.data
+    const method = data.method
+    const url = data.url
+    const options = {
+      method,
+      url,
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      }
     }
+    if (method.toLowerCase() !== 'get') {
+      options.data = body
+    } else {
+      options.params = body
+    }
+    return axiosInstance(options)
+  },
+  getAccessToken: (username, password) => {
+    return axiosInstance({
+      method: 'post',
+      url: '/auth/signin',
+      data: { username, password }
+    }).then(resp => {
+      console.log('deu bom')
+      // debugger
+      return resp
+    }).catch(e => {
+      console.log(e)
+      console.log('getError')
+      return 'Abacate'
+    })
   }
 }

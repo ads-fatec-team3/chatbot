@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import auth from '../services/auth'
+
+const { getAccessToken } = require('../services/auth')
 
 Vue.use(Vuex)
 
@@ -26,8 +27,10 @@ export const store = new Vuex.Store({
       localStorage.removeItem('access_token')
       context.commit('destroyToken')
     },
-    retrieveToken (context, userId) {
-      const token = auth.getAccessToken(userId).data
+    async retrieveToken (context, { username, password }) {
+      console.log(username)
+      const resp = await getAccessToken(username, password)
+      const token = resp.data.token
       localStorage.setItem('access_token', token)
       context.commit('retrieveToken', token)
       return token

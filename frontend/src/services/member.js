@@ -1,19 +1,18 @@
-const axios = require('axios')
+const { api } = require('./auth')
 
-const api = axios.create({
-  baseURL: 'localhost:8080/api'
-})
 module.exports = {
   setToken: (token) => {
     api.defaults.headers.common.Authorization = 'Bearer ' + token
   },
-  getAllMembers: async () => {
-    try {
-      const resp = await api.get('/members')
+  getAllMembers: () => {
+    return api({
+      method: 'get',
+      url: '/members'
+    }).then(resp => {
       return resp
-    } catch (err) {
-      console.log(err)
-    }
+    }).catch(e => {
+      console.log(e)
+    })
   },
   getMember: async (memberId) => {
     try {
