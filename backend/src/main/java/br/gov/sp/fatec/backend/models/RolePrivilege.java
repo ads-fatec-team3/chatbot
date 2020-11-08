@@ -16,7 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "role_privilege")
+@Table(name = "gruly_role_privileges")
 public class RolePrivilege {
   @JsonView({Views.SummaryRolePrivilegeView.class, Views.SummaryMemberRoleView.class})
   @Id

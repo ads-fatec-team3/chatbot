@@ -19,7 +19,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 @Entity
-@Table(name = "member")
+@Table(name = "gruly_members")
 public class Member {
   @JsonView({Views.SummaryMemberView.class, Views.SummaryConversationView.class,
              Views.SummaryMessageView.class, Views.SummaryMemberRoleView.class})
@@ -33,22 +33,27 @@ public class Member {
   @Column(name = "member_name", nullable = false)
   private String name;
 
+  @JsonView({Views.SummaryMemberView.class, Views.SummaryConversationView.class,
+             Views.SummaryMessageView.class, Views.SummaryMemberRoleView.class})
+  @Column(name = "member_username", nullable = false)
+  private String username;
+
   @JsonView(Views.DetailMemberView.class)
   @Column(name = "member_password", nullable = true)
   private String password;
 
   @JsonView(Views.DetailMemberView.class)
   @ManyToMany
-  @JoinTable(name = "member_conversation",
-             joinColumns = @JoinColumn(name = "conversation_id"),
-             inverseJoinColumns = @JoinColumn(name = "member_id"))
+  @JoinTable(name = "gruly_member_conversations",
+             joinColumns = @JoinColumn(name = "member_id"),
+             inverseJoinColumns = @JoinColumn(name = "conversation_id"))
   private Set<Conversation> conversations = new HashSet<Conversation>();
 
   @JsonView(Views.DetailMemberView.class)
   @ManyToOne
-  @JoinTable(name = "member_role",
-             joinColumns = @JoinColumn(name = "member_role_id"),
-             inverseJoinColumns = @JoinColumn(name = "member_id"))
+  @JoinTable(name = "gruly_member_role",
+             joinColumns = @JoinColumn(name = "member_id"),
+             inverseJoinColumns = @JoinColumn(name = "member_role_id"))
   private MemberRole role;
 
   public Member() {}
@@ -70,6 +75,10 @@ public class Member {
     return name;
   }
 
+  public String getUsername() {
+    return username;
+  }
+
   public String getPassword() {
     return password;
   }
@@ -84,6 +93,10 @@ public class Member {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
   }
 
   public void setPassword(String password) {

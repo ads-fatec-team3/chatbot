@@ -19,7 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "member_roles")
+@Table(name = "gruly_member_roles")
 public class MemberRole {
   @JsonView({Views.SummaryMemberRoleView.class, Views.SummaryMemberView.class, Views.SummaryRolePrivilegeView.class})
   @Id
@@ -36,9 +36,9 @@ public class MemberRole {
 
   @JsonView({Views.DetailMemberRoleView.class})
   @ManyToMany
-  @JoinTable(name = "member_role_privileges",
-             joinColumns = @JoinColumn(name = "role_privilege_id"),
-             inverseJoinColumns = @JoinColumn(name = "member_role_id"))
+  @JoinTable(name = "gruly_member_role_privileges",
+             joinColumns = @JoinColumn(name = "member_role_id"),
+             inverseJoinColumns = @JoinColumn(name = "role_privilege_id"))
   private Set<RolePrivilege> privileges = new HashSet<RolePrivilege>();
 
   public MemberRole() {}
