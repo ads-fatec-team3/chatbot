@@ -17,7 +17,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 @Entity
-@Table(name = "conversation")
+@Table(name = "gruly_conversations")
 public class Conversation {
   @JsonView({Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
   @Id
@@ -29,7 +29,7 @@ public class Conversation {
   @Column(name = "conversation_title")
   private String title;
 
-  @JsonView(Views.SummaryConversationView.class)
+  @JsonView(Views.DetailConversationView.class)
   @OneToMany(mappedBy = "conversation")
   private List<Message> messages = new ArrayList<Message>();
 
