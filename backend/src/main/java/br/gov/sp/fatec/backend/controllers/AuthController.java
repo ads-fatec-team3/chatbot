@@ -24,13 +24,14 @@ public class AuthController {
 
   @PostMapping("/signin")
   public Auth signin(@RequestBody Auth auth) throws JsonProcessingException {
-    UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(auth.getUsername(), auth.getPassword());
+    UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(auth.getUsername(),
+        auth.getPassword());
     Authentication user = authenticationManager.authenticate(credentials);
 
     auth.setToken(JwtUtils.generateToken(user));
     auth.setPassword(credentials.getCredentials().toString());
     auth.setRole(user.getAuthorities().iterator().next().getAuthority());
-  
+
     return auth;
   }
 }
