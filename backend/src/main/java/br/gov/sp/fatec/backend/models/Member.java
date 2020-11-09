@@ -53,7 +53,7 @@ public class Member {
   private MemberRole role;
 
   @ManyToMany
-  @JoinTable(name = "member_agenda", joinColumns = @JoinColumn(name = "agenda_id"), inverseJoinColumns = @JoinColumn(name = "member_id"))
+  @JoinTable(name = "gruly_member_agenda", joinColumns = @JoinColumn(name = "agenda_id"), inverseJoinColumns = @JoinColumn(name = "member_id"))
   private Set<Agenda> agenda = new HashSet<Agenda>();
 
   public Member() {

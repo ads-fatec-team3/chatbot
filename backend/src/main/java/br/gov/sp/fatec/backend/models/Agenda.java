@@ -19,7 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 
 @Entity
-@Table(name = "agenda")
+@Table(name = "gruly_agenda")
 public class Agenda {
   @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
   @Id
