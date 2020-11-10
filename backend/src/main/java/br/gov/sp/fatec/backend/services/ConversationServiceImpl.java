@@ -31,7 +31,7 @@ public class ConversationServiceImpl implements ConversationService {
   }
 
   @Override
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @PreAuthorize("isAuthenticated()")
   public Conversation getConversationById(long conversationId) throws ConversationNotFoundException {
 	  Conversation fetchedChat = conversationRepository.findConversationById(conversationId);
 
@@ -117,7 +117,7 @@ public class ConversationServiceImpl implements ConversationService {
   }
 
   @Override
- @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @PreAuthorize("isAuthenticated()")
   public Conversation removeMemberFromConversation(long memberId, long conversationId) throws MemberNotFoundException, ConversationNotFoundException {
     Conversation chat = conversationRepository.findConversationById(conversationId);
     
@@ -140,7 +140,5 @@ public class ConversationServiceImpl implements ConversationService {
     conversationRepository.save(chat);
 
     return chat;
-  }
-
-  
+  } 
 }

@@ -30,15 +30,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http
       // desabilitar CSRF
       .csrf().disable()
+      // habilitar o filtro de autenticação por jwt antes da autenticação de usuário
       .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+      // habilitar cors
+      .cors()
+      .and()
       .authorizeRequests()
       // permitir acesso à rota de autenticação
       .antMatchers("/api/auth/*").permitAll()
       // permitir acesso somente a usuários autenticados e com as seguintes roles
       .antMatchers("/api/**").hasAnyRole("STUDENT", "DIRECTOR", "INSTRUCTOR", "ATTENDANT")
-      .and()
-      // habilitar cors
-      .cors()
       .and()
       // gerenciamento de sessão stateless
       .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

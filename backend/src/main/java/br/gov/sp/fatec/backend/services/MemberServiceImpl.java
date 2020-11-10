@@ -26,6 +26,7 @@ public class MemberServiceImpl implements MemberService {
   private MemberRoleRepository memberRoleRepository;
   
   @Override
+  @PreAuthorize("isAuthenticated()")
   public List<Member> getAllMembers() {
     return memberRepository.findAll();
   }
@@ -43,6 +44,7 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public Member createMember(Member member) throws MemberCrudException {
     Member newMember = memberRepository.save(member);
 
@@ -75,7 +77,7 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @PreAuthorize("isAuthenticated()")
   public void deleteMemberById(long memberId) throws MemberCrudException {
     Member memberToDelete = memberRepository.findMemberById(memberId);
     
@@ -87,6 +89,7 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public void updateMemberRole(long memberId, long memberRoleId) throws MemberNotFoundException, MemberRoleNotFoundException {
     Member member = memberRepository.findMemberById(memberId);
 

@@ -32,6 +32,7 @@ public class MessageServiceImpl implements MessageService {
   private ConversationRepository conversationRepository;
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public List<Message> getAllMessages() {
     return messageRepository.findAll();
   }
@@ -49,6 +50,7 @@ public class MessageServiceImpl implements MessageService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public Message createMessage(Message message, long senderId, long conversationId) throws MemberNotFoundException,
                                                                                            ConversationNotFoundException,
                                                                                            MessageCrudException {
@@ -96,7 +98,7 @@ public class MessageServiceImpl implements MessageService {
   }
 
   @Override
-  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("isAuthenticated()")
   public void deleteMessageById(long messageId) {
     Message messageToDelete = messageRepository.findMessageById(messageId);
 

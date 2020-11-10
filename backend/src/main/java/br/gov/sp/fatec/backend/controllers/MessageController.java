@@ -15,7 +15,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,25 +34,22 @@ public class MessageController {
   @Autowired
   private MessageService messageService;
 
+  @ApiOperation(value = "Retorna uma lista com os dados de todas as mensagens")
   @JsonView(Views.SummaryMessageView.class)
   @GetMapping
-  @ApiOperation(value = "Retorna uma lista com os dados de todas as mensagens")
-  @PreAuthorize("isAuthenticated()")
   public ResponseEntity<List<Message>> getAllMessages() {
     return ResponseEntity.ok(messageService.getAllMessages());
   }
 
+  @ApiOperation(value = "Retorna os dados de uma mensagem")
   @JsonView(Views.DetailMessageView.class)
   @GetMapping("/{messageId}")
-  @ApiOperation(value = "Retorna os dados de uma mensagem")
-  @PreAuthorize("isAuthenticated()")
   public ResponseEntity<Message> getMessageById(@PathVariable("messageId") long messageId) {
     return ResponseEntity.ok(messageService.getMessageById(messageId));
   }
 
-  @PostMapping
   @ApiOperation(value = "Insere os dados de uma mensagem")
-  @PreAuthorize("isAuthenticated()")
+  @PostMapping
   public ResponseEntity<Message> createMessage(@RequestBody Message message,
                                                @RequestParam("senderId") long senderId,
                                                @RequestParam("conversationId") long conversationId) {
@@ -62,9 +58,8 @@ public class MessageController {
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
-  @PutMapping("/{messageId}")
   @ApiOperation(value = "Atualiza os dados de uma mensagem")
-  @PreAuthorize("isAuthenticated()")
+  @PutMapping("/{messageId}")
   public ResponseEntity<Message> updateMessageById(@PathVariable("messageId") long messageId,
                                                    @RequestBody Message messageDataToUpdate) {
     messageService.updateMessageById(messageId, messageDataToUpdate);
@@ -74,7 +69,6 @@ public class MessageController {
 
   @DeleteMapping("/{messageId}")
   @ApiOperation(value = "Deleta os dados de uma mensagem")
-  @PreAuthorize("isAuthenticated()")
   public ResponseEntity<Message> deleteMessageById(@PathVariable("messageId") long messageId) throws MessageNotFoundException {
     messageService.deleteMessageById(messageId);
 
