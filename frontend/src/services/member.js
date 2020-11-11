@@ -1,9 +1,6 @@
 const { api } = require('./auth')
 
 module.exports = {
-  setToken: (token) => {
-    api.defaults.headers.common.Authorization = 'Bearer ' + token
-  },
   getAllMembers: () => {
     return api({
       method: 'get',
@@ -15,39 +12,45 @@ module.exports = {
     })
   },
   getMember: async (memberId) => {
-    try {
-      const resp = await api.get(`/members/${memberId}`)
+    return api({
+      method: 'get',
+      url: `/members/${memberId}`
+    }).then(resp => {
       return resp
-    } catch (err) {
-      console.log(err)
-    }
+    }).catch(e => {
+      console.log(e)
+    })
   },
   newMember: async (name) => {
-    try {
-      const resp = await api.post('/members', {
-        name
-      })
+    return api({
+      method: 'post',
+      url: '/members',
+      data: { name }
+    }).then(resp => {
       return resp
-    } catch (err) {
-      console.log(err)
-    }
+    }).catch(e => {
+      console.log(e)
+    })
   },
   updateMember: async (name, memberId) => {
-    try {
-      const resp = await api.put(`/members/${memberId}`, {
-        name
-      })
+    return api({
+      method: 'put',
+      url: `/members/${memberId}`,
+      data: { name }
+    }).then(resp => {
       return resp
-    } catch (err) {
-      console.log(err)
-    }
+    }).catch(e => {
+      console.log(e)
+    })
   },
   deleteMember: async (memberId) => {
-    try {
-      const resp = await api.delete(`/members/${memberId}`)
-      return resp
-    } catch (err) {
-      console.log(err)
-    }
+  return api({
+    method: 'delete',
+    url: `/members/${memberId}`
+  }).then(resp => {
+    return resp
+  }).catch(e => {
+    console.log(e)
+  })
   }
 }

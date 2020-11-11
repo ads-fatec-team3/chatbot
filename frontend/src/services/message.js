@@ -1,59 +1,57 @@
-const axios = require('axios')
+const { api } = require('./auth')
 
-const api = axios.create({
-  baseURL: 'localhost:8080/api'
-})
 module.exports = {
-  setToken: (token) => {
-    if (token) {
-      api.defaults.headers.common.Authorization = 'Bearer ' + token
-      return true
-    }
-    return false
-  },
   getAllMessages: async () => {
-    try {
-      const resp = await api.get('/messages')
+    return api({
+      method: 'get',
+      url: '/messages'
+    }).then(resp => {
       return resp
-    } catch (err) {
-      console.log(err)
-    }
+    }).catch(e => {
+      console.log(e)
+    })
   },
   getMember: async (messageId) => {
-    try {
-      const resp = await api.get(`/messages/${messageId}`)
+    return api({
+      method: 'get',
+      url: `/messages/${messageId}`
+    }).then(resp => {
       return resp
-    } catch (err) {
-      console.log(err)
-    }
+    }).catch(e => {
+      console.log(e)
+    })
   },
   newMessage: async (senderId, conversationId, text) => {
-    try {
-      const resp = await api.post('/messages', {
-        params: { senderId, conversationId },
-        text
-      })
+    return api({
+      method: 'post',
+      url: '/messages',
+      data: { text },
+      params: { senderId, conversationId }
+    }).then(resp => {
       return resp
-    } catch (err) {
-      console.log(err)
-    }
+    }).catch(e => {
+      console.log(e)
+    })
   },
   updateMessage: async (text, messageId) => {
-    try {
-      const resp = await api.put(`/messages/${messageId}`, {
-        text
-      })
+    return api({
+      method: 'put',
+      url: `/messages/${messageId}`,
+      data: { text }
+    }).then(resp => {
       return resp
-    } catch (err) {
-      console.log(err)
-    }
+    }).catch(e => {
+      console.log(e)
+    })
   },
   deleteMessage: async (messageId) => {
-    try {
-      const resp = await api.delete(`/messages/${messageId}`)
+    return api({
+      method: 'delete',
+      url: `/messages/${messageId}`
+    }).then(resp => {
       return resp
-    } catch (err) {
-      console.log(err)
-    }
+    }).catch(e => {
+      console.log(e)
+    })
   }
 }

@@ -30,7 +30,6 @@ module.exports = {
       data: { username, password }
     }).then(resp => {
       console.log('deu bom')
-      // debugger
       return resp
     }).catch(e => {
       console.log(e)
