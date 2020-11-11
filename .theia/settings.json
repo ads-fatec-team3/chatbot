@@ -1,4 +1,4 @@
 {
-  "java.configuration.updateBuildConfiguration": "automatic",
-  "python.pythonPath": "/usr/bin/python3"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "python.pythonPath": "/usr/bin/python3"
 }

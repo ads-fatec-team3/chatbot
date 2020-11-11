@@ -15,4 +15,6 @@ public class Views {
 
   public interface SummaryRolePrivilegeView {}
   public interface DetailRolePrivilegeView extends SummaryRolePrivilegeView {}
+
+  public interface SummaryAuthView {}
 }

@@ -21,7 +21,7 @@ public class AuthServiceImpl implements AuthService {
     if(member == null) {
       throw new UsernameNotFoundException(String.format("Usuário %s não encontrado", username));
     }
-
+    
     return GrulyUser.builder()
                     .username(member.getUsername())
                     .password(member.getPassword())
