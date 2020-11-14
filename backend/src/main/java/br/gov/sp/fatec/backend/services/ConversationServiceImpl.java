@@ -44,6 +44,20 @@ public class ConversationServiceImpl implements ConversationService {
 
   @Override
   @PreAuthorize("isAuthenticated()")
+  public List<Conversation> getConversationsByMemberId(long memberId) throws MemberNotFoundException {
+    Member member = memberRepository.findMemberById(memberId);
+
+    if(member == null) {
+      throw new MemberNotFoundException(memberId);
+    }
+
+    List<Conversation> conversations = conversationRepository.findConversationsByMemberId(memberId);
+
+    return conversations;
+  }
+
+  @Override
+  @PreAuthorize("isAuthenticated()")
   public Conversation createConversation(Conversation conversation) throws ConversationCrudException {
     Conversation newChat = conversationRepository.save(conversation);
     

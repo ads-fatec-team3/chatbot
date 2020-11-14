@@ -45,7 +45,12 @@ public class ConversationController {
   public ResponseEntity<Conversation> getConversationById(@PathVariable("conversationId") long conversationId) {
     return ResponseEntity.ok(conversationService.getConversationById(conversationId));
   }
-  
+
+  @JsonView(Views.DetailConversationView.class)
+  @GetMapping("/members/{memberId}")
+  public ResponseEntity<List<Conversation>> getConversationsByMemberId(@PathVariable("memberId") long memberId) {
+    return ResponseEntity.ok(conversationService.getConversationsByMemberId(memberId));
+  }
   
   @ApiOperation(value = "Insere os dados de uma conversa")
   @PostMapping

@@ -6,14 +6,14 @@ import br.gov.sp.fatec.backend.models.MessageType;
 
 public class ChatMessage {
   private String text;
-  private String sender;
-  private String recipient;
+  private long sender;
+  private long recipient;
   private Date timestamp;
   private MessageType type;
 
   public ChatMessage() {}
 
-  public ChatMessage(String sender, MessageType type) {
+  public ChatMessage(long sender, MessageType type) {
     this.sender = sender;
     this.type = type;
     this.timestamp = new Date(System.currentTimeMillis());
@@ -23,11 +23,11 @@ public class ChatMessage {
     return text;
   }
 
-  public String getSender() {
+  public long getSender() {
     return sender;
   }
 
-  public String getRecipient() {
+  public long getRecipient() {
     return recipient;
   }
 
@@ -43,11 +43,11 @@ public class ChatMessage {
     this.text = text;
   }
 
-  public void setSender(String sender) {
+  public void setSender(long sender) {
     this.sender = sender;
   }
 
-  public void setRecipient(String recipient) {
+  public void setRecipient(long recipient) {
     this.recipient = recipient;
   }
 

@@ -29,7 +29,7 @@ public class Conversation {
   @Column(name = "conversation_title")
   private String title;
 
-  @JsonView(Views.SummaryConversationView.class)
+  @JsonView(Views.DetailConversationView.class)
   @OneToMany(mappedBy = "conversation")
   private List<Message> messages = new ArrayList<Message>();
 
