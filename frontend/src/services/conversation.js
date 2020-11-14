@@ -1,67 +1,76 @@
-const axios = require('axios')
+const { api } = require('./auth')
 
-const api = axios.create({
-  baseURL: 'localhost:8080/api'
-})
 module.exports = {
   getAllConversations: async () => {
-    try {
-      const resp = await api.get('/conversations')
+    return api({
+      method: 'get',
+      url: '/conversations'
+    }).then(resp => {
       return resp
-    } catch (err) {
-      console.log(err)
-    }
+    }).catch(e => {
+      console.log(e)
+    })
   },
   getConversation: async (conversationId) => {
-    try {
-      const resp = await api.get(`/conversations/${conversationId}`)
+    return api({
+      method: 'get',
+      url: `/conversations/${conversationId}`
+    }).then(resp => {
       return resp
-    } catch (err) {
-      console.log(err)
-    }
+    }).catch(e => {
+      console.log(e)
+    })
   },
   newConversation: async (title) => {
-    try {
-      const resp = await api.post('/conversations', {
-        title
-      })
+    return api({
+      method: 'post',
+      url: '/conversations',
+      data: { title }
+    }).then(resp => {
       return resp
-    } catch (err) {
-      console.log(err)
-    }
+    }).catch(e => {
+      console.log(e)
+    })
   },
   updateConversation: async (title, conversationId) => {
-    try {
-      const resp = await api.put(`/conversations/${conversationId}`, {
-        title
-      })
+    return api({
+      method: 'put',
+      url: `/conversations/${conversationId}`,
+      data: { title }
+    }).then(resp => {
       return resp
-    } catch (err) {
-      console.log(err)
-    }
+    }).catch(e => {
+      console.log(e)
+    })
   },
   deleteConversation: async (conversationId) => {
-    try {
-      const resp = await api.delete(`/conversations/${conversationId}`)
+    return api({
+      method: 'delete',
+      url: `/conversations/${conversationId}`
+    }).then(resp => {
       return resp
-    } catch (err) {
-      console.log(err)
-    }
+    }).catch(e => {
+      console.log(e)
+    })
   },
   insertConversationMember: async (memberId, conversationId) => {
-    try {
-      const resp = await api.put(`/conversations/${conversationId}/members/${memberId}/add`)
+    return api({
+      method: 'put',
+      url: `/conversations/${conversationId}/members/${memberId}/add`
+    }).then(resp => {
       return resp
-    } catch (err) {
-      console.log(err)
-    }
+    }).catch(e => {
+      console.log(e)
+    })
   },
   deleteConversationMember: async (memberId, conversationId) => {
-    try {
-      const resp = await api.delete(`/conversations/${conversationId}/members/${memberId}/add`)
+    return api({
+      method: 'delete',
+      url: `/conversations/${conversationId}/members/${memberId}/add`
+    }).then(resp => {
       return resp
-    } catch (err) {
-      console.log(err)
-    }
+    }).catch(e => {
+      console.log(e)
+    })
   }
 }

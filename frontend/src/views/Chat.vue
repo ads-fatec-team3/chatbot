@@ -133,6 +133,8 @@ import ChatTab from '@/components/ChatTab.vue'
 import ConversasTab from '@/components/ConversasTab.vue'
 import AgendaTab from '@/components/AgendaTab.vue'
 
+import serviceMember from '@/services/member.js'
+
 export default {
   name: 'Chat',
   components: {
@@ -246,12 +248,21 @@ export default {
     goToChat: function (user) {
       this.tab = 'tab-chat'
       this.otherUser = user
+    },
+    loadMembers: async function () {
+      const resp = await serviceMember.getAllMembers()
+      console.log(resp)
     }
   },
 
   mounted () {
-    this.selectUser()
-    this.loadAgenda()
+    if (!this.$store.state.token) {
+      this.$router.push({ name: 'login' })
+    } else {
+      this.loadMembers()
+      this.selectUser()
+      this.loadAgenda()
+    }
     // this.loadGruly()
   },
 

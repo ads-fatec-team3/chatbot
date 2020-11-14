@@ -32,7 +32,8 @@ public class AuthController {
   @JsonView(Views.SummaryAuthView.class)
   @PostMapping("/signin")
   public Auth signin(@RequestBody Auth auth) throws JsonProcessingException {
-    UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(auth.getUsername(), auth.getPassword());
+    UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(auth.getUsername(),
+        auth.getPassword());
     Authentication user = authenticationManager.authenticate(credentials);
 
     Member member = memberRepository.findMemberByUsername(user.getName());
@@ -40,7 +41,7 @@ public class AuthController {
     auth.setId(member.getId());
     auth.setToken(JwtUtils.generateToken(user, member.getId()));
     auth.setRole(user.getAuthorities().iterator().next().getAuthority());
-  
+
     return auth;
   }
 }
