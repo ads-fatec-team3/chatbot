@@ -6,6 +6,7 @@ import br.gov.sp.fatec.backend.models.MessageType;
 
 public class ChatMessage {
   private String text;
+  private long chatId;
   private long sender;
   private long recipient;
   private Date timestamp;
@@ -21,6 +22,10 @@ public class ChatMessage {
 
   public String getText() {
     return text;
+  }
+
+  public long getChatId() {
+    return chatId;
   }
 
   public long getSender() {
@@ -41,6 +46,10 @@ public class ChatMessage {
 
   public void setText(String text) {
     this.text = text;
+  }
+
+  public void setChatId(long chatId) {
+    this.chatId = chatId;
   }
 
   public void setSender(long sender) {
