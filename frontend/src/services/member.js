@@ -44,13 +44,13 @@ module.exports = {
     })
   },
   deleteMember: async (memberId) => {
-  return api({
-    method: 'delete',
-    url: `/members/${memberId}`
-  }).then(resp => {
-    return resp
-  }).catch(e => {
-    console.log(e)
-  })
+    return api({
+      method: 'delete',
+      url: `/members/${memberId}`
+    }).then(resp => {
+      return resp
+    }).catch(e => {
+      console.log(e)
+    })
   }
 }

@@ -1,8 +1,21 @@
 const axios = require('axios')
+const router = require('../router/index.js')
 
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:8080/api'
 })
+
+axiosInstance.interceptors.response.use(
+  resp => {
+    return resp
+  },
+  error => {
+    if (error.response.status === 401) {
+      router.default.push({ name: 'login' })
+    }
+    return Promise.reject(error)
+  }
+)
 
 module.exports = {
   api: (data) => {

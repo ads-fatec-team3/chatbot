@@ -59,11 +59,14 @@ atendente ou instrutor.
 ### Sprint 5
 - Sistema de autenticação (utilização de jwt)
 - Criação de atividades na agenda
-- Controle de permissões
+- Controle de permissões (backend)
 - Melhoria na estilização do frontend
 
 ### Sprint 6
-- Melhorias
+- Controle de permissões (frontend)
+- Melhorias nas validações
+- Melhoria Chatbot
+- Filtros para melhoria na experiência do usuário
 - Entrega produto final
 - Video de apresentação
 
@@ -75,7 +78,7 @@ atendente ou instrutor.
 | 2         | 21/09/2020  | 04/10/2020 | [acessar](https://github.com/ads-fatec-team3/chatbot/blob/master/docs/entregas/sprint2.md)|
 | 3         | 05/10/2020  | 18/10/2020 | [acessar](https://github.com/ads-fatec-team3/chatbot/blob/master/docs/entregas/sprint3.md)|
 | 4         | 19/10/2020  | 01/11/2020 | [acessar](https://github.com/ads-fatec-team3/chatbot/blob/master/docs/entregas/sprint4.md)|
-| 5         | 02/11/2020  | 15/11/2020 | ---                                                                                       |
+| 5         | 02/11/2020  | 15/11/2020 | [acessar](https://github.com/ads-fatec-team3/chatbot/blob/master/docs/entregas/sprint5.md)|
 | 6         | 16/11/2020  | 29/11/2020 | ---                                                                                       |
 
 ## Protótipo
