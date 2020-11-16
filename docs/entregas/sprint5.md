@@ -36,7 +36,7 @@ Também foi implementada a criação de atividades no sistema, parte importante 
 <img src="agenda3.png" heigth="300" title="Agenda">
 
 ### Funcionalidades Novas
-![Alt Text](https://media.giphy.com/media/g9LLLQyS4MURCFN8Za/giphy.gif)
+![Alt Text](https://media.giphy.com/media/repY1dBTv9k7tnrHAa/giphy.gif)
 
 **Documentação:** Foi atualizada toda a documentação do acompanhamento do projeto, tudo isso pode ser
 encontrado no [diretório de docs](https://github.com/ads-fatec-team3/chatbot/tree/master/docs).
