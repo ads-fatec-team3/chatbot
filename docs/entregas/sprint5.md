@@ -1,4 +1,4 @@
-# Entrega Sprint 4
+# Entrega Sprint 5
 
 ## Gráfico Burndown
 
@@ -35,6 +35,8 @@ Também foi implementada a criação de atividades no sistema, parte importante 
 <img src="agenda2.png" heigth="300" title="Agenda">
 <img src="agenda3.png" heigth="300" title="Agenda">
 
+### Funcionalidades Novas
+![Alt Text](https://media.giphy.com/media/repY1dBTv9k7tnrHAa/giphy.gif)
 
 **Documentação:** Foi atualizada toda a documentação do acompanhamento do projeto, tudo isso pode ser
 encontrado no [diretório de docs](https://github.com/ads-fatec-team3/chatbot/tree/master/docs).
