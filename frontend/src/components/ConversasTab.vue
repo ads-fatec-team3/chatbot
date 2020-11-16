@@ -24,7 +24,7 @@
     >
       <template v-slot="{ item, index }">
 
-        <v-list-item :key="index" @click="changeTab(item.name)">
+        <v-list-item :key="index" @click="changeTab(item.id)">
           <v-list-item-action>
             <v-btn
               fab
@@ -32,13 +32,13 @@
               depressed
               color="blue darken-4"
             >
-              <strong class="white--text">{{ index }}</strong>
+              <strong class="white--text">{{ item.title.charAt(0) }}</strong>
             </v-btn>
           </v-list-item-action>
 
           <v-list-item-content>
             <v-list-item-title>
-              <strong>{{ item.name }}</strong>
+              <strong>{{ item.title }}</strong>
             </v-list-item-title>
           </v-list-item-content>
 

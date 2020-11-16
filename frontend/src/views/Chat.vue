@@ -23,7 +23,7 @@
         </v-tab>
 
         <v-tab href="#tab-agenda">
-          Agenda
+          Atividades
           <v-icon>mdi-alarm</v-icon>
         </v-tab>
       </v-tabs>
@@ -88,37 +88,17 @@
         </v-tab-item>
 
         <v-tab-item value="tab-agenda">
-          <AgendaTab :agenda="agenda" />
+          <AgendaTab
+            :agenda="agenda"
+            :members="members"
+            :activeDialogAgenda="activeDialogAgenda"
+            @handleActiveDialog="activeDialogAgenda = !activeDialogAgenda"
+            @handleCreateAgenda="createAgenda"
+          />
         </v-tab-item>
 
       </v-tabs-items>
     </div>
-    <v-row justify="center">
-      <v-dialog
-        v-model="dialog"
-        persistent
-        max-width="290"
-      >
-        <v-card>
-          <v-card-title class="headline">
-            Informe seu nome
-          </v-card-title>
-          <v-card-text>
-            <v-text-field v-model="inputUser" outlined />
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="green darken-1"
-              text
-              @click="selectUser"
-            >
-              OK
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-row>
   </v-app>
 </template>
 
@@ -132,6 +112,10 @@ import Stomp from 'webstomp-client'
 import ChatTab from '@/components/ChatTab.vue'
 import ConversasTab from '@/components/ConversasTab.vue'
 import AgendaTab from '@/components/AgendaTab.vue'
+
+import serviceMember from '@/services/member.js'
+import serviceConversation from '@/services/conversation.js'
+import serviceAgenda from '@/services/agenda.js'
 
 export default {
   name: 'Chat',
@@ -153,7 +137,8 @@ export default {
       conversas: [],
       agenda: [],
       connected: false,
-      dialog: true
+      activeDialogAgenda: false,
+      members: []
     }
   },
   methods: {
@@ -229,12 +214,20 @@ export default {
       var scrollArea = this.$el.querySelector('#messages')
       scrollArea.scrollTop = scrollArea.scrollHeight
     },
-    loadAgenda: function () {
-      axios.get('https://ads-fatec-team3.free.beeceptor.com/schedule').then(response => {
-        this.agenda = response.data.schedule
-      }).catch(response => {
-        console.log('Deu ruim')
-      })
+    loadConversas: async function () {
+      const resp = await serviceConversation.getAllConversations()
+      this.conversas = resp.data
+    },
+    loadAgenda: async function () {
+      const resp = await serviceAgenda.getAgenda()
+      this.agenda = resp.data
+    },
+    createAgenda: async function (data) {
+      const resp = await serviceAgenda.newAgenda(data, 1)
+      if (resp.status === 201) {
+        this.loadAgenda()
+        this.activeDialogAgenda = false
+      }
     },
     loadGruly: function () {
       axios.get('http://127.0.0.1:5000').then(response => {
@@ -246,12 +239,29 @@ export default {
     goToChat: function (user) {
       this.tab = 'tab-chat'
       this.otherUser = user
+    },
+    loadMembers: async function () {
+      const resp = await serviceMember.getAllMembers()
+      const members = []
+      for (let i = 0; i < resp.data.length; i++) {
+        members.push({
+          text: resp.data[i].username,
+          value: resp.data[i].id
+        })
+      }
+      this.members = members
     }
   },
 
   mounted () {
-    this.selectUser()
-    this.loadAgenda()
+    if (!this.$store.state.token) {
+      this.$router.push({ name: 'login' })
+    } else {
+      this.loadMembers()
+      this.loadConversas()
+      // this.selectUser()
+      this.loadAgenda()
+    }
     // this.loadGruly()
   },
 

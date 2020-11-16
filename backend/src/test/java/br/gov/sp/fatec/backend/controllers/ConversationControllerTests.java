@@ -1,7 +1,6 @@
 package br.gov.sp.fatec.backend.controllers;
 
 import br.gov.sp.fatec.backend.models.Member;
-import br.gov.sp.fatec.backend.models.Message;
 import br.gov.sp.fatec.backend.models.Conversation;
 import br.gov.sp.fatec.backend.repositories.MemberRepository;
 import br.gov.sp.fatec.backend.repositories.MessageRepository;
@@ -9,6 +8,7 @@ import br.gov.sp.fatec.backend.repositories.ConversationRepository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -33,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-test.properties")
 @Transactional
+@Disabled
 public class ConversationControllerTests {
   private final String BASE_API_CONVERSATIONS_URL = "api/conversations";
 
@@ -106,7 +107,7 @@ public class ConversationControllerTests {
 
   @Test
   public void insertConversationMember() throws Exception {
-    Member member = memberRepository.save(new Member("member", 10));
+    Member member = memberRepository.save(new Member("member"));
     Conversation chat = conversationRepository.save(new Conversation("chat"));
 
     mockMvc.perform(
@@ -118,8 +119,8 @@ public class ConversationControllerTests {
   }
   
   @Test
-  public void deleteConversationMember() throws Exception {
-    Member member = memberRepository.save(new Member("member", 10));
+  public void removeConversationMember() throws Exception {
+    Member member = memberRepository.save(new Member("member"));
     Conversation chat = conversationRepository.save(new Conversation("chat"));
     
     memberRepository.save(member);
@@ -133,23 +134,5 @@ public class ConversationControllerTests {
       .andExpect(status().isOk());
 
     assertThat(chat.getMembers()).asList().isEmpty();
-  }
-
-  @Test
-  public void insertConversationMessage() throws Exception {
-    Conversation chat = new Conversation("chat");
-
-    conversationRepository.save(chat);
-
-    Message newMessage = new Message("test");
-
-    messageRepository.save(newMessage);
-
-    mockMvc.perform(
-      put("/{API_URL}/{conversationId}/messages/{messageId}/add",
-          BASE_API_CONVERSATIONS_URL, chat.getId(), newMessage.getId()))
-      .andExpect(status().isOk());
-    
-    assertThat(chat.getMessages()).asList().isNotEmpty();
   }
 }

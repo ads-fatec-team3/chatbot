@@ -9,6 +9,8 @@ public interface ConversationService {
 
   public Conversation getConversationById(long conversationId);
 
+  public List<Conversation> getConversationsByMemberId(long memberId);
+
   public Conversation createConversation(Conversation conversation);
 
   public Conversation updateConversationById(long conversationId, Conversation chatDataToUpdate);

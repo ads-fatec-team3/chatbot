@@ -11,6 +11,7 @@ import br.gov.sp.fatec.backend.repositories.MemberRepository;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,7 @@ public class ConversationServiceImpl implements ConversationService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public Conversation getConversationById(long conversationId) throws ConversationNotFoundException {
 	  Conversation fetchedChat = conversationRepository.findConversationById(conversationId);
 
@@ -41,6 +43,21 @@ public class ConversationServiceImpl implements ConversationService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
+  public List<Conversation> getConversationsByMemberId(long memberId) throws MemberNotFoundException {
+    Member member = memberRepository.findMemberById(memberId);
+
+    if(member == null) {
+      throw new MemberNotFoundException(memberId);
+    }
+
+    List<Conversation> conversations = conversationRepository.findConversationsByMemberId(memberId);
+
+    return conversations;
+  }
+
+  @Override
+  @PreAuthorize("isAuthenticated()")
   public Conversation createConversation(Conversation conversation) throws ConversationCrudException {
     Conversation newChat = conversationRepository.save(conversation);
     
@@ -52,6 +69,7 @@ public class ConversationServiceImpl implements ConversationService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public Conversation updateConversationById(long conversationId, Conversation chatDataToUpdate) {
     Conversation chat = conversationRepository.findConversationById(conversationId);
 
@@ -73,6 +91,7 @@ public class ConversationServiceImpl implements ConversationService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public void deleteConversationById(long conversationId) throws ConversationNotFoundException {
     Conversation chatToDelete = conversationRepository.findConversationById(conversationId);
 
@@ -84,6 +103,7 @@ public class ConversationServiceImpl implements ConversationService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public Conversation addMemberToConversation(long memberId, long conversationId) throws MemberNotFoundException,
                                                                                          ConversationNotFoundException,
                                                                                          ConversationCrudException {
@@ -111,6 +131,7 @@ public class ConversationServiceImpl implements ConversationService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public Conversation removeMemberFromConversation(long memberId, long conversationId) throws MemberNotFoundException, ConversationNotFoundException {
     Conversation chat = conversationRepository.findConversationById(conversationId);
     
@@ -133,7 +154,5 @@ public class ConversationServiceImpl implements ConversationService {
     conversationRepository.save(chat);
 
     return chat;
-  }
-
-  
+  } 
 }

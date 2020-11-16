@@ -1,11 +1,11 @@
 package br.gov.sp.fatec.backend.controllers;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
 import br.gov.sp.fatec.backend.exceptions.MessageException.MessageNotFoundException;
 import br.gov.sp.fatec.backend.models.Message;
 import br.gov.sp.fatec.backend.services.MessageService;
 import br.gov.sp.fatec.backend.views.Views;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,22 +34,22 @@ public class MessageController {
   @Autowired
   private MessageService messageService;
 
-  @JsonView(Views.DetailMessageView.class)
-  @GetMapping
   @ApiOperation(value = "Retorna uma lista com os dados de todas as mensagens")
+  @JsonView(Views.SummaryMessageView.class)
+  @GetMapping
   public ResponseEntity<List<Message>> getAllMessages() {
     return ResponseEntity.ok(messageService.getAllMessages());
   }
 
+  @ApiOperation(value = "Retorna os dados de uma mensagem")
   @JsonView(Views.DetailMessageView.class)
   @GetMapping("/{messageId}")
-  @ApiOperation(value = "Retorna os dados de uma mensagem")
   public ResponseEntity<Message> getMessageById(@PathVariable("messageId") long messageId) {
     return ResponseEntity.ok(messageService.getMessageById(messageId));
   }
 
-  @PostMapping
   @ApiOperation(value = "Insere os dados de uma mensagem")
+  @PostMapping
   public ResponseEntity<Message> createMessage(@RequestBody Message message,
                                                @RequestParam("senderId") long senderId,
                                                @RequestParam("conversationId") long conversationId) {
@@ -58,8 +58,8 @@ public class MessageController {
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
-  @PutMapping("/{messageId}")
   @ApiOperation(value = "Atualiza os dados de uma mensagem")
+  @PutMapping("/{messageId}")
   public ResponseEntity<Message> updateMessageById(@PathVariable("messageId") long messageId,
                                                    @RequestBody Message messageDataToUpdate) {
     messageService.updateMessageById(messageId, messageDataToUpdate);

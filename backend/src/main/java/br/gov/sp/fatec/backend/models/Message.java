@@ -1,10 +1,10 @@
 package br.gov.sp.fatec.backend.models;
 
-import java.util.Date;
+import br.gov.sp.fatec.backend.views.Views;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
-import br.gov.sp.fatec.backend.views.Views;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -18,7 +18,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "message")
+@Table(name = "gruly_messages")
 public class Message {
   @JsonView({Views.SummaryMessageView.class, Views.SummaryConversationView.class})
   @Id
@@ -31,7 +31,7 @@ public class Message {
   private String text;
   
   @JsonView(Views.DetailMessageView.class)
-  @Column(name = "timestamp", nullable = false)
+  @Column(name = "message_timestamp", nullable = false)
   @Temporal(TemporalType.TIMESTAMP)
   private Date timestamp;
 

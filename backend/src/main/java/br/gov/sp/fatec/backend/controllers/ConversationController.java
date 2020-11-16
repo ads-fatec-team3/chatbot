@@ -1,10 +1,10 @@
 package br.gov.sp.fatec.backend.controllers;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
 import br.gov.sp.fatec.backend.models.Conversation;
 import br.gov.sp.fatec.backend.services.ConversationService;
 import br.gov.sp.fatec.backend.views.Views;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,30 +32,36 @@ public class ConversationController {
   @Autowired
   private ConversationService conversationService;
 
-  @JsonView(Views.DetailConversationView.class)
-  @GetMapping
   @ApiOperation(value = "Retorna uma lista com os dados de todas as conversas")
+  @JsonView(Views.SummaryConversationView.class)
+  @GetMapping
   public ResponseEntity<List<Conversation>> getAllConversations() {
     return ResponseEntity.ok(conversationService.getAllConversations());
   }
 
+  @ApiOperation(value = "Retorna os dados de uma conversa")
   @JsonView(Views.DetailConversationView.class)
   @GetMapping("/{conversationId}")
-  @ApiOperation(value = "Retorna os dados de uma conversa")
   public ResponseEntity<Conversation> getConversationById(@PathVariable("conversationId") long conversationId) {
     return ResponseEntity.ok(conversationService.getConversationById(conversationId));
   }
+
+  @JsonView(Views.DetailConversationView.class)
+  @GetMapping("/members/{memberId}")
+  public ResponseEntity<List<Conversation>> getConversationsByMemberId(@PathVariable("memberId") long memberId) {
+    return ResponseEntity.ok(conversationService.getConversationsByMemberId(memberId));
+  }
   
-  @PostMapping
   @ApiOperation(value = "Insere os dados de uma conversa")
+  @PostMapping
   public ResponseEntity<Conversation> createConversation(@RequestBody Conversation conversation) {
     conversationService.createConversation(conversation);
 
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
-  @PutMapping("/{conversationId}")
   @ApiOperation(value = "Atualiza os dados de uma conversa")
+  @PutMapping("/{conversationId}")
   public ResponseEntity<Conversation> updateConversationById(@PathVariable("conversationId") long conversationId,
                                                              @RequestBody Conversation chatDataToUpdate) {
     conversationService.updateConversationById(conversationId, chatDataToUpdate);
@@ -63,16 +69,16 @@ public class ConversationController {
     return ResponseEntity.ok().build();
   }
 
-  @DeleteMapping("/{conversationId}")
   @ApiOperation(value = "Deleta os dados de uma conversa")
+  @DeleteMapping("/{conversationId}")
   public ResponseEntity<Conversation> deleteConversationById(@PathVariable("conversationId") long conversationId) {
     conversationService.deleteConversationById(conversationId);
 
     return ResponseEntity.ok().build();
   }
 
-  @PutMapping("/{conversationId}/members/{memberId}/add")
   @ApiOperation(value = "Adiciona um membro a uma conversa")
+  @PutMapping("/{conversationId}/members/{memberId}/add")
   public ResponseEntity<Conversation> addMemberToConversation(@PathVariable("conversationId") long conversationId,
                                                               @PathVariable("memberId") long memberId) {
     conversationService.addMemberToConversation(memberId, conversationId);
@@ -80,8 +86,8 @@ public class ConversationController {
     return ResponseEntity.ok().build();
   }
 
-  @DeleteMapping("/{conversationId}/members/{memberId}/remove")
   @ApiOperation(value = "Remove um membro de uma conversa")
+  @DeleteMapping("/{conversationId}/members/{memberId}/remove")
   public ResponseEntity<Conversation> removeMemberFromConversation(@PathVariable("conversationId") long conversationId,
                                                                    @PathVariable("memberId") long memberId) {
     conversationService.removeMemberFromConversation(memberId, conversationId);
