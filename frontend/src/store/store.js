@@ -7,7 +7,9 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-    token: localStorage.getItem('access_token') || null
+    token: localStorage.getItem('access_token') || null,
+    id: localStorage.getItem('user_id') || null,
+    role: localStorage.getItem('user_role') || null
   },
   getters: {
     AccessToken (state) {
@@ -15,8 +17,10 @@ export const store = new Vuex.Store({
     }
   },
   mutations: {
-    retrieveToken (state, token) {
-      state.token = token
+    setCredentials (state, user) {
+      state.token = user.token
+      state.id = user.id
+      state.role = user.role
     },
     destroyToken (state) {
       state.token = null
@@ -27,13 +31,15 @@ export const store = new Vuex.Store({
       localStorage.removeItem('access_token')
       context.commit('destroyToken')
     },
-    async retrieveToken (context, { username, password }) {
+    async setCredentials (context, { username, password }) {
       console.log(username)
       const resp = await getAccessToken(username, password)
-      const token = resp.data.token
+      const { token, id, role } = resp.data
       console.log(resp.data)
       localStorage.setItem('access_token', token)
-      context.commit('retrieveToken', token)
+      localStorage.setItem('user_id', id)
+      localStorage.setItem('user_role', role)
+      context.commit('setCredentials', { token, id, role })
       return token
     }
   },
