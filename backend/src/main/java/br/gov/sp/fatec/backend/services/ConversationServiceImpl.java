@@ -91,7 +91,7 @@ public class ConversationServiceImpl implements ConversationService {
   }
 
   @Override
-  @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() and hasRole('ROLE_DIRECTOR')")
   public void deleteConversationById(long conversationId) throws ConversationNotFoundException {
     Conversation chatToDelete = conversationRepository.findConversationById(conversationId);
 

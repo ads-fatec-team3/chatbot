@@ -98,7 +98,7 @@ public class MessageServiceImpl implements MessageService {
   }
 
   @Override
-  @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("isAuthenticated() and hasRole('ROLE_DIRECTOR')")
   public void deleteMessageById(long messageId) {
     Message messageToDelete = messageRepository.findMessageById(messageId);
 
