@@ -26,11 +26,11 @@ public class Message {
   @Column(name = "message_id")
   private long id;
   
-  @JsonView(Views.DetailMessageView.class)
+  @JsonView({Views.SummaryMessageView.class, Views.SummaryConversationView.class})
   @Column(name = "message_text", nullable = false)
   private String text;
   
-  @JsonView(Views.DetailMessageView.class)
+  @JsonView({Views.SummaryMessageView.class, Views.SummaryConversationView.class})
   @Column(name = "message_timestamp", nullable = false)
   @Temporal(TemporalType.TIMESTAMP)
   private Date timestamp;
