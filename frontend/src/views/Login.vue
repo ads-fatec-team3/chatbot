@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     submitLogin: function () {
-      this.$store.dispatch('retrieveToken', {
+      this.$store.dispatch('setCredentials', {
         username: this.username,
         password: this.password
       }).then(x => {
