@@ -16,6 +16,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Table(name = "gruly_conversations")
 public class Conversation {
@@ -30,9 +33,10 @@ public class Conversation {
   private String title;
 
   @JsonView(Views.DetailConversationView.class)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   @OneToMany(mappedBy = "conversation")
   private List<Message> messages = new ArrayList<Message>();
-
+  
   @JsonView(Views.DetailConversationView.class)
   @ManyToMany(mappedBy = "conversations")
   private List<Member> members = new ArrayList<Member>();

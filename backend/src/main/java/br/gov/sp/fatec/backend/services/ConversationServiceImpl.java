@@ -9,6 +9,7 @@ import br.gov.sp.fatec.backend.repositories.ConversationRepository;
 import br.gov.sp.fatec.backend.repositories.MemberRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -97,6 +98,14 @@ public class ConversationServiceImpl implements ConversationService {
 
     if(chatToDelete == null) {
       throw new ConversationNotFoundException(conversationId);
+    }
+
+    List<Member> members = memberRepository.findAllById(
+      chatToDelete.getMembers().stream().map(member -> member.getId()).collect(Collectors.toList())
+    );
+
+    for (Member member : members) {
+      chatToDelete.removeMember(member);
     }
 
     conversationRepository.deleteById(conversationId);

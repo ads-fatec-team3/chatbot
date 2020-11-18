@@ -5,14 +5,18 @@ import br.gov.sp.fatec.backend.exceptions.MemberRoleException.MemberRoleNotFound
 import br.gov.sp.fatec.backend.exceptions.MemberException.MemberCrudException;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.gov.sp.fatec.backend.models.Conversation;
 import br.gov.sp.fatec.backend.models.Member;
 import br.gov.sp.fatec.backend.models.MemberRole;
+import br.gov.sp.fatec.backend.repositories.ConversationRepository;
 import br.gov.sp.fatec.backend.repositories.MemberRepository;
 import br.gov.sp.fatec.backend.repositories.MemberRoleRepository;
 
@@ -21,9 +25,12 @@ import br.gov.sp.fatec.backend.repositories.MemberRoleRepository;
 public class MemberServiceImpl implements MemberService {
   @Autowired
   private MemberRepository memberRepository;
-
+  
   @Autowired
   private MemberRoleRepository memberRoleRepository;
+  
+  @Autowired
+  private ConversationRepository conversationRepository;
   
   @Override
   @PreAuthorize("isAuthenticated()")
@@ -78,11 +85,22 @@ public class MemberServiceImpl implements MemberService {
 
   @Override
   @PreAuthorize("isAuthenticated() and hasRole('ROLE_DIRECTOR')")
-  public void deleteMemberById(long memberId) throws MemberCrudException {
+  public void deleteMemberById(long memberId) throws MemberNotFoundException {
     Member memberToDelete = memberRepository.findMemberById(memberId);
     
     if(memberToDelete == null) {
-      throw new MemberCrudException(String.format("erro ao deletar o membro de id = %d", memberId));
+      throw new MemberNotFoundException(memberId);
+    }
+
+    Set<Conversation> conversations = Set.copyOf(
+      conversationRepository.findAllById(
+        memberToDelete.getConversations().stream().map(conversation -> conversation.getId()).collect(Collectors.toList())
+      )
+    );
+
+    // removendo as conversas associadas ao membro antes de deletar
+    for (Conversation conversation : conversations) {
+      memberToDelete.removeConversation(conversation);
     }
     
     memberRepository.deleteById(memberId);
