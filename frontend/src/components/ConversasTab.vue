@@ -64,7 +64,6 @@ export default {
   },
   methods: {
     changeTab: function (user) {
-      console.log('Abacate')
       this.$emit('handleChangeTab', user)
     }
   }
