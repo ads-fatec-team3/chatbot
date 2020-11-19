@@ -34,17 +34,17 @@ public class WebSocketEventListener {
   public void handleSessionDisconnectListener(SessionDisconnectEvent event) {
     StompHeaderAccessor header = StompHeaderAccessor.wrap(event.getMessage());
 
-    String username = header.getSessionAttributes().get("username").toString();
+    String token = header.getSessionAttributes().get("token").toString();
 
-    System.out.println("Usuário desconectado: [ " + username + " ]");
+    System.out.println("Usuário desconectado: [ " + token + " ]");
 
     List<String> activeUsers = userRegistry.getUsers().stream()
                                            .map(user -> user.getName())
-                                           .filter(user -> user != username)
+                                           .filter(user -> user != token)
                                            .collect(Collectors.toList());
     messagingTemplate.convertAndSend("/topic/active", activeUsers);
     
-    header.getSessionAttributes().remove("username");
+    header.getSessionAttributes().remove("token");
   }
 
   @EventListener
