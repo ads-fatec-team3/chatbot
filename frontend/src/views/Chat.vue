@@ -84,7 +84,12 @@
         </v-tab-item>
 
         <v-tab-item value="tab-conversas">
-          <ConversasTab :conversas="conversas" @handleChangeTab="goToChat" />
+          <ConversasTab :conversas="conversas"
+            @handleChangeTab="goToChat"
+            :members="members"
+            :activeDialogAgenda="activeDialogAgenda"
+            @handleActiveDialog="activeDialogAgenda = !activeDialogAgenda"
+            @handleCreateAgenda="createAgenda"/>
         </v-tab-item>
 
         <v-tab-item value="tab-agenda">

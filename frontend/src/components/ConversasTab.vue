@@ -1,5 +1,14 @@
 <template>
   <div>
+  <v-row justify="center">
+    <v-dialog v-model="activeDialogAgenda" persistent max-width="370">
+      <NovaConversa
+        :activeDialogAgenda="activeDialogAgenda"
+        :members="members"
+        @handleActiveDialog="activeDialogAgenda = !activeDialogAgenda"
+        @handleCreateAgenda="createAgenda"/>
+    </v-dialog>
+  </v-row>
     <div class="d-flex flex-row ma-2">
       <v-textarea
         v-model="searchMember"
@@ -15,6 +24,14 @@
         class="ml-2"
       >
         <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+      <v-btn
+        fab
+        color="primary"
+        class="ml-2"
+        @click="dialogChange"
+      >
+        <v-icon>mdi-plus</v-icon>
       </v-btn>
     </div>
     <v-virtual-scroll
@@ -51,21 +68,32 @@
 </template>
 
 <script>
+import NovaConversa from '@/components/NovaConversa'
 export default {
+  components: {
+    NovaConversa
+  },
   name: 'ConversasTab',
   props: {
+    members: Array,
     conversas: Array,
-    handleChangeTab: Function
+    handleChangeTab: Function,
+    handleActiveDialog: Function,
+    activeDialogAgenda: Boolean
   },
   data () {
     return {
-      searchMember: null
+      searchMember: null,
+      activeDialogConversa: false
     }
   },
   methods: {
     changeTab: function (user) {
       console.log('Abacate')
       this.$emit('handleChangeTab', user)
+    },
+    dialogChange: function () {
+      this.$emit('handleActiveDialog')
     }
   }
 }
