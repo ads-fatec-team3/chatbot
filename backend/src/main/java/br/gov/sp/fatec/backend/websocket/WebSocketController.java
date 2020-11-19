@@ -1,8 +1,13 @@
 package br.gov.sp.fatec.backend.websocket;
 
+import br.gov.sp.fatec.backend.models.Message;
+import br.gov.sp.fatec.backend.repositories.ConversationRepository;
+import br.gov.sp.fatec.backend.repositories.MemberRepository;
+import br.gov.sp.fatec.backend.repositories.MessageRepository;
+
 import java.util.Date;
 
-import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -10,9 +15,27 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class WebSocketController {
-  @MessageMapping("/chat/{chatId}/messages")
-  public ChatMessage sendMessage(@DestinationVariable("chatId") long chatId, @Payload ChatMessage message, SimpMessageHeaderAccessor header) throws Exception {
-    message.setTimestamp(new Date(System.currentTimeMillis()));
-    return message;
+
+  @Autowired
+  MessageRepository messageRepository;
+
+  @Autowired
+  MemberRepository memberRepository;
+
+  @Autowired
+  ConversationRepository conversationRepository;
+
+  @MessageMapping("/chat/messages")
+  public ChatMessage sendMessage(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor header) throws Exception {
+    chatMessage.setTimestamp(new Date(System.currentTimeMillis()));
+
+    Message message = new Message();
+    message.setText(chatMessage.getText());
+    message.setSender(memberRepository.findMemberById(chatMessage.getSender()));
+    message.setConversation(conversationRepository.findConversationById(chatMessage.getChatId()));
+    
+    messageRepository.save(message);
+    
+    return chatMessage;
   }
 }

@@ -135,6 +135,7 @@ export default {
       message: null,
       messageGruly: null,
       user: null,
+      token: null,
       conversaId: null,
       messages: [],
       messagesGruly: [],
@@ -147,10 +148,10 @@ export default {
   },
   methods: {
     connect: function () {
-      this.socket = new SockJS('http://localhost:8080/chat')
+      this.socket = new SockJS(`${process.env.VUE_APP_SERVER_URL}/chat`)
       this.stompClient = Stomp.over(this.socket)
       this.stompClient.connect(
-        { username: this.user },
+        { token: this.token },
         frame => {
           this.connected = true
           this.stompClient.subscribe('/topic/active', response => {
@@ -158,7 +159,7 @@ export default {
             this.connected = true
           })
 
-          this.stompClient.subscribe('/topic/chat.messages', response => {
+          this.stompClient.subscribe('/topic/chat/messages', response => {
             const message = JSON.parse(response.body)
             console.log(message)
             this.messages.push({
@@ -180,9 +181,10 @@ export default {
         sender: this.user,
         text: content,
         type: 'CHAT',
+        chatId: this.conversaId,
         recipient: this.conversaId
       }
-      this.stompClient.send(`/chat/${this.conversaId}/messages`, JSON.stringify(message), { sender: this.user })
+      this.stompClient.send('/app/chat/messages', JSON.stringify(message), { sender: this.user, token: this.token })
 
       // Para atualizar no front, talvez remover depois
       this.messages.push({
@@ -194,6 +196,7 @@ export default {
     },
     selectUser: function () {
       this.user = parseInt(this.$store.state.id)
+      this.token = this.$store.state.token
       this.connect()
     },
     arrayStringToArrayObj: function (array) {

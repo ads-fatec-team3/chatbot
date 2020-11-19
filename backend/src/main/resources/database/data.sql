@@ -47,6 +47,5 @@ INSERT INTO gruly_member_conversations (conversation_id, member_id) VALUES (1, 3
 INSERT INTO gruly_member_conversations (conversation_id, member_id) VALUES (1, 5);
 
 /* MENSAGENS */
-
 INSERT INTO gruly_messages (message_id, message_text, message_timestamp, conversation_id, sender_id)
-VALUES (1, 'oi', 'Wed Nov 18 02:05:34 GMT 2020', 1, 1);
+VALUES (0, 'oi', 'Wed Nov 18 02:05:34 GMT 2020', 1, 1);

@@ -3,14 +3,14 @@ package br.gov.sp.fatec.backend.websocket;
 import java.security.Principal;
 
 public class UserSocket implements Principal {
-  private String name;
+  private String token;
 
-  public UserSocket(String name) {
-    this.name = name;
+  public UserSocket(String token) {
+    this.token = token;
   }
 
   @Override
   public String getName() {
-    return name;
+    return token;
   }
 }
