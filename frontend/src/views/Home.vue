@@ -4,7 +4,7 @@
       <img alt="Vue logo" src="../assets/logo.png">
       <Hello msg="Melhor Chatbot da FATEC"/>
       <div>
-        <iframe v-if="active" class="chat" width="450" height="600" src="/chat" scrolling="no"></iframe>
+        <iframe v-if="active" class="chat" width="450" height="650" src="/chat" scrolling="no"></iframe>
         <v-btn
           v-else
           color="primary"

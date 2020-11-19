@@ -1,12 +1,28 @@
 <template>
   <div>
   <v-row justify="center">
-    <v-dialog v-model="activeDialogAgenda" persistent max-width="370">
-      <NovaConversa
-        :activeDialogAgenda="activeDialogAgenda"
-        :members="members"
-        @handleActiveDialog="activeDialogAgenda = !activeDialogAgenda"
-        @handleCreateAgenda="createAgenda"/>
+    <v-dialog v-model="activeDialogConversas" persistent max-width="370">
+      <v-card>
+        <v-card-title class="headline"> Criar nova conversa </v-card-title>
+        <v-card-text>
+          <v-text-field label="Título" v-model="title"></v-text-field>
+          <v-select
+            v-model="selectedMembers"
+            multiple
+            :items="members"
+            label="Participantes"
+          ></v-select>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="red darken-1" text @click="dialogChange">
+            Cancelar
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="createConversa">
+            Adicionar
+          </v-btn>
+        </v-card-actions>
+      </v-card>
     </v-dialog>
   </v-row>
     <div class="d-flex flex-row ma-2">
@@ -68,31 +84,35 @@
 </template>
 
 <script>
-import NovaConversa from '@/components/NovaConversa'
 export default {
-  components: {
-    NovaConversa
-  },
   name: 'ConversasTab',
   props: {
     members: Array,
     conversas: Array,
     handleChangeTab: Function,
     handleActiveDialog: Function,
-    activeDialogAgenda: Boolean
+    activeDialogConversas: Boolean
   },
   data () {
     return {
       searchMember: null,
-      activeDialogConversa: false
+      title: null,
+      selectedMembers: []
     }
   },
   methods: {
-    changeTab: function (user) {
-      this.$emit('handleChangeTab', user)
+    changeTab: function (itemId) {
+      this.$emit('handleChangeTab', itemId)
     },
     dialogChange: function () {
       this.$emit('handleActiveDialog')
+    },
+    createConversa: function () {
+      const dataConversa = {
+        title: this.title,
+        selectedMembers: this.selectedMembers
+      }
+      this.$emit('handleCreateConversa', dataConversa)
     }
   }
 }

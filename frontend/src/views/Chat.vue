@@ -77,19 +77,20 @@
         </v-tab-item>
 
         <v-tab-item value="tab-chat">
-          <ChatTab v-if="conversaId" :messages="messages" :user="user" :conversaId="conversaId" @send="send"/>
+          <ChatTab v-if="conversaId" :messages="messages" :user="user" :conversaName="conversaName" @send="send"/>
           <div v-else>
             <div class="text-h4 mt-4">Selecione uma conversa!</div>
           </div>
         </v-tab-item>
 
         <v-tab-item value="tab-conversas">
-          <ConversasTab :conversas="conversas"
+          <ConversasTab
+            :conversas="conversas"
             @handleChangeTab="goToChat"
             :members="members"
-            :activeDialogAgenda="activeDialogAgenda"
-            @handleActiveDialog="activeDialogAgenda = !activeDialogAgenda"
-            @handleCreateAgenda="createAgenda"/>
+            :activeDialogConversas="activeDialogConversas"
+            @handleActiveDialog="activeDialogConversas = !activeDialogConversas"
+            @handleCreateConversa="createConversa"/>
         </v-tab-item>
 
         <v-tab-item value="tab-agenda">
@@ -143,6 +144,7 @@ export default {
       agenda: [],
       connected: false,
       activeDialogAgenda: false,
+      activeDialogConversas: false,
       members: []
     }
   },
@@ -159,14 +161,13 @@ export default {
             this.connected = true
           })
 
-          this.stompClient.subscribe('/topic/chat/messages', response => {
+          this.stompClient.subscribe('/topic/chat/messages', async response => {
             const message = JSON.parse(response.body)
-            console.log(message)
+            const sender = await serviceMember.getMember(message.sender)
             this.messages.push({
               text: message.text,
-              sender: {
-                id: message.sender
-              }
+              sender: sender.data,
+              timestamp: message.timestamp
             })
           })
         },
@@ -185,14 +186,6 @@ export default {
         recipient: this.conversaId
       }
       this.stompClient.send('/app/chat/messages', JSON.stringify(message), { sender: this.user, token: this.token })
-
-      // Para atualizar no front, talvez remover depois
-      this.messages.push({
-        text: content,
-        sender: {
-          id: this.user
-        }
-      })
     },
     selectUser: function () {
       this.user = parseInt(this.$store.state.id)
@@ -228,7 +221,7 @@ export default {
       }
     },
     scrollToEnd: function () {
-      var scrollArea = this.$el.querySelector('#messages')
+      var scrollArea = this.$el.querySelector('#scroll-messages')
       scrollArea.scrollTop = scrollArea.scrollHeight
     },
     loadConversas: async function () {
@@ -238,12 +231,23 @@ export default {
     loadAgenda: async function () {
       const resp = await serviceAgenda.getAgenda()
       this.agenda = resp.data
+      console.log(resp.data)
     },
     createAgenda: async function (data) {
       const resp = await serviceAgenda.newAgenda(data, 1)
       if (resp.status === 201) {
         this.loadAgenda()
         this.activeDialogAgenda = false
+      }
+    },
+    createConversa: async function (data) {
+      const resp = await serviceConversation.newConversation(data.title)
+      if (resp.status === 200) {
+        for (const memberId of data.selectedMembers) {
+          await serviceConversation.insertConversationMember(memberId, resp.data.id)
+        }
+        this.loadConversas()
+        this.activeDialogConversas = false
       }
     },
     loadGruly: function () {
@@ -254,11 +258,14 @@ export default {
       })
     },
     goToChat: async function (conversaId) {
+      console.log(conversaId)
       const resp = await serviceConversation.getConversation(conversaId)
       console.log(resp)
       this.messages = resp.data.messages
       this.tab = 'tab-chat'
-      this.conversaId = conversaId
+      console.log(resp.data)
+      this.conversaName = resp.data.title
+      this.conversaId = resp.data.id
     },
     loadMembers: async function () {
       const resp = await serviceMember.getAllMembers()
@@ -281,8 +288,8 @@ export default {
       this.loadMembers()
       this.loadConversas()
       this.loadAgenda()
+      this.loadGruly()
     }
-    // this.loadGruly()
   },
 
   filters: {

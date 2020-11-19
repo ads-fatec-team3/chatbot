@@ -56,7 +56,7 @@
               <v-text-field label="Data Final" type="date" class="mr-4" v-model="dateEnd"></v-text-field>
               <v-text-field label="Hora Final" type="time" v-model="hourEnd"></v-text-field>
             </v-row>
-            <v-select v-model="selectedMembers" @change="sendMembers(selectedMembers)" multiple :items="members" label="Participantes" ></v-select>
+            <v-select v-model="selectedMembers" multiple :items="members" label="Participantes" ></v-select>
 
             <v-radio-group label="Prioridade" v-model="color">
               <v-row align="center" justify="center">
@@ -115,9 +115,6 @@ export default {
   methods: {
     dialogChange: function () {
       this.$emit('handleActiveDialog')
-    },
-    sendMembers: function (members) {
-      this.$emit('handleLoadMembers')
     },
     createAgenda: function () {
       const dateBegin = new Date(`${this.dateBegin} ${this.hourBegin}`)

@@ -1,32 +1,33 @@
 <template>
   <div>
-    <v-virtual-scroll
-      id="messages"
-      :items="messages"
-      class="scroll-box"
-      item-height="64"
-    >
-      <template v-slot="{ item, index }">
 
-        <v-list-item
-          v-if="item.sender.id == user"
-          :key="index"
-          class="d-flex flex-row justify-end"
-        >
-          <strong class="message my-message">{{ item.text }}</strong>
-        </v-list-item>
+    <main id="scroll-messages">
+      <div v-for="(message, index) in messages" :key="index" class="d-flex flex-column">
 
-        <v-list-item
-          v-else
-          :key="index"
-          class="d-flex flex-row justify-start">
-          <strong class="message your-message">{{ item.text }}</strong>
-        </v-list-item>
+        <div v-if="message.sender.id === user" class="d-flex justify-end">
+          <div class="message my-message">
+            <div class="d-flex justify-around">
+              <b class="message-header mr-4">Você</b>
+              <i class="message-header">{{ message.timestamp|formatDate }}</i>
+            </div>
+            <div>{{ message.text }}</div>
+          </div>
+        </div>
 
-      </template>
-    </v-virtual-scroll>
+        <div v-else class="d-flex justify-start">
+          <div class="message your-message">
+            <div class="d-flex justify-around">
+              <b class="message-header mr-4">{{ message.sender.name }}</b>
+              <i class="message-header">{{ message.timestamp|formatDate }}</i>
+            </div>
+            <div>{{ message.text }}</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
     <div class="d-flex flex-column justify-start message-input">
-      <div>Mensagem para: {{ conversaId }}</div>
+      <b>Mensagem para: {{ conversaName }}</b>
       <div class="d-flex flex-row">
         <v-textarea
           v-model="message"
@@ -49,12 +50,14 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   name: 'ChatTab',
   props: {
     messages: Array,
     user: Number,
-    conversaId: Number,
+    conversaName: String,
     send: Function
   },
   data () {
@@ -66,7 +69,26 @@ export default {
     sendMessage: function () {
       this.$emit('send', this.message)
       this.message = null
+    },
+    scrollToEnd: function () {
+      var scrollArea = this.$el.querySelector('#scroll-messages')
+      scrollArea.scrollTop = scrollArea.scrollHeight + 20
     }
+  },
+  filters: {
+    formatDate: function (value) {
+      if (value) {
+        return moment(String(value)).format('DD/MM/YYYY hh:mm')
+      }
+    },
+    upperCase: function (value) {
+      if (value) {
+        return value.toUpperCase()
+      }
+    }
+  },
+  mounted () {
+    this.scrollToEnd()
   }
 }
 </script>
@@ -78,27 +100,29 @@ export default {
     width: 100vw;
     background-color: white;
   }
-  .scroll-box {
+  #scroll-messages {
     height: 70vh;
     overflow-y: auto;
   }
 
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  .scroll-box::-webkit-scrollbar {
+  #scroll-messages::-webkit-scrollbar {
     display: none;
   }
 
-  /* Hide scrollbar for IE, Edge and Firefox */
-  .scroll-box {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+  #scroll-messages {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
   .message {
     border-radius: 15px;
-    padding: 15px;
-    margin: 15px;
-    max-width: 300px;
+    padding: 5px;
+    margin: 10px;
+    max-width: 250px;
+    text-align: justify;
+    text-justify: inter-word;
+    font-size: 18px;
+    word-wrap: break-word;
   }
 
   .my-message {
@@ -107,5 +131,13 @@ export default {
 
   .your-message {
     background-color: lightgray;
+  }
+  #scroll-messages {
+    overflow: scroll;
+    height: 70vh;
+    max-height: 70vh;
+  }
+  .message-header {
+    font-size: 14px;
   }
 </style>
