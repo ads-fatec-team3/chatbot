@@ -9,24 +9,24 @@
       <template v-slot="{ item, index }">
 
         <v-list-item
-          v-if="item.owner == user"
+          v-if="item.sender.id == user"
           :key="index"
           class="d-flex flex-row justify-end"
         >
-          <strong class="message my-message">{{ item.content }}</strong>
+          <strong class="message my-message">{{ item.text }}</strong>
         </v-list-item>
 
         <v-list-item
           v-else
           :key="index"
           class="d-flex flex-row justify-start">
-          <strong class="message your-message">{{ item.content }}</strong>
+          <strong class="message your-message">{{ item.text }}</strong>
         </v-list-item>
 
       </template>
     </v-virtual-scroll>
     <div class="d-flex flex-column justify-start message-input">
-      <div>Mensagem para: {{ otherUser }}</div>
+      <div>Mensagem para: {{ conversaId }}</div>
       <div class="d-flex flex-row">
         <v-textarea
           v-model="message"
@@ -53,8 +53,8 @@ export default {
   name: 'ChatTab',
   props: {
     messages: Array,
-    user: String,
-    otherUser: String,
+    user: Number,
+    conversaId: Number,
     send: Function
   },
   data () {

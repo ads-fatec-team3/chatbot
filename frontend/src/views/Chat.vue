@@ -77,7 +77,7 @@
         </v-tab-item>
 
         <v-tab-item value="tab-chat">
-          <ChatTab v-if="otherUser" :messages="messages" :user="user" :otherUser="otherUser" @send="send"/>
+          <ChatTab v-if="conversaId" :messages="messages" :user="user" :conversaId="conversaId" @send="send"/>
           <div v-else>
             <div class="text-h4 mt-4">Selecione uma conversa!</div>
           </div>
@@ -130,8 +130,7 @@ export default {
       message: null,
       messageGruly: null,
       user: null,
-      otherUser: null,
-      inputUser: null,
+      conversaId: null,
       messages: [],
       messagesGruly: [],
       conversas: [],
@@ -150,13 +149,18 @@ export default {
         frame => {
           this.connected = true
           this.stompClient.subscribe('/topic/active', response => {
-            this.conversas = this.arrayStringToArrayObj(JSON.parse(response.body))
+            // this.connected = this.arrayStringToArrayObj(JSON.parse(response.body))
+            this.connected = true
           })
+
           this.stompClient.subscribe('/topic/chat.messages', response => {
             const message = JSON.parse(response.body)
+            console.log(message)
             this.messages.push({
-              content: message.text,
-              owner: message.sender
+              text: message.text,
+              sender: {
+                id: message.sender
+              }
             })
           })
         },
@@ -171,16 +175,21 @@ export default {
         sender: this.user,
         text: content,
         type: 'CHAT',
-        recipient: this.otherUser
+        recipient: this.conversaId
       }
-      this.stompClient.send('/app/chat.messages', JSON.stringify(message), { sender: this.user })
+      this.stompClient.send(`/chat/${this.conversaId}/messages`, JSON.stringify(message), { sender: this.user })
+
+      // Para atualizar no front, talvez remover depois
+      this.messages.push({
+        text: content,
+        sender: {
+          id: this.user
+        }
+      })
     },
     selectUser: function () {
-      if (this.inputUser) {
-        this.user = this.inputUser
-        this.dialog = false
-        this.connect()
-      }
+      this.user = parseInt(this.$store.state.id)
+      this.connect()
     },
     arrayStringToArrayObj: function (array) {
       const arrayObj = []
@@ -236,9 +245,12 @@ export default {
         })
       })
     },
-    goToChat: function (user) {
+    goToChat: async function (conversaId) {
+      const resp = await serviceConversation.getConversation(conversaId)
+      console.log(resp)
+      this.messages = resp.data.messages
       this.tab = 'tab-chat'
-      this.otherUser = user
+      this.conversaId = conversaId
     },
     loadMembers: async function () {
       const resp = await serviceMember.getAllMembers()
@@ -257,9 +269,9 @@ export default {
     if (!this.$store.state.token) {
       this.$router.push({ name: 'login' })
     } else {
+      this.selectUser()
       this.loadMembers()
       this.loadConversas()
-      // this.selectUser()
       this.loadAgenda()
     }
     // this.loadGruly()
