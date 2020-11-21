@@ -55,9 +55,8 @@ public class ConversationController {
   @ApiOperation(value = "Insere os dados de uma conversa")
   @PostMapping
   public ResponseEntity<Conversation> createConversation(@RequestBody Conversation conversation) {
-    conversationService.createConversation(conversation);
-
-    return ResponseEntity.status(HttpStatus.CREATED).build();
+    Conversation newConversation = conversationService.createConversation(conversation);
+    return ResponseEntity.ok(conversationService.getConversationById(newConversation.getId()));
   }
 
   @ApiOperation(value = "Atualiza os dados de uma conversa")
