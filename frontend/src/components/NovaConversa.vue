@@ -1,6 +1,6 @@
 <template>
       <v-card>
-        <v-card-title class="headline"> Criar nova conversa </v-card-title>
+        <v-card-title class="headline"> Novo grupo </v-card-title>
         <v-card-text>
           <v-text-field label="Título" v-model="title"></v-text-field>
           <v-select
@@ -17,7 +17,7 @@
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn color="green darken-1" text @click="createConversa">
-            Adicionar
+            Criar grupo
           </v-btn>
         </v-card-actions>
       </v-card>
