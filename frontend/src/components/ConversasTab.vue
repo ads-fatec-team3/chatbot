@@ -106,6 +106,7 @@ export default {
     conversas: Array,
     handleChangeTab: Function,
     handleActiveDialog: Function,
+<<<<<<< HEAD
     activeDialogConversas: Boolean,
     SearchConversa: Function
   },
@@ -121,19 +122,35 @@ export default {
     searchEvent: function () {
       this.$emit('SearchConversa', this.searchMember)
     },
+=======
+    activeDialogConversas: Boolean
+  },
+  data () {
+    return {
+      searchMember: null,
+      title: null,
+      selectedMembers: []
+    }
+  },
+  methods: {
+>>>>>>> 7f979f8... adequacao layout
     changeTab: function (itemId) {
       this.$emit('handleChangeTab', itemId)
     },
     dialogChange: function () {
       this.$emit('handleActiveDialog')
+<<<<<<< HEAD
       this.$refs.form.reset()
     },
     searchChange: function () {
       this.$emit('handleSearchConversa', this.searchConversa)
+=======
+>>>>>>> 7f979f8... adequacao layout
     },
     createConversa: function () {
       const dataConversa = {
         title: this.title,
+<<<<<<< HEAD
         selectedMembers: this.selectedMembers,
         members: this.selectedMembers
       }
@@ -154,6 +171,11 @@ export default {
   filters: {
     formatDate: function (date) {
       return moment(String(date)).format('DD/MM/YYYY hh:mm')
+=======
+        selectedMembers: this.selectedMembers
+      }
+      this.$emit('handleCreateConversa', dataConversa)
+>>>>>>> 7f979f8... adequacao layout
     }
   }
 }
