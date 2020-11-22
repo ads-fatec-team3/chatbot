@@ -1,5 +1,30 @@
 <template>
   <div>
+  <v-row justify="center">
+    <v-dialog v-model="activeDialogConversas" persistent max-width="370">
+      <v-card>
+        <v-card-title class="headline"> Novo grupo </v-card-title>
+        <v-card-text>
+          <v-text-field label="Título" v-model="title"></v-text-field>
+          <v-select
+            v-model="selectedMembers"
+            multiple
+            :items="members"
+            label="Participantes"
+          ></v-select>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="red darken-1" text @click="dialogChange">
+            Cancelar
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="createConversa">
+            Criar grupo
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-row>
     <div class="d-flex flex-row ma-2">
       <v-textarea
         v-model="searchMember"
@@ -15,6 +40,14 @@
         class="ml-2"
       >
         <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+      <v-btn
+        fab
+        color="primary"
+        class="ml-2"
+        @click="dialogChange"
+      >
+        <v-icon>mdi-plus</v-icon>
       </v-btn>
     </div>
     <v-virtual-scroll
@@ -54,18 +87,32 @@
 export default {
   name: 'ConversasTab',
   props: {
+    members: Array,
     conversas: Array,
-    handleChangeTab: Function
+    handleChangeTab: Function,
+    handleActiveDialog: Function,
+    activeDialogConversas: Boolean
   },
   data () {
     return {
-      searchMember: null
+      searchMember: null,
+      title: null,
+      selectedMembers: []
     }
   },
   methods: {
-    changeTab: function (user) {
-      console.log('Abacate')
-      this.$emit('handleChangeTab', user)
+    changeTab: function (itemId) {
+      this.$emit('handleChangeTab', itemId)
+    },
+    dialogChange: function () {
+      this.$emit('handleActiveDialog')
+    },
+    createConversa: function () {
+      const dataConversa = {
+        title: this.title,
+        selectedMembers: this.selectedMembers
+      }
+      this.$emit('handleCreateConversa', dataConversa)
     }
   }
 }
