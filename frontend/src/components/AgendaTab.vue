@@ -3,11 +3,11 @@
     <div class="d-flex flex-row ma-4">
       <v-btn
         block
-        color="info"
+        color="primary"
         class="mx-2"
         @click="dialogChange"
       >
-        Adicionar
+        Nova Atividade
       </v-btn>
     </div>
     <v-virtual-scroll
@@ -43,7 +43,7 @@
       >
         <v-card>
           <v-card-title class="headline">
-            Adicionar Atividade
+            Nova Atividade
           </v-card-title>
           <v-card-text>
             <v-text-field label="Título" v-model="title"></v-text-field>
@@ -60,9 +60,9 @@
 
             <v-radio-group label="Prioridade" v-model="color">
               <v-row align="center" justify="center">
-                <v-radio label="Baixa" class="mr-2" color="green" value="green"></v-radio>
-                <v-radio label="Média" class="mr-2" color="orange" value="orange"></v-radio>
-                <v-radio label="Alta" class="mb-2" color="red" value="red"></v-radio>
+                <v-radio label="Baixa" class="mr-2" color="gray" value="gray"></v-radio>
+                <v-radio label="Média" class="mr-1" color="yellow" value="yellow"></v-radio>
+                <v-radio label="Alta" class="mb-2" color="orange" value="orange"></v-radio>
               </v-row>
             </v-radio-group>
           </v-card-text>
@@ -80,7 +80,7 @@
                 text
                 @click="createAgenda"
               >
-                Adicionar
+                Criar Atividade
               </v-btn>
             </v-card-actions>
         </v-card>
