@@ -46,19 +46,19 @@
             Nova Atividade
           </v-card-title>
           <v-card-text>
-            <v-text-field label="Título" v-model="title"></v-text-field>
-            <v-textarea label="Descrição" rows="2" v-model="description"></v-textarea>
+            <v-text-field label="Título" v-model="title" :rules="[v => !!v || 'Título é obrigatório']" required></v-text-field>
+            <v-textarea label="Descrição" rows="2" v-model="description" :rules="[v => !!v || 'Descrição é obrigatória']" required></v-textarea>
             <v-row class="mx-1">
-              <v-text-field label="Data Início" type="date" class="mr-4" v-model="dateBegin"></v-text-field>
-              <v-text-field label="Hora Início" type="time" v-model="hourBegin"></v-text-field>
+              <v-text-field label="Data Início" type="date" class="mr-4" v-model="dateBegin" :rules="[v => !!v || 'Data de início é obrigatória']" required></v-text-field>
+              <v-text-field label="Hora Início" type="time" v-model="hourBegin" :rules="[v => !!v || 'Hora de início é obrigatória']" required></v-text-field>
             </v-row>
             <v-row class="mx-1">
-              <v-text-field label="Data Final" type="date" class="mr-4" v-model="dateEnd"></v-text-field>
-              <v-text-field label="Hora Final" type="time" v-model="hourEnd"></v-text-field>
+              <v-text-field label="Data Final" type="date" class="mr-4" v-model="dateEnd" :rules="[v => !!v || 'Data final é obrigatória']" required></v-text-field>
+              <v-text-field label="Hora Final" type="time" v-model="hourEnd" :rules="[v => !!v || 'Hora final é obrigatória']" required></v-text-field>
             </v-row>
-            <v-select v-model="selectedMembers" multiple :items="members" label="Participantes" ></v-select>
+            <v-select v-model="selectedMembers" multiple :items="members" label="Participantes" :rules="[v => !!v || 'Membros são obrigatórios']" required></v-select>
 
-            <v-radio-group label="Prioridade" v-model="color">
+            <v-radio-group label="Prioridade" v-model="color" :rules="[v => !!v || 'Prioridade é obrigatória']" required>
               <v-row align="center" justify="center">
                 <v-radio label="Baixa" class="mr-2" color="gray" value="gray"></v-radio>
                 <v-radio label="Média" class="mr-1" color="yellow" value="yellow"></v-radio>

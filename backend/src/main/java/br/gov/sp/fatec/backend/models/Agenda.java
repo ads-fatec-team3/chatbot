@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,35 +30,43 @@ public class Agenda {
 
   @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
   @Column(name = "agenda_title")
+  @NotNull(message = "Title is mandatory")
   private String title;
 
   @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
   @Column(name = "agenda_description")
+  @NotNull(message = "Description is mandatory")
   private String description;
 
   @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
   @Column(name = "agenda_date_begin")
+  @NotNull(message = "Date begin is mandatory")
   private Date date_begin;
 
   @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
   @Column(name = "agenda_date_end")
+  @NotNull(message = "Date end is mandatory")
   private Date date_end;
 
   @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
   @ManyToOne
   @JoinColumn(name = "member_id")
+  @NotNull(message = "Owner is mandatory")
   private Member owner;
 
   @JsonView(Views.DetailConversationView.class)
   @ManyToMany(mappedBy = "agenda")
+  @NotNull(message = "Members are mandatory")
   private List<Member> members = new ArrayList<Member>();
 
   @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
   @Column(name = "agenda_color")
+  @NotNull(message = "Color is mandatory")
   private String color;
 
   @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
   @Column(name = "agenda_status")
+  @NotNull(message = "Status is mandatory")
   private String status;
 
   public Agenda() {

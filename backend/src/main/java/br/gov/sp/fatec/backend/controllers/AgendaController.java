@@ -11,6 +11,8 @@ import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +58,7 @@ public class AgendaController {
 
   @PostMapping
   @ApiOperation(value = "Insere os dados de uma atividade")
-  public ResponseEntity<Agenda> createAgenda(@RequestBody Agenda agenda, @RequestParam("ownerId") long ownerId) {
+  public ResponseEntity<Agenda> createAgenda(@Valid @RequestBody Agenda agenda, @RequestParam("ownerId") long ownerId) {
     agendaService.createAgenda(agenda, ownerId);
 
     return ResponseEntity.status(HttpStatus.CREATED).build();
