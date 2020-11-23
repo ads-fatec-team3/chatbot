@@ -10,37 +10,43 @@
         Nova Atividade
       </v-btn>
     </div>
-    <v-virtual-scroll
-      :items="agenda"
-      item-height="60"
-      class="scroll-box"
-    >
-      <template v-slot="{ item, index }">
 
-        <v-list-item :key="index">
+    <template>
+      <v-expansion-panels :items="agenda" class="scroll-box" >
+        <v-expansion-panel
+          v-for="(item,i) in agenda"
+          :key="i"
+        >
+          <v-expansion-panel-header>
+            <v-list-item-content>
+              <v-list-item-title class="d-flex flex-column">
+                <strong class="mb-1">{{ item.title|upperCase }}</strong>
+                <strong>{{ item.date_begin|formatDate }}</strong>
+              </v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-action>
+              <v-btn fab x-small depressed :color="item.color" />
+            </v-list-item-action>
 
-          <v-list-item-content>
-            <v-list-item-title class="d-flex flex-column">
-              <strong class="mb-1">{{ item.title|upperCase }}</strong>
-              <strong>{{ item.dateBegin|formatDate }}</strong>
-            </v-list-item-title>
-          </v-list-item-content>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+                <p><strong>Título: {{ item.title }}</strong></p>
+                <p><strong>Descrição: {{ item.description }}</strong></p>
+                <p><strong>Data Início: {{ item.date_begin|formatDate }}</strong></p>
+                <p><strong>Data Final: {{ item.date_end|formatDate }}</strong></p>
+                <p><strong>Prioridade: {{ item.color == 'gray' ? 'Baixa' : item.color == 'yellow' ? 'Média': 'Alta'}}</strong></p>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </template>
 
-          <v-list-item-action>
-            <v-btn fab small depressed :color="item.color" />
-          </v-list-item-action>
-
-        </v-list-item>
-        <v-divider></v-divider>
-
-      </template>
-    </v-virtual-scroll>
     <v-row justify="center">
       <v-dialog
         v-model="activeDialogAgenda"
         persistent
         max-width="370"
       >
+        <v-form ref="form">
         <v-card>
           <v-card-title class="headline">
             Nova Atividade
@@ -84,6 +90,7 @@
               </v-btn>
             </v-card-actions>
         </v-card>
+        </v-form>
       </v-dialog>
     </v-row>
   </div>
@@ -127,6 +134,7 @@ export default {
         color: this.color
       }
       this.$emit('handleCreateAgenda', dataAgenda)
+      this.$refs.form.reset()
     }
   },
   filters: {
