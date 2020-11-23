@@ -51,12 +51,10 @@ public class Agenda {
   @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
   @ManyToOne
   @JoinColumn(name = "member_id")
-  @NotNull(message = "Owner is mandatory")
   private Member owner;
 
   @JsonView(Views.DetailConversationView.class)
   @ManyToMany(mappedBy = "agenda")
-  @NotNull(message = "Members are mandatory")
   private List<Member> members = new ArrayList<Member>();
 
   @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
@@ -66,7 +64,6 @@ public class Agenda {
 
   @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
   @Column(name = "agenda_status")
-  @NotNull(message = "Status is mandatory")
   private String status;
 
   public Agenda() {

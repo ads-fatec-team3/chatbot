@@ -109,7 +109,8 @@ export default {
       dateEnd: null,
       hourEnd: null,
       selectedMembers: [],
-      color: 'orange'
+      color: 'orange',
+      status: null
     }
   },
   methods: {
