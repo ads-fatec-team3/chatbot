@@ -66,7 +66,7 @@
 
             <v-radio-group label="Prioridade" v-model="color" :rules="[v => !!v || 'Prioridade é obrigatória']" required>
               <v-row align="center" justify="center">
-                <v-radio label="Baixa" class="mr-2" color="gray" value="gray"></v-radio>
+                <v-radio label="Baixa" class="mr-2" color="green" value="green"></v-radio>
                 <v-radio label="Média" class="mr-1" color="yellow" value="yellow"></v-radio>
                 <v-radio label="Alta" class="mb-2" color="orange" value="orange"></v-radio>
               </v-row>
