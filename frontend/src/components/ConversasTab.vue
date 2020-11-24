@@ -1,30 +1,35 @@
 <template>
   <div>
-  <v-row justify="center">
-    <v-dialog v-model="activeDialogConversas" persistent max-width="370">
-      <v-card>
-        <v-card-title class="headline"> Novo grupo </v-card-title>
-        <v-card-text>
-          <v-text-field label="Título" v-model="title"></v-text-field>
-          <v-select
-            v-model="selectedMembers"
-            multiple
-            :items="members"
-            label="Participantes"
-          ></v-select>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="red darken-1" text @click="dialogChange">
-            Cancelar
-          </v-btn>
-          <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="createConversa">
-            Criar grupo
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row>
+  <v-form v-model="valid" ref="form">
+    <v-row justify="center">
+      <v-dialog v-model="activeDialogConversas" persistent max-width="370">
+        <v-card>
+          <v-card-title class="headline"> Novo grupo </v-card-title>
+          <v-card-text>
+            <v-text-field class="text-icon" prepend-icon="mdi-asterisk" label="Título" v-model="title" :rules="[v => !!v || 'Título é obrigatório']" required></v-text-field>
+            <v-select
+              class="text-icon" prepend-icon="mdi-asterisk"
+              v-model="selectedMembers"
+              multiple
+              :items="members"
+              label="Participantes"
+              :rules="[required]"
+              required
+            ></v-select>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="red darken-1" text @click="dialogChange">
+              Cancelar
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text @click="createConversa">
+              Criar grupo
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
+  </v-form>
     <div class="d-flex flex-row ma-2">
       <v-textarea
         v-model="searchMember"
@@ -97,7 +102,8 @@ export default {
     return {
       searchMember: null,
       title: null,
-      selectedMembers: []
+      selectedMembers: [],
+      valid: false
     }
   },
   methods: {
@@ -106,14 +112,34 @@ export default {
     },
     dialogChange: function () {
       this.$emit('handleActiveDialog')
+      this.$refs.form.reset()
     },
     createConversa: function () {
       const dataConversa = {
         title: this.title,
         selectedMembers: this.selectedMembers
       }
-      this.$emit('handleCreateConversa', dataConversa)
+      this.$refs.form.validate()
+
+      if (this.valid === true) {
+        this.$emit('handleCreateConversa', dataConversa)
+        this.$refs.form.reset()
+      }
+    },
+    required (value) {
+      if (value instanceof Array && value.length === 0) {
+        return 'Participantes são obrigatórios'
+      }
+      return !!value || 'Participantes são obrigatórios'
     }
   }
 }
 </script>
+
+<style>
+.text-icon .v-icon {
+    color: green;
+    color: (this.valid === false ? 'red !important' : 'green !important') ;
+    font-size: 12px;
+}
+</style>
