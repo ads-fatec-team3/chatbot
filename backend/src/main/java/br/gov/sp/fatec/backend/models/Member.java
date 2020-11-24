@@ -56,6 +56,7 @@ public class Member {
              inverseJoinColumns = @JoinColumn(name = "member_role_id"))
   private MemberRole role;
 
+  @JsonView(Views.DetailMemberView.class)
   @ManyToMany
   @JoinTable(name = "gruly_member_agenda",
              joinColumns = @JoinColumn(name = "agenda_id"),

@@ -22,47 +22,47 @@ import javax.persistence.JoinColumn;
 @Entity
 @Table(name = "gruly_agenda")
 public class Agenda {
-  @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
+  @JsonView({Views.SummaryAgendaView.class, Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "agenda_id")
   private long id;
 
-  @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
+  @JsonView({Views.SummaryAgendaView.class, Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
   @Column(name = "agenda_title")
   @NotNull(message = "Title is mandatory")
   private String title;
 
-  @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
+  @JsonView({Views.SummaryAgendaView.class, Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
   @Column(name = "agenda_description")
   @NotNull(message = "Description is mandatory")
   private String description;
 
-  @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
+  @JsonView({Views.SummaryAgendaView.class, Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
   @Column(name = "agenda_date_begin")
   @NotNull(message = "Date begin is mandatory")
   private Date date_begin;
 
-  @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
+  @JsonView({Views.SummaryAgendaView.class, Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
   @Column(name = "agenda_date_end")
   @NotNull(message = "Date end is mandatory")
   private Date date_end;
 
-  @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
+  @JsonView({Views.SummaryAgendaView.class, Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
   @ManyToOne
   @JoinColumn(name = "member_id")
   private Member owner;
 
-  @JsonView(Views.DetailConversationView.class)
+  @JsonView({Views.SummaryAgendaView.class, Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
   @ManyToMany(mappedBy = "agenda")
   private List<Member> members = new ArrayList<Member>();
 
-  @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
+  @JsonView({Views.SummaryAgendaView.class, Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
   @Column(name = "agenda_color")
   @NotNull(message = "Color is mandatory")
   private String color;
 
-  @JsonView({ Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class })
+  @JsonView({Views.SummaryAgendaView.class, Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
   @Column(name = "agenda_status")
   private String status;
 

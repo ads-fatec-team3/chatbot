@@ -14,7 +14,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,33 +34,33 @@ public class AgendaController {
   @Autowired
   private AgendaService agendaService;
 
-  @JsonView(Views.DetailConversationView.class)
   @GetMapping
   @ApiOperation(value = "Retorna uma lista com os dados de todas as atividades")
+  @JsonView(Views.SummaryConversationView.class)
   public ResponseEntity<List<Agenda>> getAllAgendas() {
     return ResponseEntity.ok(agendaService.getAllAgendas());
   }
 
-  @JsonView(Views.DetailConversationView.class)
+  @JsonView(Views.SummaryConversationView.class)
   @GetMapping("/{agendaId}")
   @ApiOperation(value = "Retorna os dados de uma atividade")
   public ResponseEntity<Agenda> getAgendaById(@PathVariable("agendaId") long agendaId) {
     return ResponseEntity.ok(agendaService.getAgendaById(agendaId));
   }
 
-  @JsonView(Views.DetailConversationView.class)
+  @JsonView(Views.SummaryConversationView.class)
   @GetMapping("/member/{memberId}")
   @ApiOperation(value = "Retorna os dados de uma atividade com um determinado membro")
   public ResponseEntity<Agenda> getAgendaByMember(@PathVariable("memberId") long memberId) {
     return ResponseEntity.ok(agendaService.getAgendaByMember(memberId));
   }
 
+  @JsonView(Views.SummaryConversationView.class)
   @PostMapping
   @ApiOperation(value = "Insere os dados de uma atividade")
   public ResponseEntity<Agenda> createAgenda(@Valid @RequestBody Agenda agenda, @RequestParam("ownerId") long ownerId) {
-    agendaService.createAgenda(agenda, ownerId);
-
-    return ResponseEntity.status(HttpStatus.CREATED).build();
+    Agenda newAgenda = agendaService.createAgenda(agenda, ownerId);
+    return ResponseEntity.ok(agendaService.getAgendaById(newAgenda.getId()));
   }
 
   @PutMapping("/{agendaId}/members/{memberId}/add")
