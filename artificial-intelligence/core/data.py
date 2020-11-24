@@ -1,32 +1,40 @@
 RESPONSES = [
     {
         'tags': ['oi', 'olá'],
-        'responses': ['Olá, como posso ajudá-lo?', 'Oi!']
+        'responses': ['Olá. Como posso ajudá-lo?', 'Oi!']
     },
 
     {
         'tags': ['trabalham', 'fazem'],
-        'responses': ['A Anova ajuda pessoas com a auto escola']
+        'responses': ['A Anova ajuda pessoas com a auto escola.']
     },
 
     {
         'tags': ['horário', 'funcionamento'],
-        'responses': ['De segunda a sexta das 8h as 22h']
+        'responses': ['Funcionamos de segunda a sexta, das 8h as 22h.']
     },
 
     {
         'tags': ['quem', 'gruly'],
-        'responses': ['Eu sou o Gruly', 'Meu nome é Gruly', 'Gruly é o nome que meus criadores me deram']
+        'responses': ['Eu sou o Gruly!', 'Meu nome é Gruly!', 'Gruly é o nome que meus criadores me deram.']
     },
 
     {
-        'tags': ['tarde', 'dia'],
-        'responses': ['olá, bom dia', 'ótimo dia!']
+        'tags': ['tarde'],
+        'responses': ['Olá. Boa tarde!!', 'Ótima tarde!']
     },
-
+    {
+        'tags': ['dia'],
+        'responses': ['Olá. Bom dia!', 'Ótimo dia!']
+    },
+    {
+        'tags': ['noite'],
+        'responses': ['Olá. Boa noite!', 'Ótima noite!']
+    },
+    
     {
         'tags': ['boleto', 'segunda', 'via'],
-        'responses': ['Procure por atendente no chat, ela te dara melhor essas informações']
+        'responses': ['Procure pela atendente no chat. Ela te dará mais informações.']
     },
 
     {
@@ -36,16 +44,16 @@ RESPONSES = [
 
     {
         'tags': ['pesquisar', 'pessoa'],
-        'responses': ['Tente pesquisar a pessoa com quem deseja falar pelo nome no campo de buscas']
+        'responses': ['Tente pesquisar a pessoa com quem deseja falar pelo nome no campo de busca.']
     },
 
     {
     'tags': ['secretaria'],
-        'responses': ['Procure por atendente no chat, ela te dara melhor essas informações']
+        'responses': ['Procure pela atendente no chat. Ela te dará mais informações.']
     },
 
     {
     'tags': ['nova', 'conversa', 'conversas'],
-        'responses': ['Se você deseja iniciar uma nova conversa, procure pelo botão que tem um "+" para isso']
+        'responses': ['Procure pela aba chat!']
     },
 ]
