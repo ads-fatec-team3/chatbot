@@ -89,6 +89,7 @@
             @handleChangeTab="goToChat"
             :members="members"
             :activeDialogConversas="activeDialogConversas"
+            @handleSearchConversa="SearchConversa"
             @handleActiveDialog="activeDialogConversas = !activeDialogConversas"
             @handleCreateConversa="createConversa"/>
         </v-tab-item>
@@ -98,6 +99,7 @@
             :agenda="agenda"
             :members="members"
             :activeDialogAgenda="activeDialogAgenda"
+            @handleSearchAgenda="SearchAgenda"
             @handleActiveDialog="activeDialogAgenda = !activeDialogAgenda"
             @handleCreateAgenda="createAgenda"
           />
@@ -226,16 +228,24 @@ export default {
     },
     loadConversas: async function () {
       const resp = await serviceConversation.getAllConversations()
+      // this.conversas = resp.data.filter((conversa) => {
+      //   return conversa.members.includes(this.$store.state.id)
+      // })
       this.conversas = resp.data
     },
     loadAgenda: async function () {
       const resp = await serviceAgenda.getAgenda()
+      this.agenda = resp.data.filter((tarefa) => {
+        return tarefa.members.includes(this.$store.state.id)
+      })
       this.agenda = resp.data
-      console.log(resp.data)
     },
     createAgenda: async function (data) {
-      const resp = await serviceAgenda.newAgenda(data, 1)
+      const resp = await serviceAgenda.newAgenda(data, this.$store.state.id)
       if (resp.status === 201) {
+        for (const member of data.members) {
+          await serviceAgenda.addMember(resp.data.id, member)
+        }
         this.loadAgenda()
         this.activeDialogAgenda = false
       }
@@ -249,6 +259,19 @@ export default {
         this.loadConversas()
         this.activeDialogConversas = false
       }
+    },
+    SearchConversa: async function (search) {
+      await this.loadConversas()
+      this.conversas = this.conversas.filter((conversa) => {
+        return conversa.title.toUpperCase().includes(search.toUpperCase())
+      })
+    },
+    SearchAgenda: async function (search) {
+      await this.loadAgenda()
+      console.log('asdasd')
+      this.agenda = this.agenda.filter((agenda) => {
+        return agenda.title.toUpperCase().includes(search.toUpperCase())
+      })
     },
     loadGruly: function () {
       axios.get('http://127.0.0.1:5000').then(response => {
