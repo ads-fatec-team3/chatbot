@@ -1,17 +1,15 @@
 package br.gov.sp.fatec.backend.controllers;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
 import br.gov.sp.fatec.backend.models.Agenda;
 import br.gov.sp.fatec.backend.services.AgendaService;
 import br.gov.sp.fatec.backend.views.Views;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -55,12 +53,11 @@ public class AgendaController {
     return ResponseEntity.ok(agendaService.getAgendaByMember(memberId));
   }
 
-  @JsonView(Views.SummaryConversationView.class)
+  @JsonView(Views.SummaryAgendaView.class)
   @PostMapping
   @ApiOperation(value = "Insere os dados de uma atividade")
-  public ResponseEntity<Agenda> createAgenda(@Valid @RequestBody Agenda agenda, @RequestParam("ownerId") long ownerId) {
-    Agenda newAgenda = agendaService.createAgenda(agenda, ownerId);
-    return ResponseEntity.ok(agendaService.getAgendaById(newAgenda.getId()));
+  public ResponseEntity<Agenda> createAgenda(@RequestBody Agenda agenda, @RequestParam("ownerId") long ownerId) {
+    return ResponseEntity.ok(agendaService.createAgenda(agenda, ownerId));
   }
 
   @PutMapping("/{agendaId}/members/{memberId}/add")

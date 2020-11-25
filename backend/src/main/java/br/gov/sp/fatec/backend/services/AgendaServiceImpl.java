@@ -118,9 +118,9 @@ public class AgendaServiceImpl implements AgendaService {
     if (data.getColor() != null)
       agenda.setColor(data.getColor());
     if (data.getDateBegin() != null)
-      agenda.setDate_begin(data.getDateBegin());
+      agenda.setDateBegin(data.getDateBegin());
     if (data.getDateEnd() != null)
-      agenda.setDate_end(data.getDateEnd());
+      agenda.setDateEnd(data.getDateEnd());
     if (data.getStatus() != null)
       agenda.setStatus(data.getStatus());
     if (data.getMembers() != null)

@@ -41,19 +41,19 @@ public class Agenda {
   @JsonView({Views.SummaryAgendaView.class, Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
   @Column(name = "agenda_date_begin")
   @NotNull(message = "Date begin is mandatory")
-  private Date date_begin;
+  private Date dateBegin;
 
   @JsonView({Views.SummaryAgendaView.class, Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
   @Column(name = "agenda_date_end")
   @NotNull(message = "Date end is mandatory")
-  private Date date_end;
+  private Date dateEnd;
 
   @JsonView({Views.SummaryAgendaView.class, Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
   @ManyToOne
   @JoinColumn(name = "member_id")
   private Member owner;
 
-  @JsonView({Views.SummaryAgendaView.class, Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
+  @JsonView({Views.DetailAgendaView.class, Views.DetailConversationView.class})
   @ManyToMany(mappedBy = "agenda")
   private List<Member> members = new ArrayList<Member>();
 
@@ -66,14 +66,13 @@ public class Agenda {
   @Column(name = "agenda_status")
   private String status;
 
-  public Agenda() {
-  }
+  public Agenda() {}
 
-  public Agenda(String title, String description, Date date_begin, Date date_end, String color, String status) {
+  public Agenda(String title, String description, Date dateBegin, Date dateEnd, String color, String status) {
     this.title = title;
     this.description = description;
-    this.date_begin = date_begin;
-    this.date_end = date_end;
+    this.dateBegin = dateBegin;
+    this.dateEnd = dateEnd;
     this.color = color;
     this.status = status;
   }
@@ -91,11 +90,11 @@ public class Agenda {
   }
 
   public Date getDateBegin() {
-    return date_begin;
+    return dateBegin;
   }
 
   public Date getDateEnd() {
-    return date_end;
+    return dateEnd;
   }
 
   public Member getOwner() {
@@ -126,12 +125,12 @@ public class Agenda {
     this.color = color;
   }
 
-  public void setDate_begin(Date date_begin) {
-    this.date_begin = date_begin;
+  public void setDateBegin(Date dateBegin) {
+    this.dateBegin = dateBegin;
   }
 
-  public void setDate_end(Date date_end) {
-    this.date_end = date_end;
+  public void setDateEnd(Date dateEnd) {
+    this.dateEnd = dateEnd;
   }
 
   public void setDescription(String description) {

@@ -21,7 +21,7 @@
             <v-list-item-content>
               <v-list-item-title class="d-flex flex-column">
                 <strong class="mb-1">{{ item.title|upperCase }}</strong>
-                <strong>{{ item.date_begin|formatDate }}</strong>
+                <strong>{{ item.dateBegin|formatDate }}</strong>
               </v-list-item-title>
             </v-list-item-content>
             <v-list-item-action>
@@ -32,8 +32,8 @@
           <v-expansion-panel-content>
                 <p><strong>Título: {{ item.title }}</strong></p>
                 <p><strong>Descrição: {{ item.description }}</strong></p>
-                <p><strong>Data Início: {{ item.date_begin|formatDate }}</strong></p>
-                <p><strong>Data Final: {{ item.date_end|formatDate }}</strong></p>
+                <p><strong>Data Início: {{ item.dateBegin|formatDate }}</strong></p>
+                <p><strong>Data Final: {{ item.dateEnd|formatDate }}</strong></p>
                 <p><strong>Prioridade: {{ item.color == 'gray' ? 'Baixa' : item.color == 'yellow' ? 'Média': 'Alta'}}</strong></p>
           </v-expansion-panel-content>
         </v-expansion-panel>
@@ -132,8 +132,8 @@ export default {
       const dataAgenda = {
         title: this.title,
         description: this.description,
-        date_begin: dateBegin,
-        date_end: dateEnd,
+        dateBegin: dateBegin,
+        dateEnd: dateEnd,
         color: this.color
       }
       this.$refs.form.validate()
