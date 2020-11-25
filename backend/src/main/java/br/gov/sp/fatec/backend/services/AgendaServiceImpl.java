@@ -12,6 +12,7 @@ import br.gov.sp.fatec.backend.repositories.MemberRepository;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,11 +27,13 @@ public class AgendaServiceImpl implements AgendaService {
   private MemberRepository memberRepository;
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public List<Agenda> getAllAgendas() {
     return agendaRepository.findAll();
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public Agenda getAgendaById(long agendaId) {
     Agenda fetchedAgenda = agendaRepository.findAgendById(agendaId);
 
@@ -42,6 +45,7 @@ public class AgendaServiceImpl implements AgendaService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public Agenda getAgendaByMember(long memberId) {
     Agenda fetchedAgenda = agendaRepository.findByMember(memberId);
 
@@ -53,6 +57,7 @@ public class AgendaServiceImpl implements AgendaService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public Agenda createAgenda(Agenda agenda, long ownerId) throws AgendaCrudException, MemberNotFoundException {
     Member owner = memberRepository.findMemberById(ownerId);
 
@@ -72,6 +77,7 @@ public class AgendaServiceImpl implements AgendaService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public Agenda addMemberToAgenda(long memberId, long agendaId)
       throws MemberNotFoundException, AgendaNotFoundException, AgendaCrudException {
     Agenda agenda = agendaRepository.findAgendById(agendaId);
@@ -97,6 +103,7 @@ public class AgendaServiceImpl implements AgendaService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public Agenda updateAgendaById(long agendaId, Agenda data) throws AgendaNotFoundException {
     Agenda agenda = agendaRepository.findAgendById(agendaId);
 
@@ -129,6 +136,7 @@ public class AgendaServiceImpl implements AgendaService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public void deleteAgendaById(long agendaId) throws AgendaNotFoundException {
     Agenda agenda = agendaRepository.findAgendById(agendaId);
 
