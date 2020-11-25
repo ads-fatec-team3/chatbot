@@ -1,5 +1,6 @@
 package br.gov.sp.fatec.backend.websocket;
 
+import br.gov.sp.fatec.backend.models.Conversation;
 import br.gov.sp.fatec.backend.models.Message;
 import br.gov.sp.fatec.backend.repositories.ConversationRepository;
 import br.gov.sp.fatec.backend.repositories.MemberRepository;
@@ -28,13 +29,18 @@ public class WebSocketController {
   @MessageMapping("/chat/messages")
   public ChatMessage sendMessage(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor header) throws Exception {
     chatMessage.setTimestamp(new Date(System.currentTimeMillis()));
-
+    
+    Conversation chat = conversationRepository.findConversationById(chatMessage.getChatId());
+    
     Message message = new Message();
     message.setText(chatMessage.getText());
     message.setSender(memberRepository.findMemberById(chatMessage.getSender()));
-    message.setConversation(conversationRepository.findConversationById(chatMessage.getChatId()));
+    message.setConversation(chat);
     
     messageRepository.save(message);
+
+    chat.setLastMessage(message);
+    conversationRepository.save(chat);
     
     return chatMessage;
   }

@@ -31,6 +31,10 @@ public class Conversation {
   @JsonView({Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
   @Column(name = "conversation_title")
   private String title;
+  
+  @JsonView({Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
+  @Column(name = "conversation_last_message")
+  private Message lastMessage;
 
   @JsonView(Views.DetailConversationView.class)
   @OnDelete(action = OnDeleteAction.CASCADE)
@@ -55,6 +59,10 @@ public class Conversation {
     return title;
   }
 
+  public Message getLastMessage() {
+    return lastMessage;
+  }
+
   public List<Message> getMessages() {
     return messages;
   }
@@ -69,6 +77,10 @@ public class Conversation {
 
   public void setTitle(String title) {
     this.title = title;
+  }
+
+  public void setLastMessage(Message lastMessage) {
+    this.lastMessage = lastMessage;
   }
 
   public void setMembers(List<Member> members) {
