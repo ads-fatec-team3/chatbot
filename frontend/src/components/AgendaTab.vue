@@ -46,7 +46,7 @@
         persistent
         max-width="370"
       >
-        <v-form ref="form">
+        <v-form v-model="valid" ref="form">
         <v-card>
           <v-card-title class="headline">
             Nova Atividade
@@ -62,7 +62,7 @@
               <v-text-field label="Data Final" type="date" class="mr-4" v-model="dateEnd" :rules="[v => !!v || 'Data final é obrigatória']" required></v-text-field>
               <v-text-field label="Hora Final" type="time" v-model="hourEnd" :rules="[v => !!v || 'Hora final é obrigatória']" required></v-text-field>
             </v-row>
-            <v-select v-model="selectedMembers" multiple :items="members" label="Participantes" :rules="[v => !!v || 'Membros são obrigatórios']" required></v-select>
+            <v-select v-model="selectedMembers" multiple :items="members" label="Participantes" :rules="[required]" required></v-select>
 
             <v-radio-group label="Prioridade" v-model="color" :rules="[v => !!v || 'Prioridade é obrigatória']" required>
               <v-row align="center" justify="center">
@@ -117,12 +117,14 @@ export default {
       hourEnd: null,
       selectedMembers: [],
       color: 'orange',
-      status: null
+      status: null,
+      valid: false
     }
   },
   methods: {
     dialogChange: function () {
       this.$emit('handleActiveDialog')
+      this.$refs.form.reset()
     },
     createAgenda: function () {
       const dateBegin = new Date(`${this.dateBegin} ${this.hourBegin}`)
@@ -134,8 +136,18 @@ export default {
         date_end: dateEnd,
         color: this.color
       }
-      this.$emit('handleCreateAgenda', dataAgenda)
-      this.$refs.form.reset()
+      this.$refs.form.validate()
+
+      if (this.valid === true) {
+        this.$emit('handleCreateAgenda', dataAgenda)
+        this.$refs.form.reset()
+      }
+    },
+    required (value) {
+      if (value instanceof Array && value.length === 0) {
+        return 'Participantes são obrigatórios'
+      }
+      return !!value || 'Participantes são obrigatórios'
     }
   },
   filters: {
