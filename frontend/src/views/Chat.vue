@@ -7,7 +7,7 @@
         centered
         icons-and-text
       >
-        <v-tab href="#tab-gruly">
+        <v-tab  v-if="hasPermission()" href="#tab-gruly">
           Gruly
           <v-icon>mdi-robot</v-icon>
         </v-tab>
@@ -29,7 +29,7 @@
       </v-tabs>
 
       <v-tabs-items v-model="tab">
-        <v-tab-item value="tab-gruly">
+        <v-tab-item v-if="hasPermission()" value="tab-gruly">
           <div>
             <v-virtual-scroll
               id="messages"
@@ -149,6 +149,12 @@ export default {
     }
   },
   methods: {
+    hasPermission: function () {
+      if (this.$store.state.role === 'ROLE_STUDENT' || this.$store.state.role === 'ROLE_INSTRUCTOR') {
+        return true
+      }
+      return false
+    },
     connect: function () {
       this.socket = new SockJS(`${process.env.VUE_APP_SERVER_URL}/chat`)
       this.stompClient = Stomp.over(this.socket)
