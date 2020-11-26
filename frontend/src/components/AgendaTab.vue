@@ -1,5 +1,25 @@
 <template>
   <div>
+    <!-- <div class="d-flex flex-row ma-2">
+      <v-textarea
+        v-model="searchAgenda"
+        @input="searchChange"
+        outlined
+        rows="1"
+        no-resize
+        class="ml-2"
+        placeholder="Filtro de tarefas"
+      ></v-textarea>
+      <v-btn
+        fab
+        color="primary"
+        class="ml-2"
+        @click="dialogChange"
+      >
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+    </div> -->
+
     <template>
       <div class="scroll-box" style="height: 90vh;">
 
@@ -175,7 +195,8 @@ export default {
     agenda: Array,
     members: Array,
     handleActiveDialog: Function,
-    activeDialogAgenda: Boolean
+    activeDialogAgenda: Boolean,
+    handleSearchAgenda: Function
   },
   data () {
     return {
@@ -194,7 +215,8 @@ export default {
       selectedEvent: {},
       selectedElement: null,
       selectedOpen: false,
-      events: []
+      events: [],
+      searchAgenda: null
     }
   },
   mounted () {
@@ -214,7 +236,8 @@ export default {
         description: this.description,
         dateBegin: dateBegin,
         dateEnd: dateEnd,
-        color: this.color
+        color: this.color,
+        members: this.selectedMembers
       }
       this.$refs.form.validate()
 

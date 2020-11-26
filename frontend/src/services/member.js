@@ -11,6 +11,16 @@ module.exports = {
       console.log(e)
     })
   },
+  getmemberConversation: (id) => {
+    return api({
+      method: 'get',
+      url: `/members/${id}`
+    }).then(resp => {
+      return resp
+    }).catch(e => {
+      console.log(e)
+    })
+  },
   getMember: async (memberId) => {
     return api({
       method: 'get',

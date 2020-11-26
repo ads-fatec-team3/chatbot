@@ -2,7 +2,7 @@ const axios = require('axios')
 const router = require('../router/index.js')
 
 const axiosInstance = axios.create({
-  baseURL: `${process.env.VUE_APP_SERVER_URL}/api`
+  baseURL: `${process.env.VUE_APP_SERVER_URL || 'localhost:8080'}/api`
 })
 
 axiosInstance.interceptors.response.use(
