@@ -1,43 +1,113 @@
 <template>
   <div>
-    <div class="d-flex flex-row ma-4">
-      <v-btn
-        block
-        color="primary"
-        class="mx-2"
-        @click="dialogChange"
-      >
-        Nova Atividade
-      </v-btn>
-    </div>
-
     <template>
-      <v-expansion-panels :items="agenda" class="scroll-box" >
-        <v-expansion-panel
-          v-for="(item,i) in agenda"
-          :key="i"
-        >
-          <v-expansion-panel-header>
-            <v-list-item-content>
-              <v-list-item-title class="d-flex flex-column">
-                <strong class="mb-1">{{ item.title|upperCase }}</strong>
-                <strong>{{ item.dateBegin|formatDate }}</strong>
-              </v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-btn fab x-small depressed :color="item.color" />
-            </v-list-item-action>
+      <div class="scroll-box" style="height: 90vh;">
 
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-                <p><strong>Título: {{ item.title }}</strong></p>
-                <p><strong>Descrição: {{ item.description }}</strong></p>
-                <p><strong>Data Início: {{ item.dateBegin|formatDate }}</strong></p>
-                <p><strong>Data Final: {{ item.dateEnd|formatDate }}</strong></p>
-                <p><strong>Prioridade: {{ item.color == 'gray' ? 'Baixa' : item.color == 'yellow' ? 'Média': 'Alta'}}</strong></p>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
+        <v-sheet height="64">
+          <v-toolbar
+            flat
+          >
+            <v-toolbar-title class="ml-2" v-if="$refs.calendar">
+              {{ $refs.calendar.title }}
+            </v-toolbar-title>
+            <v-btn
+              fab
+              text
+              small
+              color="grey darken-2"
+              @click="prev"
+            >
+              <v-icon small>
+                mdi-chevron-left
+              </v-icon>
+            </v-btn>
+            <v-btn
+              fab
+              text
+              small
+              color="grey darken-2"
+              @click="next"
+            >
+              <v-icon small>
+                mdi-chevron-right
+              </v-icon>
+            </v-btn>
+            <v-btn
+              class="info"
+              color="grey darken-2"
+              @click="setToday"
+            >
+              Hoje
+            </v-btn>
+            <v-btn
+              class="ml-3"
+              color="primary"
+              @click="dialogChange()"
+            >
+              Nova
+            </v-btn>
+          </v-toolbar>
+        </v-sheet>
+        <v-sheet height="500">
+          <v-calendar
+            ref="calendar"
+            v-model="focus"
+            color="info "
+            :events="events"
+            :event-color="getEventColor"
+            type="week"
+            @click:event="showEvent"
+          ></v-calendar>
+          <v-menu
+            v-model="selectedOpen"
+            :close-on-content-click="false"
+            :activator="selectedElement"
+            offset-x
+          >
+            <v-card
+              color="grey lighten-4"
+              min-width="350px"
+              flat
+            >
+              <v-toolbar
+                :color="selectedEvent.color"
+                dark
+              >
+                <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      color="info"
+                      dark
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      <v-icon>mdi-check</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Concluir Atividade</span>
+                </v-tooltip>
+              </v-toolbar>
+              <v-card-text class="headline justify-start">
+                <div class="text-subtitle-1">Inicio: {{ selectedEvent.start|formatDate }}</div>
+                <div class="text-subtitle-1">Fim: {{ selectedEvent.start|formatDate }}</div>
+                <div class="text-subtitle-1">Descrição: {{ selectedEvent.description }}</div>
+                <div class="text-subtitle-1">Participantes: {{ selectedEvent.members|arrayToString }}</div>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn
+                  text
+                  color="secondary"
+                  @click="selectedOpen = false"
+                >
+                  Fechar
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-menu>
+        </v-sheet>
+      </div>
     </template>
 
     <v-row justify="center">
@@ -67,8 +137,8 @@
             <v-radio-group label="Prioridade" v-model="color" :rules="[v => !!v || 'Prioridade é obrigatória']" required>
               <v-row align="center" justify="center">
                 <v-radio label="Baixa" class="mr-2" color="green" value="green"></v-radio>
-                <v-radio label="Média" class="mr-1" color="yellow" value="yellow"></v-radio>
-                <v-radio label="Alta" class="mb-2" color="orange" value="orange"></v-radio>
+                <v-radio label="Média" class="mr-1" color="yellow darken-3" value="yellow darken-3"></v-radio>
+                <v-radio label="Alta" class="mb-2" color="red" value="red"></v-radio>
               </v-row>
             </v-radio-group>
           </v-card-text>
@@ -118,8 +188,18 @@ export default {
       selectedMembers: [],
       color: 'orange',
       status: null,
-      valid: false
+      valid: false,
+      dialogCalendario: false,
+      focus: '',
+      selectedEvent: {},
+      selectedElement: null,
+      selectedOpen: false,
+      events: []
     }
+  },
+  mounted () {
+    this.$refs.calendar.checkChange()
+    this.loadEvents()
   },
   methods: {
     dialogChange: function () {
@@ -143,11 +223,63 @@ export default {
         this.$refs.form.reset()
       }
     },
+    isAllDay (start, end) {
+      if (start.getMonth() !== end.getMonth() || start.getDate() !== end.getDate()) {
+        return false
+      }
+      return true
+    },
+    loadEvents: function () {
+      this.agenda.forEach((element, index, originalArray) => {
+        const start = new Date(element.date_begin)
+        const end = new Date(element.date_end)
+        this.events.push({
+          id: element.id,
+          name: element.title,
+          start: start,
+          end: end,
+          color: element.color,
+          timed: this.isAllDay(start, end),
+          description: element.description,
+          members: element.members
+        })
+      })
+    },
     required (value) {
       if (value instanceof Array && value.length === 0) {
         return 'Participantes são obrigatórios'
       }
       return !!value || 'Participantes são obrigatórios'
+    },
+    getEventColor (event) {
+      return event.color
+    },
+    setToday () {
+      this.focus = ''
+    },
+    prev () {
+      this.$refs.calendar.prev()
+    },
+    next () {
+      this.$refs.calendar.next()
+    },
+    showEvent ({ nativeEvent, event }) {
+      const open = () => {
+        this.selectedEvent = event
+        this.selectedElement = nativeEvent.target
+        setTimeout(() => {
+          this.selectedOpen = true
+        }, 10)
+      }
+
+      if (this.selectedOpen) {
+        this.selectedOpen = false
+        setTimeout(open, 10)
+      } else {
+        open()
+      }
+
+      nativeEvent.stopPropagation()
     }
   },
   filters: {
@@ -159,6 +291,11 @@ export default {
     upperCase: function (value) {
       if (value) {
         return value.toUpperCase()
+      }
+    },
+    arrayToString: function (value) {
+      if (value) {
+        return value.join(', ') || '---'
       }
     }
   }
