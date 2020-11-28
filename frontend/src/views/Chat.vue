@@ -230,19 +230,6 @@ export default {
       scrollArea.scrollTop = scrollArea.scrollHeight
     },
     loadConversas: async function () {
-<<<<<<< HEAD
-      const resp = await serviceConversation.getAllConversations()
-      this.conversas = resp.data
-    },
-    loadAgenda: async function () {
-      const resp = await serviceAgenda.getAgenda()
-      this.agenda = resp.data
-      console.log(resp.data)
-    },
-    createAgenda: async function (data) {
-      const resp = await serviceAgenda.newAgenda(data, 1)
-      if (resp.status === 201) {
-=======
       const resp = await serviceMember.getMemberData(this.$store.state.id)
       this.conversas = resp.data.conversations
     },
@@ -256,7 +243,6 @@ export default {
         for (const member of members) {
           await serviceAgenda.addMember(resp.data.id, member)
         }
->>>>>>> get agenda and conversations
         this.loadAgenda()
         this.activeDialogAgenda = false
       }
@@ -271,8 +257,6 @@ export default {
         this.activeDialogConversas = false
       }
     },
-<<<<<<< HEAD
-=======
     SearchConversa: async function (search) {
       await this.loadConversas()
       this.conversas = this.conversas.filter((conversa) => {
@@ -285,7 +269,6 @@ export default {
         return agenda.title.toUpperCase().includes(search.toUpperCase())
       })
     },
->>>>>>> get agenda and conversations
     loadGruly: function () {
       if (this.hasPermission()) {
         axios.get('http://127.0.0.1:5000').then(response => {

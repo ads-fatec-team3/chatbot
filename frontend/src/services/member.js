@@ -11,8 +11,6 @@ module.exports = {
       console.log(e)
     })
   },
-<<<<<<< HEAD
-=======
   getMemberData: (id) => {
     return api({
       method: 'get',
@@ -23,7 +21,6 @@ module.exports = {
       console.log(e)
     })
   },
->>>>>>> get agenda and conversations
   getMember: async (memberId) => {
     return api({
       method: 'get',
