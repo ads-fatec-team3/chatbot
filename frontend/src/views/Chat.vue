@@ -294,7 +294,7 @@ export default {
       this.loadMembers()
       this.loadConversas()
       this.loadAgenda()
-      this.loadGruly()
+      // this.loadGruly()
     }
   },
 

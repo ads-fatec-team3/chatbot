@@ -10,11 +10,13 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Table;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -33,7 +35,7 @@ public class Conversation {
   private String title;
   
   @JsonView({Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
-  @Column(name = "conversation_last_message")
+  @OneToOne(fetch = FetchType.LAZY)
   private Message lastMessage;
 
   @JsonView(Views.DetailConversationView.class)
