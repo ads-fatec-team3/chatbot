@@ -32,7 +32,8 @@
   </v-form>
     <div class="d-flex flex-row ma-2">
       <v-textarea
-        v-model="searchMember"
+        v-model="searchConversa"
+        @input="searchChange"
         outlined
         rows="1"
         no-resize
@@ -100,7 +101,7 @@ export default {
   },
   data () {
     return {
-      searchMember: null,
+      searchConversa: null,
       title: null,
       selectedMembers: [],
       valid: false
@@ -114,10 +115,14 @@ export default {
       this.$emit('handleActiveDialog')
       this.$refs.form.reset()
     },
+    searchChange: function () {
+      this.$emit('handleSearchConversa', this.searchConversa)
+    },
     createConversa: function () {
       const dataConversa = {
         title: this.title,
-        selectedMembers: this.selectedMembers
+        selectedMembers: this.selectedMembers,
+        members: this.selectedMembers
       }
       this.$refs.form.validate()
 

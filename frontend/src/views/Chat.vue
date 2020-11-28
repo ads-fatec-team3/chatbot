@@ -89,6 +89,7 @@
             @handleChangeTab="goToChat"
             :members="members"
             :activeDialogConversas="activeDialogConversas"
+            @handleSearchConversa="SearchConversa"
             @handleActiveDialog="activeDialogConversas = !activeDialogConversas"
             @handleCreateConversa="createConversa"/>
         </v-tab-item>
@@ -98,6 +99,7 @@
             :agenda="agenda"
             :members="members"
             :activeDialogAgenda="activeDialogAgenda"
+            @handleSearchAgenda="SearchAgenda"
             @handleActiveDialog="activeDialogAgenda = !activeDialogAgenda"
             @handleCreateAgenda="createAgenda"
           />
@@ -119,8 +121,8 @@ import ChatTab from '@/components/ChatTab.vue'
 import ConversasTab from '@/components/ConversasTab.vue'
 import AgendaTab from '@/components/AgendaTab.vue'
 
-import serviceMember from '@/services/member.js'
 import serviceConversation from '@/services/conversation.js'
+import serviceMember from '@/services/member.js'
 import serviceAgenda from '@/services/agenda.js'
 
 export default {
@@ -230,17 +232,23 @@ export default {
       scrollArea.scrollTop = scrollArea.scrollHeight
     },
     loadConversas: async function () {
-      const resp = await serviceConversation.getAllConversations()
-      this.conversas = resp.data
+      const resp = await serviceMember.getmemberConversation(this.$store.state.id)
+      console.log(resp)
+      this.conversas = resp.data.conversations
     },
     loadAgenda: async function () {
       const resp = await serviceAgenda.getAgenda()
+      this.agenda = resp.data.filter((tarefa) => {
+        return tarefa.members.includes(this.$store.state.id)
+      })
       this.agenda = resp.data
-      console.log(resp.data)
     },
     createAgenda: async function (data) {
-      const resp = await serviceAgenda.newAgenda(data, 1)
+      const resp = await serviceAgenda.newAgenda(data, this.$store.state.id)
       if (resp.status === 201) {
+        for (const member of data.members) {
+          await serviceAgenda.addMember(resp.data.id, member)
+        }
         this.loadAgenda()
         this.activeDialogAgenda = false
       }
@@ -254,6 +262,19 @@ export default {
         this.loadConversas()
         this.activeDialogConversas = false
       }
+    },
+    SearchConversa: async function (search) {
+      await this.loadConversas()
+      this.conversas = this.conversas.filter((conversa) => {
+        return conversa.title.toUpperCase().includes(search.toUpperCase())
+      })
+    },
+    SearchAgenda: async function (search) {
+      await this.loadAgenda()
+      console.log('asdasd')
+      this.agenda = this.agenda.filter((agenda) => {
+        return agenda.title.toUpperCase().includes(search.toUpperCase())
+      })
     },
     loadGruly: function () {
       if (this.hasPermission()) {
