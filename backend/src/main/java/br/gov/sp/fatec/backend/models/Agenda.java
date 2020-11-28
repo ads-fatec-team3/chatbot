@@ -54,7 +54,7 @@ public class Agenda {
   private Member owner;
 
   @JsonView(Views.DetailAgendaView.class)
-  @ManyToMany(mappedBy = "agenda")
+  @ManyToMany(mappedBy = "agendas")
   private List<Member> members = new ArrayList<Member>();
 
   @JsonView({Views.SummaryAgendaView.class, Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
