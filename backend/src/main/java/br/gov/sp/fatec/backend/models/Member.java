@@ -59,9 +59,9 @@ public class Member {
   @JsonView(Views.DetailMemberView.class)
   @ManyToMany
   @JoinTable(name = "gruly_member_agenda",
-             joinColumns = @JoinColumn(name = "agenda_id"),
-             inverseJoinColumns = @JoinColumn(name = "member_id"))
-  private Set<Agenda> agenda = new HashSet<Agenda>();
+             joinColumns = @JoinColumn(name = "member_id"),
+             inverseJoinColumns = @JoinColumn(name = "agenda_id"))
+  private Set<Agenda> agendas = new HashSet<Agenda>();
 
   public Member() {}
 
@@ -98,8 +98,8 @@ public class Member {
     return conversations;
   }
 
-  public Set<Agenda> getAgenda() {
-    return agenda;
+  public Set<Agenda> getAgendas() {
+    return agendas;
   }
 
   public void setId(long id) {
@@ -126,8 +126,8 @@ public class Member {
     this.conversations = conversations;
   }
 
-  public void setAgenda(Set<Agenda> agenda) {
-    this.agenda = agenda;
+  public void setAgenda(Set<Agenda> agendas) {
+    this.agendas = agendas;
   }
 
   public void removeConversation(Conversation conversation) {
