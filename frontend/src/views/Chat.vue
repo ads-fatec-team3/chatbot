@@ -163,7 +163,6 @@ export default {
         frame => {
           this.connected = true
           this.stompClient.subscribe('/topic/active', response => {
-            // this.connected = this.arrayStringToArrayObj(JSON.parse(response.body))
             this.connected = true
           })
 
@@ -257,11 +256,13 @@ export default {
       }
     },
     loadGruly: function () {
-      axios.get('http://127.0.0.1:5000').then(response => {
-        this.messagesGruly.push({
-          content: response.data.result, dateTime: '2020-10-04 12:00:00', owner: 'Gruly'
+      if (this.hasPermission()) {
+        axios.get('http://127.0.0.1:5000').then(response => {
+          this.messagesGruly.push({
+            content: response.data.result, dateTime: '2020-10-04 12:00:00', owner: 'Gruly'
+          })
         })
-      })
+      }
     },
     goToChat: async function (conversaId) {
       console.log(conversaId)
