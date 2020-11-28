@@ -11,6 +11,19 @@ module.exports = {
       console.log(e)
     })
   },
+<<<<<<< HEAD
+=======
+  getMemberData: (id) => {
+    return api({
+      method: 'get',
+      url: `/members/${id}`
+    }).then(resp => {
+      return resp
+    }).catch(e => {
+      console.log(e)
+    })
+  },
+>>>>>>> get agenda and conversations
   getMember: async (memberId) => {
     return api({
       method: 'get',

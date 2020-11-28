@@ -219,7 +219,7 @@ export default {
       this.$refs.form.validate()
 
       if (this.valid === true) {
-        this.$emit('handleCreateAgenda', dataAgenda)
+        this.$emit('handleCreateAgenda', dataAgenda, this.selectedMembers)
         this.$refs.form.reset()
       }
     },
@@ -231,8 +231,8 @@ export default {
     },
     loadEvents: function () {
       this.agenda.forEach((element, index, originalArray) => {
-        const start = new Date(element.date_begin)
-        const end = new Date(element.date_end)
+        const start = new Date(element.dateBegin)
+        const end = new Date(element.dateEnd)
         this.events.push({
           id: element.id,
           name: element.title,
