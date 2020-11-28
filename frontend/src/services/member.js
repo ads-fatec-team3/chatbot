@@ -11,7 +11,7 @@ module.exports = {
       console.log(e)
     })
   },
-  getmemberConversation: (id) => {
+  getMemberData: (id) => {
     return api({
       method: 'get',
       url: `/members/${id}`

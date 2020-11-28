@@ -232,21 +232,17 @@ export default {
       scrollArea.scrollTop = scrollArea.scrollHeight
     },
     loadConversas: async function () {
-      const resp = await serviceMember.getmemberConversation(this.$store.state.id)
-      console.log(resp)
+      const resp = await serviceMember.getMemberData(this.$store.state.id)
       this.conversas = resp.data.conversations
     },
     loadAgenda: async function () {
-      const resp = await serviceAgenda.getAgenda()
-      this.agenda = resp.data.filter((tarefa) => {
-        return tarefa.members.includes(this.$store.state.id)
-      })
-      this.agenda = resp.data
+      const resp = await serviceMember.getMemberData(this.$store.state.id)
+      this.agenda = resp.data.agenda
     },
-    createAgenda: async function (data) {
+    createAgenda: async function (data, members) {
       const resp = await serviceAgenda.newAgenda(data, this.$store.state.id)
-      if (resp.status === 201) {
-        for (const member of data.members) {
+      if (resp.status === 200) {
+        for (const member of members) {
           await serviceAgenda.addMember(resp.data.id, member)
         }
         this.loadAgenda()
@@ -271,7 +267,6 @@ export default {
     },
     SearchAgenda: async function (search) {
       await this.loadAgenda()
-      console.log('asdasd')
       this.agenda = this.agenda.filter((agenda) => {
         return agenda.title.toUpperCase().includes(search.toUpperCase())
       })
