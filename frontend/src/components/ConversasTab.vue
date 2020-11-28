@@ -41,6 +41,7 @@
       ></v-textarea>
       <v-btn
         fab
+        @click="searchEvent"
         color="primary"
         class="ml-2"
       >
@@ -96,7 +97,8 @@ export default {
     conversas: Array,
     handleChangeTab: Function,
     handleActiveDialog: Function,
-    activeDialogConversas: Boolean
+    activeDialogConversas: Boolean,
+    SearchConversa: Function
   },
   data () {
     return {
@@ -107,6 +109,9 @@ export default {
     }
   },
   methods: {
+    searchEvent: function () {
+      this.$emit('SearchConversa', this.searchMember)
+    },
     changeTab: function (itemId) {
       this.$emit('handleChangeTab', itemId)
     },

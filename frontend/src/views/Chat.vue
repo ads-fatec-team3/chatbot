@@ -88,6 +88,7 @@
             :conversas="conversas"
             @handleChangeTab="goToChat"
             :members="members"
+            @SearchConversa="SearchConversa"
             :activeDialogConversas="activeDialogConversas"
             @handleActiveDialog="activeDialogConversas = !activeDialogConversas"
             @handleCreateConversa="createConversa"/>
@@ -235,7 +236,7 @@ export default {
     },
     loadAgenda: async function () {
       const resp = await serviceMember.getMemberData(this.$store.state.id)
-      this.agenda = resp.data.agenda
+      this.agenda = resp.data.agendas
     },
     createAgenda: async function (data, members) {
       const resp = await serviceAgenda.newAgenda(data, this.$store.state.id)
@@ -262,6 +263,7 @@ export default {
       this.conversas = this.conversas.filter((conversa) => {
         return conversa.title.toUpperCase().includes(search.toUpperCase())
       })
+      return this.conversas
     },
     SearchAgenda: async function (search) {
       await this.loadAgenda()
