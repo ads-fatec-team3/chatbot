@@ -10,12 +10,11 @@
           <v-col cols='10' sm='6' md='3'>
             <v-text-field label='Usuário' v-model='username'></v-text-field>
           </v-col>
-
           <v-col cols='10' sm='6' md='3'>
             <v-text-field label='Senha' :type="value ? 'password' : 'text'" v-model='password' value="" name="password" :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'" @click:append="() => (value = !value)"></v-text-field>
           </v-col>
           <v-col cols='10' sm='6' md='3'>
-            <v-btn color="primary" x-medium block class="ma-2 pa-2"  @click="submitLogin">Entrar</v-btn>
+            <v-btn color="primary" x-medium block class="ma-2 pa-2" @click="submitLogin">Entrar</v-btn>
           </v-col>
         </v-row>
       </v-container>

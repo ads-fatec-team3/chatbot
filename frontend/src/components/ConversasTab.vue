@@ -32,7 +32,8 @@
   </v-form>
     <div class="d-flex flex-row ma-2">
       <v-textarea
-        v-model="searchMember"
+        v-model="searchConversa"
+        @input="searchChange"
         outlined
         rows="1"
         no-resize
@@ -79,6 +80,9 @@
             <v-list-item-title>
               <strong>{{ item.title }}</strong>
             </v-list-item-title>
+            <span v-if="item.lastMessage != null">
+              <i>última mensagem: <b>{{ item.lastMessage.text }}</b> - {{ item.lastMessage.timestamp|formatDate }}</i>
+            </span>
           </v-list-item-content>
 
         </v-list-item>
@@ -90,6 +94,8 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   name: 'ConversasTab',
   props: {
@@ -102,7 +108,7 @@ export default {
   },
   data () {
     return {
-      searchMember: null,
+      searchConversa: null,
       title: null,
       selectedMembers: [],
       valid: false
@@ -119,10 +125,14 @@ export default {
       this.$emit('handleActiveDialog')
       this.$refs.form.reset()
     },
+    searchChange: function () {
+      this.$emit('handleSearchConversa', this.searchConversa)
+    },
     createConversa: function () {
       const dataConversa = {
         title: this.title,
-        selectedMembers: this.selectedMembers
+        selectedMembers: this.selectedMembers,
+        members: this.selectedMembers
       }
       this.$refs.form.validate()
 
@@ -136,6 +146,11 @@ export default {
         return 'Participantes são obrigatórios'
       }
       return !!value || 'Participantes são obrigatórios'
+    }
+  },
+  filters: {
+    formatDate: function (date) {
+      return moment(String(date)).format('DD/MM/YYYY hh:mm')
     }
   }
 }

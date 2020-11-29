@@ -94,15 +94,17 @@
             :members="members"
             @SearchConversa="SearchConversa"
             :activeDialogConversas="activeDialogConversas"
+            @handleSearchConversa="SearchConversa"
             @handleActiveDialog="activeDialogConversas = !activeDialogConversas"
             @handleCreateConversa="createConversa"/>
         </v-tab-item>
 
         <v-tab-item value="tab-agenda">
           <AgendaTab
-            :agenda="agenda"
+            :agendas="agendas"
             :members="members"
             :activeDialogAgenda="activeDialogAgenda"
+            @handleSearchAgenda="SearchAgenda"
             @handleActiveDialog="activeDialogAgenda = !activeDialogAgenda"
             @handleCreateAgenda="createAgenda"
           />
@@ -124,8 +126,8 @@ import ChatTab from '@/components/ChatTab.vue'
 import ConversasTab from '@/components/ConversasTab.vue'
 import AgendaTab from '@/components/AgendaTab.vue'
 
-import serviceMember from '@/services/member.js'
 import serviceConversation from '@/services/conversation.js'
+import serviceMember from '@/services/member.js'
 import serviceAgenda from '@/services/agenda.js'
 
 export default {
@@ -146,7 +148,7 @@ export default {
       messages: [],
       messagesGruly: [],
       conversas: [],
-      agenda: [],
+      agendas: [],
       connected: false,
       activeDialogAgenda: false,
       activeDialogConversas: false,
@@ -241,9 +243,9 @@ export default {
       const resp = await serviceMember.getMemberData(this.$store.state.id)
       this.conversas = resp.data.conversations
     },
-    loadAgenda: async function () {
+    loadAgendas: async function () {
       const resp = await serviceMember.getMemberData(this.$store.state.id)
-      this.agenda = resp.data.agendas
+      this.agendas = resp.data.agendas
     },
     createAgenda: async function (data, members) {
       const resp = await serviceAgenda.newAgenda(data, this.$store.state.id)
@@ -251,7 +253,7 @@ export default {
         for (const member of members) {
           await serviceAgenda.addMember(resp.data.id, member)
         }
-        this.loadAgenda()
+        this.loadAgendas()
         this.activeDialogAgenda = false
       }
     },
@@ -270,11 +272,10 @@ export default {
       this.conversas = this.conversas.filter((conversa) => {
         return conversa.title.toUpperCase().includes(search.toUpperCase())
       })
-      return this.conversas
     },
     SearchAgenda: async function (search) {
-      await this.loadAgenda()
-      this.agenda = this.agenda.filter((agenda) => {
+      await this.loadAgendas()
+      this.agendas = this.agendas.filter((agenda) => {
         return agenda.title.toUpperCase().includes(search.toUpperCase())
       })
     },
@@ -317,7 +318,7 @@ export default {
       this.selectUser()
       this.loadMembers()
       this.loadConversas()
-      this.loadAgenda()
+      this.loadAgendas()
       // this.loadGruly()
     }
   },

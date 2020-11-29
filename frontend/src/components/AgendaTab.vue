@@ -1,5 +1,25 @@
 <template>
   <div>
+    <!-- <div class="d-flex flex-row ma-2">
+      <v-textarea
+        v-model="searchAgenda"
+        @input="searchChange"
+        outlined
+        rows="1"
+        no-resize
+        class="ml-2"
+        placeholder="Filtro de tarefas"
+      ></v-textarea>
+      <v-btn
+        fab
+        color="primary"
+        class="ml-2"
+        @click="dialogChange"
+      >
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+    </div> -->
+
     <template>
       <div class="scroll-box" style="height: 90vh;">
 
@@ -172,10 +192,11 @@ import moment from 'moment'
 export default {
   name: 'AgendaTab',
   props: {
-    agenda: Array,
+    agendas: Array,
     members: Array,
     handleActiveDialog: Function,
-    activeDialogAgenda: Boolean
+    activeDialogAgenda: Boolean,
+    handleSearchAgenda: Function
   },
   data () {
     return {
@@ -194,7 +215,8 @@ export default {
       selectedEvent: {},
       selectedElement: null,
       selectedOpen: false,
-      events: []
+      events: [],
+      searchAgenda: null
     }
   },
   mounted () {
@@ -230,7 +252,7 @@ export default {
       return true
     },
     loadEvents: function () {
-      this.agenda.forEach((element, index, originalArray) => {
+      this.agendas.forEach((element, index, originalArray) => {
         const start = new Date(element.dateBegin)
         const end = new Date(element.dateEnd)
         this.events.push({

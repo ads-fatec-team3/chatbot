@@ -53,7 +53,7 @@ public class Agenda {
   @JoinColumn(name = "member_id")
   private Member owner;
 
-  @JsonView(Views.DetailAgendaView.class)
+  @JsonView({Views.DetailAgendaView.class, Views.DetailConversationView.class})
   @ManyToMany(mappedBy = "agendas")
   private List<Member> members = new ArrayList<Member>();
 

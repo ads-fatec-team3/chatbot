@@ -10,7 +10,6 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Table;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,7 +34,7 @@ public class Conversation {
   private String title;
   
   @JsonView({Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
-  @OneToOne(fetch = FetchType.LAZY)
+  @OneToOne
   private Message lastMessage;
 
   @JsonView(Views.DetailConversationView.class)
