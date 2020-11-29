@@ -39,7 +39,7 @@ public class AgendaController {
     return ResponseEntity.ok(agendaService.getAllAgendas());
   }
 
-  @JsonView({Views.DetailAgendaView.class, Views.SummaryConversationView.class})
+  @JsonView(Views.DetailAgendaView.class)
   @GetMapping("/{agendaId}")
   @ApiOperation(value = "Retorna os dados de uma atividade")
   public ResponseEntity<Agenda> getAgendaById(@PathVariable("agendaId") long agendaId) {
