@@ -88,6 +88,7 @@
             :conversas="conversas"
             @handleChangeTab="goToChat"
             :members="members"
+            @SearchConversa="SearchConversa"
             :activeDialogConversas="activeDialogConversas"
             @handleSearchConversa="SearchConversa"
             @handleActiveDialog="activeDialogConversas = !activeDialogConversas"
