@@ -22,14 +22,14 @@ import javax.persistence.ManyToOne;
 @Table(name = "gruly_members")
 public class Member {
   @JsonView({Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class,
-             Views.SummaryMemberRoleView.class})
+             Views.SummaryMemberRoleView.class, Views.SummaryAgendaView.class})
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "member_id")
   private long id;
 
   @JsonView({Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class,
-              Views.SummaryMemberRoleView.class})
+              Views.SummaryMemberRoleView.class, Views.SummaryAgendaView.class})
   @Column(name = "member_name", nullable = false)
   private String name;
 
