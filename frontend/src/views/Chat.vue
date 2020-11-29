@@ -88,6 +88,7 @@
             :conversas="conversas"
             @handleChangeTab="goToChat"
             :members="members"
+            @SearchConversa="SearchConversa"
             :activeDialogConversas="activeDialogConversas"
             @handleActiveDialog="activeDialogConversas = !activeDialogConversas"
             @handleCreateConversa="createConversa"/>
@@ -230,17 +231,19 @@ export default {
       scrollArea.scrollTop = scrollArea.scrollHeight
     },
     loadConversas: async function () {
-      const resp = await serviceConversation.getAllConversations()
-      this.conversas = resp.data
+      const resp = await serviceMember.getMemberData(this.$store.state.id)
+      this.conversas = resp.data.conversations
     },
     loadAgenda: async function () {
-      const resp = await serviceAgenda.getAgenda()
-      this.agenda = resp.data
-      console.log(resp.data)
+      const resp = await serviceMember.getMemberData(this.$store.state.id)
+      this.agenda = resp.data.agendas
     },
-    createAgenda: async function (data) {
-      const resp = await serviceAgenda.newAgenda(data, 1)
-      if (resp.status === 201) {
+    createAgenda: async function (data, members) {
+      const resp = await serviceAgenda.newAgenda(data, this.$store.state.id)
+      if (resp.status === 200) {
+        for (const member of members) {
+          await serviceAgenda.addMember(resp.data.id, member)
+        }
         this.loadAgenda()
         this.activeDialogAgenda = false
       }
@@ -254,6 +257,19 @@ export default {
         this.loadConversas()
         this.activeDialogConversas = false
       }
+    },
+    SearchConversa: async function (search) {
+      await this.loadConversas()
+      this.conversas = this.conversas.filter((conversa) => {
+        return conversa.title.toUpperCase().includes(search.toUpperCase())
+      })
+      return this.conversas
+    },
+    SearchAgenda: async function (search) {
+      await this.loadAgenda()
+      this.agenda = this.agenda.filter((agenda) => {
+        return agenda.title.toUpperCase().includes(search.toUpperCase())
+      })
     },
     loadGruly: function () {
       if (this.hasPermission()) {

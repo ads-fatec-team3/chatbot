@@ -35,7 +35,6 @@ export const store = new Vuex.Store({
       console.log(username)
       const resp = await getAccessToken(username, password)
       const { token, id, role } = resp.data
-      console.log(resp.data)
       localStorage.setItem('access_token', token)
       localStorage.setItem('user_id', id)
       localStorage.setItem('user_role', role)
