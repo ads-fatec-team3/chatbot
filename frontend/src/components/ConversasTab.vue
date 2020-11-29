@@ -78,11 +78,14 @@
 
           <v-list-item-content>
             <v-list-item-title>
-              <strong>{{ item.title }}</strong>
+              <div class="d-flex flex-row justify-space-between align-end mb-1">
+                <div class="text-h5">{{ item.title }}</div>
+                <i v-if="item.lastMessage !== null">{{ item.lastMessage.timestamp|formatDate }}</i>
+              </div>
             </v-list-item-title>
-            <span v-if="item.lastMessage != null">
-              <i>última mensagem: <b>{{ item.lastMessage.text }}</b> - {{ item.lastMessage.timestamp|formatDate }}</i>
-            </span>
+            <div v-if="item.lastMessage !== null" class="d-flex flex-row justify-start">
+              <i>Mensagem: {{ item.lastMessage.text }}</i>
+            </div>
           </v-list-item-content>
 
         </v-list-item>

@@ -107,6 +107,7 @@
             @handleSearchAgenda="SearchAgenda"
             @handleActiveDialog="activeDialogAgenda = !activeDialogAgenda"
             @handleCreateAgenda="createAgenda"
+            @handleUpdateAgenda="updateAgenda"
           />
         </v-tab-item>
 
@@ -156,6 +157,9 @@ export default {
     }
   },
   methods: {
+    updateAgenda: function () {
+      this.loadAgendas()
+    },
     goToConversations: function () {
       this.tab = 'tab-conversas'
     },
@@ -319,6 +323,7 @@ export default {
       this.loadMembers()
       this.loadConversas()
       this.loadAgendas()
+      this.loadMemberConversa()
       // this.loadGruly()
     }
   },

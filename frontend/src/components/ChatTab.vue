@@ -8,7 +8,7 @@
           class="ma-2"
           @click="handleTab"
         >
-          <v-icon>mdi-arrow-left</v-icon>
+          <v-icon>mdi-arrow-right</v-icon>
         </v-btn>
     </v-layout>
     <main id="scroll-messages">

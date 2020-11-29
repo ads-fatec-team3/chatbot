@@ -16,7 +16,10 @@
           height="50"
           @click="active = !active"
         >
-          Chatbot
+          <div class="text-h5">
+            Fale com a autoescola
+            <v-icon large>mdi-message-text</v-icon>
+          </div>
         </v-btn>
       </div>
     </div>

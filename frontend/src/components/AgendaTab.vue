@@ -95,13 +95,14 @@
               >
                 <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-tooltip bottom>
+                <v-tooltip v-if="selectedEvent.status !== 'concluido'" bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
                       color="info"
                       dark
                       v-bind="attrs"
                       v-on="on"
+                      @click="updateStatusAgenda(selectedEvent)"
                     >
                       <v-icon>mdi-check</v-icon>
                     </v-btn>
@@ -110,10 +111,12 @@
                 </v-tooltip>
               </v-toolbar>
               <v-card-text class="headline justify-start">
-                <div class="text-subtitle-1">Inicio: {{ selectedEvent.start|formatDate }}</div>
-                <div class="text-subtitle-1">Fim: {{ selectedEvent.start|formatDate }}</div>
-                <div class="text-subtitle-1">Descrição: {{ selectedEvent.description }}</div>
-                <div class="text-subtitle-1">Participantes: {{ selectedEvent.members|arrayToString }}</div>
+                <div class="text-subtitle-1" v-if="selectedEvent.owner"><b>Criada por:</b> {{ selectedEvent.owner.name }}</div>
+                <div class="text-subtitle-1"><b>Inicio:</b> {{ selectedEvent.start|formatDate }}</div>
+                <div class="text-subtitle-1"><b>Fim:</b> {{ selectedEvent.end|formatDate }}</div>
+                <div class="text-subtitle-1"><b>Descrição:</b> {{ selectedEvent.description }}</div>
+                <div class="text-subtitle-1"><b>Participantes:</b> {{ selectedEvent.members|arrayToString }}</div>
+                <div class="text-subtitle-1"><b>Status:</b> {{ selectedEvent.status || 'Indisponível' }}</div>
               </v-card-text>
               <v-card-actions>
                 <v-btn
@@ -188,6 +191,7 @@
 
 <script>
 import moment from 'moment'
+import serviceAgenda from '@/services/agenda.js'
 
 export default {
   name: 'AgendaTab',
@@ -196,7 +200,8 @@ export default {
     members: Array,
     handleActiveDialog: Function,
     activeDialogAgenda: Boolean,
-    handleSearchAgenda: Function
+    handleSearchAgenda: Function,
+    handleUpdateAgenda: Function
   },
   data () {
     return {
@@ -224,6 +229,22 @@ export default {
     this.loadEvents()
   },
   methods: {
+    updateStatusAgenda: async function (data) {
+      const newAgenda = {
+        id: data.id,
+        title: data.name,
+        description: data.description,
+        color: 'blue',
+        dateBegin: data.start,
+        dateEnd: data.end,
+        status: 'concluido'
+      }
+      const resp = await serviceAgenda.updateAgenda(newAgenda)
+      console.log(resp.status)
+      this.$emit('handleUpdateAgenda')
+      this.selectedOpen = false
+      this.selectedEvent = {}
+    },
     dialogChange: function () {
       this.$emit('handleActiveDialog')
       this.$refs.form.reset()
@@ -236,12 +257,14 @@ export default {
         description: this.description,
         dateBegin: dateBegin,
         dateEnd: dateEnd,
-        color: this.color
+        color: this.color,
+        status: 'aberta'
       }
       this.$refs.form.validate()
 
       if (this.valid === true) {
         this.$emit('handleCreateAgenda', dataAgenda, this.selectedMembers)
+        this.loadEvents()
         this.$refs.form.reset()
       }
     },
@@ -252,10 +275,11 @@ export default {
       return true
     },
     loadEvents: function () {
+      const events = []
       this.agendas.forEach((element, index, originalArray) => {
         const start = new Date(element.dateBegin)
         const end = new Date(element.dateEnd)
-        this.events.push({
+        events.push({
           id: element.id,
           name: element.title,
           start: start,
@@ -263,9 +287,10 @@ export default {
           color: element.color,
           timed: this.isAllDay(start, end),
           description: element.description,
-          members: element.members
+          status: element.status
         })
       })
+      this.events = events
     },
     required (value) {
       if (value instanceof Array && value.length === 0) {
@@ -286,8 +311,23 @@ export default {
       this.$refs.calendar.next()
     },
     showEvent ({ nativeEvent, event }) {
-      const open = () => {
-        this.selectedEvent = event
+      const open = async () => {
+        const resp = await serviceAgenda.getAgendaById(event.id)
+        const start = new Date(resp.data.dateBegin)
+        const end = new Date(resp.data.dateEnd)
+        const selectedEvent = {
+          id: resp.data.id,
+          name: resp.data.title,
+          start: start,
+          end: end,
+          color: resp.data.color,
+          timed: this.isAllDay(start, end),
+          description: resp.data.description,
+          members: resp.data.members,
+          owner: resp.data.owner,
+          status: resp.data.status
+        }
+        this.selectedEvent = selectedEvent
         this.selectedElement = nativeEvent.target
         setTimeout(() => {
           this.selectedOpen = true
@@ -317,8 +357,15 @@ export default {
     },
     arrayToString: function (value) {
       if (value) {
-        return value.join(', ') || '---'
+        return value.map(val => {
+          return val.name
+        }).join(', ') || '---'
       }
+    }
+  },
+  watch: {
+    agendas: function (val) {
+      this.loadEvents()
     }
   }
 }
