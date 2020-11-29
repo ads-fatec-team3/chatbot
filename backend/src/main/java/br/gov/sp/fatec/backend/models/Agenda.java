@@ -48,13 +48,13 @@ public class Agenda {
   @NotNull(message = "Date end is mandatory")
   private Date dateEnd;
 
-  @JsonView({Views.SummaryAgendaView.class, Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
+  @JsonView(Views.DetailAgendaView.class)
   @ManyToOne
   @JoinColumn(name = "member_id")
   private Member owner;
 
   @JsonView({Views.DetailAgendaView.class, Views.DetailConversationView.class})
-  @ManyToMany(mappedBy = "agenda")
+  @ManyToMany(mappedBy = "agendas")
   private List<Member> members = new ArrayList<Member>();
 
   @JsonView({Views.SummaryAgendaView.class, Views.SummaryMemberView.class, Views.SummaryConversationView.class, Views.SummaryMessageView.class})
@@ -151,11 +151,11 @@ public class Agenda {
 
   public void addMember(Member member) {
     members.add(member);
-    member.getAgenda().add(this);
+    member.getAgendas().add(this);
   }
 
   public void removeMember(Member member) {
     members.add(member);
-    member.getAgenda().remove(this);
+    member.getAgendas().remove(this);
   }
 }

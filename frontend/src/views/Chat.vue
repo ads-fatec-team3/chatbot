@@ -96,7 +96,7 @@
 
         <v-tab-item value="tab-agenda">
           <AgendaTab
-            :agenda="agenda"
+            :agendas="agendas"
             :members="members"
             :activeDialogAgenda="activeDialogAgenda"
             @handleSearchAgenda="SearchAgenda"
@@ -143,7 +143,7 @@ export default {
       messages: [],
       messagesGruly: [],
       conversas: [],
-      agenda: [],
+      agendas: [],
       connected: false,
       activeDialogAgenda: false,
       activeDialogConversas: false,
@@ -235,9 +235,9 @@ export default {
       const resp = await serviceMember.getMemberData(this.$store.state.id)
       this.conversas = resp.data.conversations
     },
-    loadAgenda: async function () {
+    loadAgendas: async function () {
       const resp = await serviceMember.getMemberData(this.$store.state.id)
-      this.agenda = resp.data.agenda
+      this.agendas = resp.data.agendas
     },
     createAgenda: async function (data, members) {
       const resp = await serviceAgenda.newAgenda(data, this.$store.state.id)
@@ -245,7 +245,7 @@ export default {
         for (const member of members) {
           await serviceAgenda.addMember(resp.data.id, member)
         }
-        this.loadAgenda()
+        this.loadAgendas()
         this.activeDialogAgenda = false
       }
     },
@@ -266,8 +266,8 @@ export default {
       })
     },
     SearchAgenda: async function (search) {
-      await this.loadAgenda()
-      this.agenda = this.agenda.filter((agenda) => {
+      await this.loadAgendas()
+      this.agendas = this.agendas.filter((agenda) => {
         return agenda.title.toUpperCase().includes(search.toUpperCase())
       })
     },
@@ -310,7 +310,7 @@ export default {
       this.selectUser()
       this.loadMembers()
       this.loadConversas()
-      this.loadAgenda()
+      this.loadAgendas()
       // this.loadGruly()
     }
   },

@@ -192,7 +192,7 @@ import moment from 'moment'
 export default {
   name: 'AgendaTab',
   props: {
-    agenda: Array,
+    agendas: Array,
     members: Array,
     handleActiveDialog: Function,
     activeDialogAgenda: Boolean,
@@ -252,7 +252,7 @@ export default {
       return true
     },
     loadEvents: function () {
-      this.agenda.forEach((element, index, originalArray) => {
+      this.agendas.forEach((element, index, originalArray) => {
         const start = new Date(element.dateBegin)
         const end = new Date(element.dateEnd)
         this.events.push({

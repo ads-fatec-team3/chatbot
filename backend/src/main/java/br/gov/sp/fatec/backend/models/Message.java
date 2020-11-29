@@ -20,17 +20,17 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "gruly_messages")
 public class Message {
-  @JsonView({Views.SummaryMessageView.class, Views.SummaryConversationView.class})
+  @JsonView({Views.SummaryMessageView.class, Views.SummaryConversationView.class, Views.SummaryMemberView.class})
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "message_id")
   private long id;
   
-  @JsonView({Views.SummaryMessageView.class, Views.SummaryConversationView.class})
+  @JsonView({Views.SummaryMessageView.class, Views.SummaryConversationView.class, Views.SummaryMemberView.class})
   @Column(name = "message_text", nullable = false)
   private String text;
   
-  @JsonView({Views.SummaryMessageView.class, Views.SummaryConversationView.class})
+  @JsonView({Views.SummaryMessageView.class, Views.SummaryConversationView.class, Views.SummaryMemberView.class})
   @Column(name = "message_timestamp", nullable = false)
   @Temporal(TemporalType.TIMESTAMP)
   private Date timestamp;

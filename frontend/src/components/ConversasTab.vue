@@ -79,6 +79,9 @@
             <v-list-item-title>
               <strong>{{ item.title }}</strong>
             </v-list-item-title>
+            <span v-if="item.lastMessage != null">
+              <i>última mensagem: <b>{{ item.lastMessage.text }}</b> - {{ item.lastMessage.timestamp|formatDate }}</i>
+            </span>
           </v-list-item-content>
 
         </v-list-item>
@@ -90,6 +93,8 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   name: 'ConversasTab',
   props: {
@@ -136,6 +141,11 @@ export default {
         return 'Participantes são obrigatórios'
       }
       return !!value || 'Participantes são obrigatórios'
+    }
+  },
+  filters: {
+    formatDate: function (date) {
+      return moment(String(date)).format('DD/MM/YYYY hh:mm')
     }
   }
 }
