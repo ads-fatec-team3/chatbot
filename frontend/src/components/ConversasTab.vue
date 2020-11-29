@@ -1,6 +1,5 @@
 <template>
   <div>
-<<<<<<< HEAD
   <v-form v-model="valid" ref="form">
     <v-row justify="center">
       <v-dialog v-model="activeDialogConversas" persistent max-width="370">
@@ -31,33 +30,6 @@
       </v-dialog>
     </v-row>
   </v-form>
-=======
-  <v-row justify="center">
-    <v-dialog v-model="activeDialogConversas" persistent max-width="370">
-      <v-card>
-        <v-card-title class="headline"> Novo grupo </v-card-title>
-        <v-card-text>
-          <v-text-field label="Título" v-model="title"></v-text-field>
-          <v-select
-            v-model="selectedMembers"
-            multiple
-            :items="members"
-            label="Participantes"
-          ></v-select>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="red darken-1" text @click="dialogChange">
-            Cancelar
-          </v-btn>
-          <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="createConversa">
-            Criar grupo
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row>
->>>>>>> f063b480ff9dca9adcfe40541080dfbaa20b7fc4
     <div class="d-flex flex-row ma-2">
       <v-textarea
         v-model="searchConversa"
@@ -126,7 +98,6 @@
 
 <script>
 import moment from 'moment'
-
 export default {
   name: 'ConversasTab',
   props: {
@@ -134,8 +105,6 @@ export default {
     conversas: Array,
     handleChangeTab: Function,
     handleActiveDialog: Function,
-<<<<<<< HEAD
-<<<<<<< HEAD
     activeDialogConversas: Boolean,
     SearchConversa: Function
   },
@@ -151,49 +120,23 @@ export default {
     searchEvent: function () {
       this.$emit('SearchConversa', this.searchMember)
     },
-=======
-=======
->>>>>>> f063b480ff9dca9adcfe40541080dfbaa20b7fc4
-    activeDialogConversas: Boolean
-  },
-  data () {
-    return {
-      searchMember: null,
-      title: null,
-      selectedMembers: []
-    }
-  },
-  methods: {
-<<<<<<< HEAD
->>>>>>> 7f979f8... adequacao layout
-=======
->>>>>>> f063b480ff9dca9adcfe40541080dfbaa20b7fc4
     changeTab: function (itemId) {
       this.$emit('handleChangeTab', itemId)
     },
     dialogChange: function () {
       this.$emit('handleActiveDialog')
-<<<<<<< HEAD
-<<<<<<< HEAD
       this.$refs.form.reset()
     },
     searchChange: function () {
       this.$emit('handleSearchConversa', this.searchConversa)
-=======
->>>>>>> 7f979f8... adequacao layout
-=======
->>>>>>> f063b480ff9dca9adcfe40541080dfbaa20b7fc4
     },
     createConversa: function () {
       const dataConversa = {
         title: this.title,
-<<<<<<< HEAD
-<<<<<<< HEAD
         selectedMembers: this.selectedMembers,
         members: this.selectedMembers
       }
       this.$refs.form.validate()
-
       if (this.valid === true) {
         this.$emit('handleCreateConversa', dataConversa)
         this.$refs.form.reset()
@@ -209,16 +152,6 @@ export default {
   filters: {
     formatDate: function (date) {
       return moment(String(date)).format('DD/MM/YYYY hh:mm')
-=======
-        selectedMembers: this.selectedMembers
-      }
-      this.$emit('handleCreateConversa', dataConversa)
->>>>>>> 7f979f8... adequacao layout
-=======
-        selectedMembers: this.selectedMembers
-      }
-      this.$emit('handleCreateConversa', dataConversa)
->>>>>>> f063b480ff9dca9adcfe40541080dfbaa20b7fc4
     }
   }
 }
