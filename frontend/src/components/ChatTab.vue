@@ -1,6 +1,16 @@
 <template>
   <div>
-
+    <v-layout class="d-flex flex-row justify-end">
+      <v-btn
+      cols="2"
+          fab
+          color="primary"
+          class="ma-2"
+          @click="handleTab"
+        >
+          <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
+    </v-layout>
     <main id="scroll-messages">
       <div v-for="(message, index) in messages" :key="index" class="d-flex flex-column">
 
@@ -58,7 +68,8 @@ export default {
     messages: Array,
     user: Number,
     conversaName: String,
-    send: Function
+    send: Function,
+    handleChangeTab: Function
   },
   data () {
     return {
@@ -66,6 +77,9 @@ export default {
     }
   },
   methods: {
+    handleTab: function () {
+      this.$emit('handleChangeTab')
+    },
     sendMessage: function () {
       this.$emit('send', this.message)
       this.message = null

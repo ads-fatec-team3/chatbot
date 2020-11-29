@@ -12,12 +12,12 @@
           <v-icon>mdi-robot</v-icon>
         </v-tab>
 
-        <v-tab href="#tab-chat">
-          Chat
+        <v-tab v-if="tab=='tab-chat'" href="#tab-chat">
+          Conversas
           <v-icon>mdi-chat</v-icon>
         </v-tab>
 
-        <v-tab href="#tab-conversas">
+        <v-tab v-if="tab!='tab-chat'" href="#tab-conversas">
           Conversas
           <v-icon>mdi-view-list</v-icon>
         </v-tab>
@@ -77,7 +77,11 @@
         </v-tab-item>
 
         <v-tab-item value="tab-chat">
-          <ChatTab v-if="conversaId" :messages="messages" :user="user" :conversaName="conversaName" @send="send"/>
+          <ChatTab v-if="conversaId"
+          :messages="messages"
+          :user="user"
+          :conversaName="conversaName" @send="send"
+          @handleChangeTab="goToConversations"/>
           <div v-else>
             <div class="text-h4 mt-4">Selecione uma conversa!</div>
           </div>
@@ -149,6 +153,9 @@ export default {
     }
   },
   methods: {
+    goToConversations: function () {
+      this.tab = 'tab-conversas'
+    },
     hasPermission: function () {
       if (this.$store.state.role === 'ROLE_STUDENT' || this.$store.state.role === 'ROLE_INSTRUCTOR') {
         return true
