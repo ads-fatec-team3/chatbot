@@ -37,7 +37,10 @@ Adicionado filtro para facilitar na busca em listagem.
 
 ## Resumo Final do Projeto
 
-_Adicionar GIFs_
+![Alt Text](https://media.giphy.com/media/fNZ1hBuXVlFUoH7WX0/giphy.gif)
+![Alt Text](https://media.giphy.com/media/vCGpQoCLYdaOLn0Px0/giphy.gif)
+![Alt Text](https://media.giphy.com/media/Ug9evLGV0ZywV2TkfB/giphy.gif)
+![Alt Text](https://media.giphy.com/media/1yUBRyDj8NoBVU1dVU/giphy.gif)
 
 **Documentação:** Foi atualizada toda a documentação do acompanhamento do projeto, tudo isso pode ser
 encontrado no [diretório de docs](https://github.com/ads-fatec-team3/chatbot/tree/master/docs).
