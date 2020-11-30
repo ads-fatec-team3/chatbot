@@ -324,7 +324,7 @@ export default {
       this.loadConversas()
       this.loadAgendas()
       this.loadMemberConversa()
-      // this.loadGruly()
+      this.loadGruly()
     }
   },
 
