@@ -247,7 +247,6 @@ export default {
       })
     },
     loadGruly: function () {
-      debugger
       if (this.hasPermission()) {
         axios.get('http://127.0.0.1:5000').then(response => {
           this.messagesGruly.push({
