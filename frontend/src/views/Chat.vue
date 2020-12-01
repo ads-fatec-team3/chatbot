@@ -30,50 +30,12 @@
 
       <v-tabs-items v-model="tab">
         <v-tab-item v-if="hasPermission()" value="tab-gruly">
-          <div>
-            <v-virtual-scroll
-              id="messages"
-              :items="messagesGruly"
-              class="scroll-box"
-              item-height="110"
-            >
-              <template v-slot="{ item, index }">
-
-                <v-list-item
-                  v-if="item.owner == user"
-                  :key="index"
-                  class="d-flex flex-row justify-end"
-                >
-                  <strong class="message my-message">{{ item.content }}</strong>
-                </v-list-item>
-
-                <v-list-item
-                  v-else
-                  :key="index"
-                  class="d-flex flex-row justify-start">
-                  <strong class="message your-message">{{ item.content }}</strong>
-                </v-list-item>
-
-              </template>
-            </v-virtual-scroll>
-            <div class="d-flex flex-row message-input">
-              <v-textarea
-                v-model="messageGruly"
-                outlined
-                rows="2"
-                no-resize
-                class="ml-2"
-              ></v-textarea>
-              <v-btn
-                fab
-                color="primary"
-                class="ma-2"
-                @click="sendMessageGruly"
-              >
-                <v-icon>mdi-send</v-icon>
-              </v-btn>
-            </div>
-          </div>
+          <Gruly
+            :messages="messagesGruly"
+            :user="user"
+            :conversaName="conversaName"
+            @sendGruly="sendMessageGruly"
+          />
         </v-tab-item>
 
         <v-tab-item value="tab-chat">
@@ -126,6 +88,7 @@ import Stomp from 'webstomp-client'
 import ChatTab from '@/components/ChatTab.vue'
 import ConversasTab from '@/components/ConversasTab.vue'
 import AgendaTab from '@/components/AgendaTab.vue'
+import Gruly from '@/components/Gruly.vue'
 
 import serviceConversation from '@/services/conversation.js'
 import serviceMember from '@/services/member.js'
@@ -136,7 +99,8 @@ export default {
   components: {
     ChatTab,
     ConversasTab,
-    AgendaTab
+    AgendaTab,
+    Gruly
   },
   data () {
     return {
@@ -221,22 +185,21 @@ export default {
       })
       return arrayObj
     },
-    sendMessageGruly: function () {
-      if (this.messageGruly) {
+    sendMessageGruly: function (message) {
+      if (message) {
         this.messagesGruly.push({
-          content: this.messageGruly,
-          owner: this.user
+          text: message,
+          sender: this.user
         })
 
         axios.post('http://127.0.0.1:5000/send-message', {
-          message: this.messageGruly
+          message: message
         }).then(response => {
           this.messagesGruly.push({
-            content: response.data.result, dateTime: '2020-10-04 12:00:00', owner: 'Gruly'
+            text: response.data.result,
+            sender: 'Gruly'
           })
         })
-
-        this.messageGruly = null
       }
     },
     scrollToEnd: function () {
@@ -288,7 +251,8 @@ export default {
       if (this.hasPermission()) {
         axios.get('http://127.0.0.1:5000').then(response => {
           this.messagesGruly.push({
-            content: response.data.result, dateTime: '2020-10-04 12:00:00', owner: 'Gruly'
+            text: response.data.result,
+            sender: 'Gruly'
           })
         })
       }
