@@ -96,7 +96,7 @@ Pode acessar aqui: https://xd.adobe.com/view/76ccd03a-4998-4da1-9f5c-ca6f4ecf402
 | Leandro Lopes (Scrum Master)   | [acessar](https://github.com/LLBueno)            | [acessar](https://www.linkedin.com/in/leandro-lopes-bueno/) |
 | Marcio Ordonez (Product Owner) | [acessar](https://github.com/MarcioOrdonez)      | [acessar](https://www.linkedin.com/in/marcio-ordonez/)      |
 | Bruna Totti                    | [acessar](https://github.com/brunatotti)         | [acessar](https://www.linkedin.com/in/brunatotti/)          |
-| Eduardo Nunes                  | [acessar](https://github.com/eduns)              | [acessar](https://www.linkedin.com/in/nsedu)                                                 |
+| Eduardo Nunes                  | [acessar](https://github.com/eduns)              | [acessar](https://www.linkedin.com/in/eduns)                                                 |
 | Greice Castilho                | [acessar](https://github.com/GreiceCastilho)     | [acessar]()                                                 |
 | João Uchoas                    | [acessar](https://github.com/joaouchoas)         | [acessar](https://www.linkedin.com/in/joaouchoas)           |
 | Letícia Barreto                | [acessar](https://github.com/lebarreto)          | [acessar](https://www.linkedin.com/in/leticiambarreto/)     |
